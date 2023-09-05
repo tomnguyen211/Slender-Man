@@ -14,6 +14,9 @@ public class PlayerData : ScriptableObject
 
     [Header("Jump State")]
     public float jumpVelocity = 5;
+
+    [Header("In Air State")]
+    public float coyoteTime = 0.2f;
     public float variableJumpHeightMultiplier = 0.5f;
 
 
@@ -22,10 +25,10 @@ public class PlayerData : ScriptableObject
     public float wallCheckDistance = 0.5f;
     public float ceilingCheckRadius = 0.2f;
 
-    /*[Header("Others")]
+    [Header("Others")]
     public float disBetweenAfterImages = 0.5f;
     public float drag = 5f;
-    public float standColliderHeight = 0.9f;*/
+    public float standColliderHeight = 0.9f;
 
     public LayerMask whatisGround;
     public LayerMask character;
