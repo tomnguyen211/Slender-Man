@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Entities.UniversalDelegates;
 using UnityEngine;
 
 public class PlayerState
@@ -42,16 +43,17 @@ public class PlayerState
 
         if (playAnim)
         {
-            for (int i = 0; i < player.Anim.Length; i++)
-                player.Anim[i].SetBool(animBoolName, true);
+            /*for (int i = 0; i < player.Anim.Length; i++)
+                player.Anim[i].SetBool(animBoolName, true);*/
+            player.Anim.SetBool(animBoolName, true);
 
         }
         else
         {
 
-            for (int i = 0; i < player.Anim.Length; i++)
-                player.Anim[i].SetBool(animBoolName, false);
-            //player.Anim.SetBool(previous_animBoolName, true);
+            /*for (int i = 0; i < player.Anim.Length; i++)
+                player.Anim[i].SetBool(animBoolName, false);*/
+            player.Anim.SetBool(animBoolName, false);
         }
 
         startTime = Time.time;
@@ -71,8 +73,10 @@ public class PlayerState
                  player.Anim[i].SetBool(animBoolName, false);
              //player.Anim.SetBool(animBoolName, false);
          }*/
-        for (int i = 0; i < player.Anim.Length; i++)
-            player.Anim[i].SetBool(animBoolName, false);
+        /*for (int i = 0; i < player.Anim.Length; i++)
+            player.Anim[i].SetBool(animBoolName, false);*/
+
+        player.Anim.SetBool(animBoolName, false);
         isExitingState = true;
     }
 
