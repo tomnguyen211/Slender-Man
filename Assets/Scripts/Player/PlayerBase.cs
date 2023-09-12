@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class PlayerBase : MonoBehaviour
 {
+    public float horizontalInput;
+    public float verticalInput;
 
     #region State Variables
     public PlayerStateMachine StateMachine { get; private set; }
@@ -71,6 +73,9 @@ public class PlayerBase : MonoBehaviour
 
     public virtual void Update()
     {
+        horizontalInput = Input.GetAxisRaw("Horizontal");
+        verticalInput = Input.GetAxisRaw("Vertical");
+
         StateMachine.CurrentState.LogicUpdate();
         CurrentVelocity = RB.velocity;
     }
@@ -89,7 +94,7 @@ public class PlayerBase : MonoBehaviour
     }
     public void SetVelocity(float velocity, Vector3 direction)
     {
-        workspace = orientation.forward * direction.x + Vector3.forward * direction.z;
+        workspace = orientation.forward * direction.x + orientation.right * direction.z;
         workspace = direction * velocity;
         RB.velocity = workspace;
         CurrentVelocity = workspace;
@@ -578,7 +583,7 @@ public class PlayerMoveState : Player_GroundState
         base.LogicUpdate();
 
 
-        player.SetVelocity(5, new Vector3(xInput,yInput,zInput));
+        player.SetVelocity(5, new Vector3(player.horizontalInput,0, player.verticalInput));
 
         RaycastHit2D rayGround = Physics2D.Raycast(player.transform.position, Vector2.down, 1, player.playerData.whatisGround);
 
