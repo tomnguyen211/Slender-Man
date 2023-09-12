@@ -1,9 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.Windows;
-using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class PlayerBase : MonoBehaviour
 {
@@ -43,6 +39,8 @@ public class PlayerBase : MonoBehaviour
     protected bool Checkpoint;
     public Vector3 CurrentVelocity { get; private set; }
     private Vector3 workspace;
+    [SerializeField]
+    Transform orientation;
     [SerializeField] protected Transform ShootPoint;
     public Player_Input_Manager InputHandler { get; private set; }
     #endregion
@@ -56,6 +54,10 @@ public class PlayerBase : MonoBehaviour
         PlayerIdleState = new PlayerIdleState(this, StateMachine, playerData, "Idle");
         PlayerMoveState = new PlayerMoveState(this, StateMachine, playerData, "Move");
         PlayerInAirState = new PlayerInAirState(this, StateMachine, playerData, "inAir");
+        PlayerLandState = new PlayerLandState(this, StateMachine, playerData, "Fall_Landed");
+
+        colliders = new List<Collider>();
+
     }
 
     public virtual void Start()
@@ -63,17 +65,19 @@ public class PlayerBase : MonoBehaviour
         StateMachine.Initialize(PlayerIdleState);
 
         RB = GetComponent<Rigidbody>();
+        RB.constraints = RigidbodyConstraints.FreezeRotation;
         InputHandler = GetComponent<Player_Input_Manager>();
-        colliders = new List<Collider>();
-
     }
 
     public virtual void Update()
     {
+        StateMachine.CurrentState.LogicUpdate();
         CurrentVelocity = RB.velocity;
     }
     public virtual void FixedUpdate()
     {
+        StateMachine.CurrentState.PhysicUpdate();
+
     }
     #endregion
 
@@ -85,6 +89,7 @@ public class PlayerBase : MonoBehaviour
     }
     public void SetVelocity(float velocity, Vector3 direction)
     {
+        workspace = orientation.forward * direction.x + Vector3.forward * direction.z;
         workspace = direction * velocity;
         RB.velocity = workspace;
         CurrentVelocity = workspace;
@@ -117,11 +122,12 @@ public class PlayerBase : MonoBehaviour
     #endregion
     #region Get Functions
     #endregion
-    #region Check Functions
 
+    #region Check Functions
     public bool CheckIfGrounded()
     {
-        return Physics.OverlapSphere(groundCheck.position, playerData.groundCheckRadius, playerData.whatisGround).Length > 0;
+        return colliders.Count > 0;
+        //return Physics.OverlapSphere(groundCheck.position, playerData.groundCheckRadius, playerData.whatisGround).Length > 0;
     }
     public bool CheckForCeiling()
     {
@@ -352,7 +358,7 @@ public class PlayerInAirState : PlayerState
 
         xInput = player.InputHandler.NormInputX;
         yInput = player.InputHandler.NormInputY;
-        zInput = player.InputHandler.NormInputY;
+        zInput = player.InputHandler.NormInputZ;
 
         jumpInput = player.InputHandler.JumpInput;
         jumpInputStop = player.InputHandler.JumpInputStop;
@@ -362,40 +368,26 @@ public class PlayerInAirState : PlayerState
         //CheckGround_SFX();
         CheckJumpMultiplier();
 
-       
-        /*if (isGrounded && player.CurrentVelocity.y < 0.01f)
+        Debug.Log(isGrounded);
+        Debug.Log(player.CurrentVelocity.y);
+
+        if (isGrounded && player.CurrentVelocity.y < 0.01f)
         {
             stateMachine.ChangeState(player.PlayerLandState);
-        }       
-        else if (jumpInput && player.jump.CanJump())
+        }
+        /*else if (jumpInput && player.jump.CanJump())
         {
             stateMachine.ChangeState(_player.PlayerJumpStage_Scorpion);
-        }
-        else if (isTouchingWall && grabInput && isTouchingLedge)
-        {
-            stateMachine.ChangeState(_player.PlayerWallGrabState_Scorpion);
-        }
-        else if (isTouchingWall && xInput == player.FacingDirection && _player.CurrentVelocity.y <= 0)
-        {
-            stateMachine.ChangeState(_player.PlayerWallSlideState_Scorpion);
-        }
-        else if (dashInput && _player.PlayerDashState_Scorpion.CheckIfCanDash())
-        {
-            stateMachine.ChangeState(_player.PlayerDashState_Scorpion);
-        }
+        }*/
         else
         {
-            _player.CheckIfShouldFlip(xInput);
 
-            if (!_player.CheckIfKnockback)
-                _player.SetVelocityX(_player.armor_manager.moveSpeed * xInput);
-
-            for (int i = 0; i < player.Anim.Length; i++)
+            /*for (int i = 0; i < player.Anim.Length; i++)
             {
                 _player.Anim[i].SetFloat("yVelocity", _player.CurrentVelocity.y);
                 _player.Anim[i].SetFloat("xVelocity", Mathf.Abs(_player.CurrentVelocity.x));
-            }
-        }*/
+            }*/
+        }
     }
 
     private void CheckJumpMultiplier()
@@ -524,7 +516,7 @@ public class PlayerIdleState : Player_GroundState
     public override void Enter()
     {
         base.Enter();
-        player.SetVelocityX(0);
+        //player.SetVelocity(0,Vector3.zero);
     }
 
     public override void Exit()
@@ -543,7 +535,10 @@ public class PlayerIdleState : Player_GroundState
         else
             player.RB.drag = 0;
 
-        if (xInput != 0 && !isExitingState)
+        Debug.Log("Xinput: " + xInput);
+        Debug.Log("Zinput: " + zInput);
+
+        if ((xInput != 0 || zInput != 0) && !isExitingState)
         {
             stateMachine.ChangeState(player.PlayerMoveState);
         }
@@ -583,7 +578,7 @@ public class PlayerMoveState : Player_GroundState
         base.LogicUpdate();
 
 
-        player.SetVelocityX(/*player.armor_manager.moveSpeed*/ 5 * xInput);
+        player.SetVelocity(5, new Vector3(xInput,yInput,zInput));
 
         RaycastHit2D rayGround = Physics2D.Raycast(player.transform.position, Vector2.down, 1, player.playerData.whatisGround);
 

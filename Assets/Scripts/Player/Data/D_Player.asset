@@ -15,9 +15,14 @@ MonoBehaviour:
   healthCount: 100
   movementVelocity: 10
   jumpVelocity: 5
-  groundCheckRadius: 0.3
+  coyoteTime: 0.2
+  variableJumpHeightMultiplier: 0.5
+  groundCheckRadius: 2
   wallCheckDistance: 0.5
   ceilingCheckRadius: 0.2
+  disBetweenAfterImages: 0.5
+  drag: 5
+  standColliderHeight: 0.9
   whatisGround:
     serializedVersion: 2
     m_Bits: 0
