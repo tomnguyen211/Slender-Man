@@ -353,6 +353,7 @@ GameObject:
   - component: {fileID: 627885337}
   - component: {fileID: 627885339}
   - component: {fileID: 627885340}
+  - component: {fileID: 627885341}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -514,12 +515,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 418cd5834d15c854e81e30bcceee06da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  horizontalInput: 0
+  verticalInput: 0
   playerData: {fileID: 11400000, guid: 82be080d6f3324a4090b2cd6a40b3c06, type: 2}
   Anim: {fileID: 627885340}
   groundCheck: {fileID: 1069736536}
   wallCheck: {fileID: 2106002653}
   ledgeCheck: {fileID: 813225219}
   ceilingCheck: {fileID: 928708022}
+  CurrentForceVelocity: {x: 0, y: 0, z: 0}
   orientation: {fileID: 1853780264}
   ShootPoint: {fileID: 1669396751}
 --- !u!114 &627885338
@@ -584,6 +588,32 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!143 &627885341
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 627885331}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Height: 2
+  m_Radius: 0.5
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &813225218
 GameObject:
   m_ObjectHideFlags: 0
