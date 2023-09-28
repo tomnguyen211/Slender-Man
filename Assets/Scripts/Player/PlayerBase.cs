@@ -23,6 +23,8 @@ public class PlayerBase : MonoBehaviour
     #region Components
     public Animator Anim;
     public Rigidbody RB { get; private set; }
+
+    public CharacterController CharacterController { get; private set; }
     #endregion
 
     #region Check Transforms
@@ -40,6 +42,8 @@ public class PlayerBase : MonoBehaviour
     List<Collider> colliders;
     protected bool Checkpoint;
     public Vector3 CurrentVelocity { get; private set; }
+    public Vector3 CurrentForceVelocity;
+
     private Vector3 workspace;
     [SerializeField]
     Transform orientation;
@@ -69,6 +73,7 @@ public class PlayerBase : MonoBehaviour
         RB = GetComponent<Rigidbody>();
         RB.constraints = RigidbodyConstraints.FreezeRotation;
         InputHandler = GetComponent<Player_Input_Manager>();
+        CharacterController = GetComponent<CharacterController>();
     }
 
     public virtual void Update()
@@ -92,12 +97,20 @@ public class PlayerBase : MonoBehaviour
         RB.velocity = Vector3.zero;
         CurrentVelocity = Vector3.zero;
     }
-    public void SetVelocity(float velocity, Vector3 direction)
+    public void SetVelocity(float velocity, Vector3 direction, Vector3 moveVector)
     {
-        workspace = orientation.forward * direction.x + orientation.right * direction.z;
+        CurrentVelocity = Vector3.SmoothDamp(CurrentVelocity, moveVector * velocity, ref workspace, 0.5f);
+        CharacterController.Move(CurrentVelocity * Time.deltaTime);
+
+        /*Ray groundCheckRay = new Ray(transform.position, Vector3.down);
+        if(Physics.Raycast(groundCheckRay,2f))
+        {
+            CurrentForceVelocity.y = -2f;
+        }*/
+       /* workspace = orientation.forward * direction.x + orientation.right * direction.z;
         workspace = direction * velocity;
         RB.velocity = workspace;
-        CurrentVelocity = workspace;
+        CurrentVelocity = workspace;*/
     }
     public void SetVelocityX(float velocity)
     {
@@ -582,8 +595,13 @@ public class PlayerMoveState : Player_GroundState
     {
         base.LogicUpdate();
 
+        Vector3 PlayerInput = new Vector3 { x = player.InputHandler.NormInputX, y = 0f, z = player.InputHandler.NormInputZ };
+        Vector3 MoveVector = player.transform.TransformDirection(PlayerInput);
 
-        player.SetVelocity(5, new Vector3(player.horizontalInput,0, player.verticalInput));
+        player.SetVelocity(5, PlayerInput, MoveVector);
+
+        //player.SetVelocity(5, new Vector3(player.horizontalInput, 0, PlayerInput));
+
 
         RaycastHit2D rayGround = Physics2D.Raycast(player.transform.position, Vector2.down, 1, player.playerData.whatisGround);
 
