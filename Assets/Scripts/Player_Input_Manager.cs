@@ -16,6 +16,7 @@ public class Player_Input_Manager : MonoBehaviour
 {
     private PlayerInput playerInput;
     private Camera cam;
+
     [HideInInspector]
     public PlayerBase player;
 
