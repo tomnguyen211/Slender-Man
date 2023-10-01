@@ -35,7 +35,11 @@ namespace UnityTutorial.PlayerControl
         private const float _walkSpeed = 2f;
         private const float _runSpeed = 6f;
         private Vector2 _currentVelocity;
-        
+
+
+        // PickUp
+        [SerializeField] private LayerMask pickUpLayerMask;
+        [SerializeField] GameObject flashLight;
 
 
         private void Start() {
@@ -51,6 +55,19 @@ namespace UnityTutorial.PlayerControl
             _groundHash = Animator.StringToHash("Grounded");
             _fallingHash = Animator.StringToHash("Falling");
             _crouchHash = Animator.StringToHash("Crouch");
+        }
+
+        private void Update()
+        {
+            if(Input.GetKeyDown(KeyCode.E))
+            {
+                if (Physics.Raycast(Camera.position, CameraRoot.forward, out RaycastHit raycastHit,5f, pickUpLayerMask))
+                {
+                    GameObject itemPickup = raycastHit.transform.gameObject;
+                    itemPickup.SetActive(false);
+                    flashLight.SetActive(true);
+                }
+            }
         }
 
         private void FixedUpdate() {
