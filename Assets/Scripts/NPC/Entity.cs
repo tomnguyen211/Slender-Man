@@ -1,26 +1,47 @@
+using Pathfinding;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Collections;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.InputSystem.XR;
 
 public class Entity : MonoBehaviour
 {
-    public PlayerStateMachine stateMachine;
+    public FiniteStateMachine stateMachine;
     public D_Entity entityData;
+
+    [HideInInspector]
+    public Seeker seeker;
+    [HideInInspector]
+    public Path path;
+    public float nextWaypointDistance = 3;
+    protected int currentWaypoint = 0;
+    [ReadOnly]
+    public bool reachedEndOfPath;
 
     [Header("GENERAL SETUP")]
     public Rigidbody rb;
     public Animator anim;
+    [HideInInspector]
     public CharacterController characterController;
 
     [Header("DETECTION")]
+    [HideInInspector]
+    public GameObject enemy;
+    [ReadOnly]
     public bool CanSeePlayer;
-    protected float TargetFindTimerReset = 10;
+    protected float TargetFindTimerReset = 2;
+    private bool resetFindTargetEnable;
+    [ReadOnly]
     public bool DetectionCheck;
     public float DetectionTimer { get; set; }
+    [HideInInspector]
     public float RadiusDetection;
+    [HideInInspector]
     public float RadiusAfterDetection;
+    [ReadOnly]
     public bool NoTargetFound;
 
     #region Check Transforms
@@ -40,7 +61,7 @@ public class Entity : MonoBehaviour
 
     public virtual void Awake()
     {
-        stateMachine = new PlayerStateMachine();
+        stateMachine = new FiniteStateMachine();
 
         Initialization();
     }
@@ -49,26 +70,49 @@ public class Entity : MonoBehaviour
     public virtual void Start()
     {
         TriggerDetected += TriggerDetection;
+        seeker = GetComponent<Seeker>();
+        characterController = GetComponent<CharacterController>();
     }
 
     public virtual void Update()
     {
         ResetFindTarget();
-        DetectionReset();
-        Detection(); ;
-
-
+        //ResetFindTarget();
+        /* DetectionReset();
+         Detection();*/
         stateMachine.CurrentState.LogicUpdate();
     }
 
     public virtual void FixedUpdate()
     {
+        DetectionReset();
+        Detection();
         stateMachine.CurrentState.PhysicUpdate();
     }
 
+    #region Pathfinding
+    public void UpdatePath_Enemy()
+    {
+        if (enemy == null)
+            CancelInvoke(nameof(UpdatePath_Enemy));
+        else if (seeker.IsDone())
+        {
+            seeker.StartPath(transform.position, enemy.transform.position, OnPathComplete);
+        }
+    }
+    public void OnPathComplete(Path p)
+    {
+        if (!p.error)
+        {
+            path = p;
+            currentWaypoint = 0;
+        }
+    }
+    #endregion
+
 
     #region Set Functions
-   
+
     public void SetVelocity(float velocity, Vector2 direction)
     {
         /*workspace = direction * velocity;
@@ -82,7 +126,18 @@ public class Entity : MonoBehaviour
 
     public bool CheckIfGround()
     {
-        return Physics2D.OverlapCircle(groundCheck.position, entityData.groundCheckRadius, entityData.whatIsGround);
+        return Physics.Raycast(groundCheck.position,Vector3.down ,entityData.groundCheckDistance, entityData.whatIsGround);
+    }
+
+    public bool CheckIfTouchingWall()
+    {
+        return Physics.Raycast(groundCheck.position, transform.forward, entityData.wallCheckDistance, entityData.whatIsGround);
+    }
+
+    public bool CheckIfTouchingLedge()
+    {
+        return !Physics.Raycast(groundCheck.position, Vector3.down, entityData.groundCheckDistance, entityData.whatIsGround);
+
     }
 
     #endregion
@@ -169,207 +224,62 @@ public class Entity : MonoBehaviour
     #region Detection Functions
     public virtual void FieldOfViewCheck()
     {
-        /*Collider2D[] rangeChecks = Physics2D.OverlapCircleAll(transform.position, RadiusDetection, entityData.armor | entityData.protection);
+        Collider[] rangeChecks = Physics.OverlapSphere(transform.position, RadiusDetection, entityData.character);
+
 
         if (rangeChecks.Length != 0)
         {
             for (int i = 0; i < rangeChecks.Length; i++)
             {
                 Transform target = rangeChecks[i].transform;
-                Vector3 directionToTarget = (target.position - rayCenter.transform.position).normalized;
-                if (Vector3.Angle(rayCenter.transform.right, directionToTarget) < entityData.angleDetection / 2)
+                Vector3 directionToTarget = (target.position - transform.position).normalized;
+
+                if (Vector3.Angle(transform.forward, directionToTarget) < entityData.angleDetection / 2)
                 {
-                    float distanceToTarget = Vector3.Distance(rayCenter.transform.position, target.position);
-
-                    if (!Physics2D.Raycast(rayCenter.transform.position, directionToTarget, distanceToTarget, entityData.whatIsGround))
+                    float distanceToTarget = Vector3.Distance(transform.position, target.position);
+                    if (!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, entityData.whatIsGround) && target.CompareTag("Player"))
                     {
-
-                        for (int n = 0; n < enemyList.Count; n++)
-                        {
-
-                            if (target.CompareTag((string)enemyList[n]))
-                            {
-                                NoTargetFound = false;
-                                CanSeePlayer = true;
-                                DetectionCheck = true;
-                                DetectionTimer = entityData.detectionTimer;
-                                if (enemy == null)
-                                {
-                                    if (((1 << target.gameObject.layer) & entityData.armor) != 0)
-                                        enemy = target.GetComponent<Armor_Manager>().parentObject;
-                                    else
-                                        enemy = target.GetComponent<Protection_Manager>().parentObject;
-                                }
-                                enemy_pools.Add(enemy);
-                                InvokeRepeating(nameof(FieldOfViewDetect), 1, 1);
-                                TriggerDetected.Invoke();
-
-                                return;
-                            }
-                        }
+                        NoTargetFound = false;
+                        CanSeePlayer = true;
+                        DetectionCheck = true;
+                        DetectionTimer = entityData.detectionTimer;
+                        enemy = target.gameObject;
+                        TriggerDetected.Invoke();
                     }
                 }
             }
-        }*/
+        }
     }
-    public virtual void FieldOfViewDetect()
-    {
-       /* List<GameObject> temp_pools = new List<GameObject>();
-
-        // STAGE 1 : CHECK AND DELETE //
-        for (int m = 0; m < enemy_pools.Count; m++)
-        {
-            if (enemy_pools[m].Equals(null))
-            {
-                enemy_pools.RemoveAt(m);
-            }
-            else if (!enemyList.Contains(enemy_pools[m].tag))
-            {
-                enemy_pools.RemoveAt(m);
-            }
-            else if (enemy_pools[m].CompareTag("Dead"))
-            {
-                enemy_pools.RemoveAt(m);
-            }
-            else
-            {
-                temp_pools.Add(enemy_pools[m]);
-            }
-        }
-
-        // STAGE 2 : SEARCH FOR ENEMIES // 
-        Collider2D[] rangeChecks = Physics2D.OverlapCircleAll(rayCenter.transform.position, RadiusAfterDetection, entityData.armor | entityData.protection);
-        if (rangeChecks.Length != 0)
-        {
-            for (int i = 0; i < rangeChecks.Length; i++)
-            {
-                Transform target = rangeChecks[i].transform;
-                Vector3 directionToTarget = (target.position - rayCenter.transform.position).normalized;
-                if (Vector3.Angle(rayCenter.transform.right, directionToTarget) < 180)
-                {
-                    float distanceToTarget = Vector3.Distance(rayCenter.transform.position, target.position);
-
-                    if (!Physics2D.Raycast(rayCenter.transform.position, directionToTarget, distanceToTarget, entityData.whatIsGround))
-                    {
-                        for (int n = 0; n < enemyList.Count; n++) // Check Tag
-                        {
-                            if (target.CompareTag((string)enemyList[n]))
-                            {
-                                if (((1 << target.gameObject.layer) & entityData.armor) != 0)
-                                {
-                                    if (!enemy_pools.Contains(target.GetComponent<Armor_Manager>().parentObject) && target.gameObject.layer != LayerMask.NameToLayer("Invisible"))
-                                    {
-                                        enemy_pools.Add(target.GetComponent<Armor_Manager>().parentObject);
-                                        CanSeePlayer = true;
-                                        break;
-                                    }
-                                    else
-                                    {
-                                        temp_pools.Remove(target.GetComponent<Armor_Manager>().parentObject);
-                                        break;
-                                    }
-                                }
-                                else
-                                {
-                                    if (!enemy_pools.Contains(target.GetComponent<Protection_Manager>().parentObject) && target.gameObject.layer != LayerMask.NameToLayer("Invisible"))
-                                    {
-                                        enemy_pools.Add(target.GetComponent<Protection_Manager>().parentObject);
-                                        CanSeePlayer = true;
-                                        break;
-                                    }
-                                    else
-                                    {
-                                        temp_pools.Remove(target.GetComponent<Protection_Manager>().parentObject);
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    else
-                    {
-                        for (int n = 0; n < enemyList.Count; n++) // Check Tag
-                        {
-                            if (target.CompareTag((string)enemyList[n]))
-                            {
-
-                                if (((1 << target.gameObject.layer) & entityData.armor) != 0)
-                                {
-                                    if (enemy_pools.Contains(target.GetComponent<Armor_Manager>().parentObject))
-                                    {
-                                        temp_pools.Remove(target.GetComponent<Armor_Manager>().parentObject);
-                                        break;
-                                    }
-                                }
-                                else
-                                {
-                                    if (enemy_pools.Contains(target.GetComponent<Protection_Manager>().parentObject))
-                                    {
-                                        temp_pools.Remove(target.GetComponent<Protection_Manager>().parentObject);
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-
-        // STAGE 3 : REMOVE ENEMY THAT NO LONGER FOUND EXCEPT CURRENT ENEMY // 
-        for (int n = 0; n < temp_pools.Count; n++)
-        {
-            for (int i = 0; i < enemy_pools.Count; i++)
-            {
-                if (temp_pools[n] == enemy_pools[i])
-                {
-                    enemy_pools.RemoveAt(i);
-                    break;
-                }
-            }
-        }
-
-
-        // STAGE 4: ACTIVATE IF ENEMY IS NULL
-        if (enemy_pools.Count > 0 && NoTargetFound)
-        {
-            enemy = FindClosestEnemy();
-        }*/
-    }
+  
    
     public virtual void CheckAimDirection()
     {
-        /*if (enemy == null)
+        if (enemy == null)
         {
             CanSeePlayer = false;
             return;
         }
 
-        Vector2 dir = (enemy.transform.position - rayCenter.transform.position).normalized;
-        RaycastHit2D[] hitInfo = Physics2D.RaycastAll(rayCenter.transform.position, dir, RadiusAfterDetection, entityData.armor | entityData.protection);
-        if (hitInfo.Length >= 1)
+        Vector3 dir = (enemy.transform.position - transform.position).normalized;
+
+        RaycastHit[] hitInfo = Physics.RaycastAll(transform.position, dir, RadiusAfterDetection, entityData.character);
+
+        if (hitInfo.Length > 0)
         {
+            resetFindTargetEnable = false;
+            TargetFindTimerReset = 2;
             for (int i = 0; i < hitInfo.Length; i++)
             {
-                RaycastHit2D hit = hitInfo[i];
-                //GameObject a = hit.transform.GetComponent<RootObject>().parentObject;
+                RaycastHit hit = hitInfo[i];
                 GameObject a = hit.transform.gameObject;
-                Debug.DrawLine(rayCenter.transform.position, hit.point, Color.red);
 
-                if (a.layer != LayerMask.NameToLayer("Invisible"))
+                Debug.DrawLine(transform.position, hit.point, Color.red);
+
+                if (a.CompareTag("Player"))
                 {
-                    for (int n = 0; n < enemyList.Count; n++)
-                    {
-                        if (a.CompareTag((string)enemyList[n]))
-                        {
-                            CanSeePlayer = true;
-                            return;
-                        }
-                    }
+                    CanSeePlayer = true;
+                    return;
                 }
-                else
-                    CanSeePlayer = false;
 
                 if (i == hitInfo.Length - 1)
                 {
@@ -380,8 +290,8 @@ public class Entity : MonoBehaviour
         }
         else
         {
-            CanSeePlayer = false;
-        }*/
+            resetFindTargetEnable = true;
+        }
     }
 
     public virtual void Detection()
@@ -408,8 +318,6 @@ public class Entity : MonoBehaviour
             {
                 DetectionCheck = false;
                 DetectionTimer = entityData.detectionTimer;
-
-                CancelInvoke(nameof(FieldOfViewDetect));
             }
             else
                 DetectionTimer -= Time.deltaTime;
@@ -418,11 +326,14 @@ public class Entity : MonoBehaviour
 
     public virtual void ResetFindTarget()
     {
-        if (DetectionCheck)
+        if (resetFindTargetEnable)
         {
             if (TargetFindTimerReset <= 0)
             {
-                TargetFindTimerReset = 10;
+                Debug.Log("Here");
+                TargetFindTimerReset = 2;
+                CanSeePlayer = false;
+                resetFindTargetEnable = false;
             }
             else
                 TargetFindTimerReset -= Time.deltaTime;
