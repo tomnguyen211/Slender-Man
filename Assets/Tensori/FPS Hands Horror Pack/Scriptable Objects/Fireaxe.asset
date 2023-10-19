@@ -1,0 +1,78 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36e8c6027337e07448e0dd91076647c6, type: 3}
+  m_Name: Fireaxe
+  m_EditorClassIdentifier: 
+  ItemPrefab: {fileID: 2685722253168256307, guid: 3e4fef31c9ec46b499db2e1fd2f944ed,
+    type: 3}
+  HandsPivotBoneTransformName: fireaxe
+  ItemAnimatorTimeParameter: AnimationTime
+  AttackAnimations:
+  - HandsAnimatorAttackStateName: Axe_Hit
+    ItemAnimatorAttackStateName: Axe_Hit
+    AttackAnimationLength: 0.8
+    AttackAnimationBlendTime: 0.02
+    AnimationEvents:
+    - EventMessage: CheckForDamage
+      EventPosition: 0.368
+  - HandsAnimatorAttackStateName: Axe_Hit_Secondary
+    ItemAnimatorAttackStateName: Axe_Hit_Secondary
+    AttackAnimationLength: 1
+    AttackAnimationBlendTime: 0.02
+    AnimationEvents:
+    - EventMessage: CheckForDamage
+      EventPosition: 0.432
+  MovementBounceVelocityLimit: 5
+  MovementBounceSpringStiffness: 10
+  MovementBounceSpringDamping: 10
+  IdlePose:
+    HandsAnimationStateName: Axe_Idle
+    ItemAnimationStateName: Axe_Idle
+    AnimationStateBlendTime: 0.1
+    PositionOffset: {x: 0, y: -0.15, z: -0.12}
+    EulerOffset: {x: -5.07, y: 6.23, z: -8.37}
+    TransformSmoothDampTime: 0.1
+    MovementBounceStrength_Horizontal: 0.2
+    MovementBounceStrength_Vertical: 0.15
+    MovementBounceSpeed: 12
+  RunPose:
+    HandsAnimationStateName: Axe_Idle
+    ItemAnimationStateName: Axe_Idle
+    AnimationStateBlendTime: 0.1
+    PositionOffset: {x: 0, y: -0.12, z: -0.1}
+    EulerOffset: {x: 5, y: 10.41, z: 0}
+    TransformSmoothDampTime: 0.1
+    MovementBounceStrength_Horizontal: 0.35
+    MovementBounceStrength_Vertical: 0.22
+    MovementBounceSpeed: 15
+  AimPose:
+    HandsAnimationStateName: Axe_Idle
+    ItemAnimationStateName: Axe_Idle
+    AnimationStateBlendTime: 0.1
+    PositionOffset: {x: 0, y: -0.2, z: 0}
+    EulerOffset: {x: 0, y: 0, z: 0}
+    TransformSmoothDampTime: 0.1
+    MovementBounceStrength_Horizontal: 0.1
+    MovementBounceStrength_Vertical: 0.1
+    MovementBounceSpeed: 12
+  ReloadPose:
+    HandsAnimationStateName: Axe_Idle
+    ItemAnimationStateName: Axe_Idle
+    AnimationStateBlendTime: 0.1
+    PositionOffset: {x: 0, y: -0.15, z: -0.12}
+    EulerOffset: {x: -5.07, y: 6.23, z: -8.37}
+    TransformSmoothDampTime: 0.1
+    MovementBounceStrength_Horizontal: 0.1
+    MovementBounceStrength_Vertical: 0.1
+    MovementBounceSpeed: 12
+    AnimationLength: 1
+    AnimationEvents: []
