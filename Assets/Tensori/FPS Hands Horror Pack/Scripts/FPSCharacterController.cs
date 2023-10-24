@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-
 using UnityEngine;
 
 namespace Tensori.FPSHandsHorrorPack
@@ -60,8 +57,8 @@ namespace Tensori.FPSHandsHorrorPack
                 return;
             }
 
-            updateInput();
-            updateTransform();
+            UpdateInput();
+            UpdateTransform();
         }
 
         private void LateUpdate()
@@ -73,11 +70,11 @@ namespace Tensori.FPSHandsHorrorPack
                 return;
             }
 
-            updateCameraRotation();
-            updateCameraPosition();
+            UpdateCameraRotation();
+            UpdateCameraPosition();
         }
 
-        private void updateInput()
+        private void UpdateInput()
         {
             runInputHeld = Input.GetKey(KeyCode.LeftShift);
 
@@ -87,7 +84,7 @@ namespace Tensori.FPSHandsHorrorPack
             inputMouseDelta = new Vector2(Input.GetAxis(inputAxis_MouseX), Input.GetAxis(inputAxis_MouseY));
         }
 
-        private void updateCameraRotation()
+        private void UpdateCameraRotation()
         {
             cameraYaw += inputMouseDelta.x * cameraMouseSensitivity;
             cameraPitch += -inputMouseDelta.y * cameraMouseSensitivity;
@@ -102,12 +99,12 @@ namespace Tensori.FPSHandsHorrorPack
             cameraTransform.rotation = Quaternion.Euler(cameraPitch, cameraYaw, 0f);
         }
 
-        private void updateCameraPosition()
+        private void UpdateCameraPosition()
         {
             cameraTransform.position = transform.position + cameraHeight * transform.up;
         }
 
-        private void updateTransform()
+        private void UpdateTransform()
         {
             Vector3 cameraHorizontalForward = cameraTransform.forward;
             cameraHorizontalForward.y = 0;

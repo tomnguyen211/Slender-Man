@@ -14,6 +14,7 @@ public class Beast_Entity : Entity
     public D_PatrolState D_PatrolState;
     public D_MoveState D_MoveState;
 
+
   
     public override void Awake()
     {

@@ -55,6 +55,8 @@ namespace Tensori.FPSHandsHorrorPack
             [Min(0f)] public float AttackAnimationBlendTime = 0f;
 
             public List<AnimationEvent> AnimationEvents = new List<AnimationEvent>();
+            
+            public GameObject bulletCase;
         }
 
         [System.Serializable]
@@ -99,6 +101,9 @@ namespace Tensori.FPSHandsHorrorPack
 
             [Tooltip("Speed of the movement bounce motion in this pose.")]
             [Min(0f)] public float MovementBounceSpeed = 12f;
+
+            public Vector3 bulletPoint;
+            public Vector3 bulletCasePos;
         }
 
         [System.Serializable]
