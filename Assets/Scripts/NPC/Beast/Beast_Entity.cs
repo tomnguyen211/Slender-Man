@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Beast_Entity : Entity
+public class Beast_Entity : Entity, IDamage
 {
     public Beast_Idle Beast_Idle { get; private set; }
     public Beast_Move Beast_Move { get; private set; }
@@ -64,6 +64,13 @@ public class Beast_Entity : Entity
             DetectionCheck = true;
             DetectionTimer = entityData.detectionTimer;
             TriggerDetection();
+        }
+
+        current_Health -= amount;
+        if(current_Health < 0)
+        {
+            // Dead//
+
         }
     }
 
@@ -147,6 +154,11 @@ public class Beast_Entity : Entity
         base.TriggerDetection();
         stateMachine.ChangeState(Beast_Idle);
         Beast_Idle.isIdleTimeOver = true;
+    }
+
+    public void Damage(float damage)
+    {
+        MainHealthSet(damage);
     }
 }
 

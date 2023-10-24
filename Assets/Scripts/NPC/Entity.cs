@@ -1,11 +1,7 @@
 using Pathfinding;
-using System.Collections;
-using System.Collections.Generic;
 using Unity.Collections;
-using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.InputSystem.XR;
 
 public class Entity : MonoBehaviour
 {
@@ -52,11 +48,20 @@ public class Entity : MonoBehaviour
     #endregion
     protected UnityAction TriggerDetected { get; set; }
 
+    #region Health
+    protected float max_Health;
+    [SerializeField]
+    protected float current_Health;
+    #endregion
+
+
     public virtual void Initialization()
     {
         DetectionTimer = entityData.detectionTimer;
         RadiusDetection = entityData.radiusDetection;
         RadiusAfterDetection = entityData.radiusAfterDetection;
+
+        current_Health = max_Health = entityData.healthCount;
     }
 
     public virtual void Awake()

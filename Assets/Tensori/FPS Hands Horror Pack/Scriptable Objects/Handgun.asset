@@ -12,6 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36e8c6027337e07448e0dd91076647c6, type: 3}
   m_Name: Handgun
   m_EditorClassIdentifier: 
+  Stats:
+    bulletCase: {fileID: 1170647774315830, guid: 522b470e09ed8b8488c6b8788f9d6206,
+      type: 3}
+    damage: 10
+    range: 20
   ItemPrefab: {fileID: 4259820314644530675, guid: b8fc9818562b00146b2b1cd0c52b2560,
     type: 3}
   HandsPivotBoneTransformName: handgun
@@ -24,7 +29,6 @@ MonoBehaviour:
     AnimationEvents:
     - EventMessage: CheckForDamage
       EventPosition: 0.052
-    bulletCase: {fileID: 0}
   MovementBounceVelocityLimit: 4
   MovementBounceSpringStiffness: 10
   MovementBounceSpringDamping: 10

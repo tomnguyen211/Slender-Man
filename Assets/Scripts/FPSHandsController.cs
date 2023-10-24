@@ -456,12 +456,23 @@ public class FPSHandsController : MonoBehaviour
 
         if(Physics.Raycast(shootRayOrigin,handsParentTransform.forward,out hit,500))
         {
-            Debug.Log(hit.collider.name + " is hit");
             if (hit.collider.CompareTag("Enemy"))
             {
                 Debug.Log(hit.collider.name + " is hit");
+
+                if(hit.collider.TryGetComponent<IDamage>(out IDamage component_1))
+                {
+                    component_1.Damage(10);
+                }
+                else if(hit.collider.transform.parent.TryGetComponent<IDamage>(out IDamage component_2))
+                {
+                    component_2.Damage(10);
+
+                }
             }    
         }
         _crosshair.SetScale(CrossHairScale.Shoot, 1f);
+
+        GameObject cartridge = Instantiate(heldItemPreviousFrame.Stats.bulletCase, bulletCasing.transform.position, bulletCasing.transform.rotation);
     }    
 }
