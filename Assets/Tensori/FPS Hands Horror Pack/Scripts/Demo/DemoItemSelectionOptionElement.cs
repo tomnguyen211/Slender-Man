@@ -8,7 +8,7 @@ namespace Tensori.FPSHandsHorrorPack.Demo
 {
     public class DemoItemSelectionOptionElement : MonoBehaviour
     {
-        public FPSItemSelector.InputItemOption OptionBinding { get; private set; } = null;
+       /* public FPSItemSelector.InputItemOption OptionBinding { get; private set; } = null;
 
         [Header("Object References")]
         [SerializeField] private Text labelText = null;
@@ -52,6 +52,6 @@ namespace Tensori.FPSHandsHorrorPack.Demo
                 isSelected ? defaultSize : 0.7f * defaultSize, 
                 ref sizeVelocity, 
                 smoothTime: 0.2f);
-        }
+        }*/
     }
 }

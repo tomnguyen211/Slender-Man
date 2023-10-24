@@ -8,7 +8,7 @@ namespace Tensori.FPSHandsHorrorPack.Demo
 {
     public class DemoItemSelectionCanvas : MonoBehaviour
     {
-        [Header("Object References")]
+       /* [Header("Object References")]
         [SerializeField] private DemoItemSelectionOptionElement selectionOptionPrefab = null;
         [SerializeField] private FPSItemSelector itemSelector = null;
         [SerializeField] private RectTransform verticalGroupParent = null;
@@ -44,6 +44,6 @@ namespace Tensori.FPSHandsHorrorPack.Demo
                 var element = activeOptionElements[i];
                 element.UpdateSelectionHighlight(isSelected: option == element.OptionBinding);
             }
-        }
+        }*/
     }
 }
