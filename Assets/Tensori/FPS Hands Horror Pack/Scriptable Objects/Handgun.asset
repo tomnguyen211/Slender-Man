@@ -17,6 +17,10 @@ MonoBehaviour:
       type: 3}
     damage: 10
     range: 20
+    MuzzleFlash: {fileID: 8066342488965651439, guid: d1daaaf365f8bcb40a53af1cacb36f33,
+      type: 3}
+    ImpactMark: {fileID: 4300086816366312831, guid: 3698fcc89068d4e4dbc426132521e30f,
+      type: 3}
   ItemPrefab: {fileID: 4259820314644530675, guid: b8fc9818562b00146b2b1cd0c52b2560,
     type: 3}
   HandsPivotBoneTransformName: handgun
@@ -44,7 +48,7 @@ MonoBehaviour:
     MovementBounceStrength_Horizontal: 0.2
     MovementBounceStrength_Vertical: 0.15
     MovementBounceSpeed: 12
-    bulletPoint: {x: 0.1742, y: -0.7094, z: 0.0691}
+    bulletPoint: {x: 0.17516, y: -0.70967, z: 0.07375}
     bulletCasePos: {x: 0.1753, y: -0.5587, z: 0.0803}
   RunPose:
     HandsAnimationStateName: Handgun_Raised
@@ -68,7 +72,7 @@ MonoBehaviour:
     MovementBounceStrength_Horizontal: 0.1
     MovementBounceStrength_Vertical: 0.07
     MovementBounceSpeed: 12
-    bulletPoint: {x: 0.1742, y: -0.7094, z: 0.0691}
+    bulletPoint: {x: 0.17516, y: -0.70967, z: 0.07375}
     bulletCasePos: {x: 0.1754, y: -0.56642, z: 0.07976}
   ReloadPose:
     HandsAnimationStateName: Handgun_Reload

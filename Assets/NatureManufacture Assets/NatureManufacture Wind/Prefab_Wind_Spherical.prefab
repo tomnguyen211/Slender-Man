@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &3549660964224255517
+--- !u!1 &1967707348568356
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,8 +8,8 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 3554866624786202463}
-  - component: {fileID: 3732606736682455019}
+  - component: {fileID: 4921507568758886}
+  - component: {fileID: 182662161432101074}
   m_Layer: 0
   m_Name: Prefab_Wind_Spherical
   m_TagString: Untagged
@@ -17,31 +17,30 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &3554866624786202463
+--- !u!4 &4921507568758886
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3549660964224255517}
-  m_LocalRotation: {x: -0, y: -0.2117749, z: -0, w: 0.97731847}
-  m_LocalPosition: {x: 157.515, y: 42.101, z: 94.807}
+  m_GameObject: {fileID: 1967707348568356}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 23.7, z: 18.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: -24.453, z: 0}
---- !u!182 &3732606736682455019
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!182 &182662161432101074
 WindZone:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3549660964224255517}
+  m_GameObject: {fileID: 1967707348568356}
   m_Enabled: 1
   m_Mode: 1
-  m_Radius: 10
+  m_Radius: 20
   m_WindMain: 100
   m_WindTurbulence: 1
   m_WindPulseMagnitude: 0.5

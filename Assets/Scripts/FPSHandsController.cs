@@ -464,65 +464,147 @@ public class FPSHandsController : MonoBehaviour
 
     public void TriggerBulletCasingAnimation()
     {
-        GameObject cartridge = Instantiate(heldItemPreviousFrame.Stats.bulletCase, bulletCasing.transform.position, bulletCasing.transform.rotation);
+        GameObject cartridge = Instantiate(heldItemPreviousFrame.Stats.bulletCase, bulletCasing.transform.position, bulletCasing.rotation);
     }
 
     public void TriggerAttackAnimation()
     {
-        Vector3 shootRayOrigin = handsParentTransform.GetComponent<Camera>().ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0f));
-        RaycastHit hit;
+        if (heldItemPreviousFrame.HandsPivotBoneTransformName == "handgun")
+        {
+            GameObject muzzle = Instantiate(heldItemPreviousFrame.Stats.MuzzleFlash, bulletPoint.transform.position, Quaternion.identity);
+            muzzle.transform.SetParent(bulletPoint);
+            muzzle.transform.localEulerAngles = new Vector3(90, 90, 0);
 
-        if (_crosshair.GetState == CrossHairScale.Default)
-        {
-            shootMaxCount = 0;
-        }
+            Vector3 shootRayOrigin = handsParentTransform.GetComponent<Camera>().ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0f));
+            RaycastHit hit;
 
-        if (fpsCharacterController.IsRunning())
-        {
-            randX = Random.Range(0.15f, -0.15f);
-            randY = Random.Range(0.15f, -0.15f);
-        }
-        else if(fpsCharacterController.IsWalking())
-        {
-            randX = Random.Range(0.05f, -0.05f);
-            randY = Random.Range(0.05f, -0.05f);
-        }
-        else
-        {
-            randX = 0;
-            randY = 0;
-        }
-
-        if(_crosshair.GetState == CrossHairScale.Shoot && shootMaxCount < 5)
-        {
-            randX += Random.Range(0.01f, -0.01f);
-            randY += Random.Range(0.01f, -0.01f);
-            shootMaxCount++;
-        }
-        
-        var DirectionRay = handsParentTransform.TransformDirection(randX, randY, 1);
-
-        Debug.DrawRay(shootRayOrigin, DirectionRay * heldItemPreviousFrame.Stats.range, Color.red);
-        //Debug.DrawRay(shootRayOrigin, handsParentTransform.forward * heldItemPreviousFrame.Stats.range, Color.red);
-
-        if (Physics.Raycast(shootRayOrigin, DirectionRay, out hit, heldItemPreviousFrame.Stats.range))
-        {
-            if (hit.collider.CompareTag("Enemy"))
+            if (_crosshair.GetState == CrossHairScale.Default)
             {
-                Debug.Log(hit.collider.name + " is hit");
+                shootMaxCount = 0;
+            }
 
-                if (hit.collider.TryGetComponent<IDamage>(out IDamage component_1))
+            if (fpsCharacterController.IsRunning())
+            {
+                randX = Random.Range(0.15f, -0.15f);
+                randY = Random.Range(0.15f, -0.15f);
+            }
+            else if (fpsCharacterController.IsWalking())
+            {
+                randX = Random.Range(0.05f, -0.05f);
+                randY = Random.Range(0.05f, -0.05f);
+            }
+            else
+            {
+                randX = 0;
+                randY = 0;
+            }
+
+            if (_crosshair.GetState == CrossHairScale.Shoot && shootMaxCount < 5)
+            {
+                randX += Random.Range(0.01f, -0.01f);
+                randY += Random.Range(0.01f, -0.01f);
+                shootMaxCount++;
+            }
+
+            var DirectionRay = handsParentTransform.TransformDirection(randX, randY, 1);
+
+            Debug.DrawRay(shootRayOrigin, DirectionRay * heldItemPreviousFrame.Stats.range, Color.red);
+
+            if (Physics.Raycast(shootRayOrigin, DirectionRay, out hit, heldItemPreviousFrame.Stats.range))
+            {
+               
+                if (hit.collider.CompareTag("Enemy"))
                 {
-                    component_1.Damage(heldItemPreviousFrame.Stats.damage);
+                    Debug.Log(hit.collider.name + " is hit");
+
+                    if (hit.collider.TryGetComponent<IDamage>(out IDamage component_1))
+                    {
+                        component_1.Damage(heldItemPreviousFrame.Stats.damage);
+                    }
+                    else if (hit.collider.transform.parent.TryGetComponent<IDamage>(out IDamage component_2))
+                    {
+                        component_2.Damage(heldItemPreviousFrame.Stats.damage);
+
+                    }
                 }
-                else if (hit.collider.transform.parent.TryGetComponent<IDamage>(out IDamage component_2))
+                else if (hit.collider.CompareTag("Ground"))
                 {
-                    component_2.Damage(heldItemPreviousFrame.Stats.damage);
-
+                    float angle = Vector3.Angle(hit.normal, transform.up);
+                    Quaternion startRot = Quaternion.LookRotation(hit.normal);
+                    GameObject bulletHole = Instantiate(heldItemPreviousFrame.Stats.ImpactMark, hit.point, startRot);
                 }
             }
+            _crosshair.SetScale(CrossHairScale.Shoot, 1f);
         }
-        _crosshair.SetScale(CrossHairScale.Shoot, 1f);
+        else if(heldItemPreviousFrame.HandsPivotBoneTransformName == "shotgun")
+        {
+            GameObject muzzle = Instantiate(heldItemPreviousFrame.Stats.MuzzleFlash, bulletPoint.transform.position, Quaternion.identity);
+            muzzle.transform.SetParent(bulletPoint);
+            muzzle.transform.localEulerAngles = new Vector3(90, 90, 0);
+
+            Vector3 shootRayOrigin = handsParentTransform.GetComponent<Camera>().ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0f));
+            RaycastHit hit;
+
+            if (_crosshair.GetState == CrossHairScale.Default)
+            {
+                shootMaxCount = 0;
+            }
+
+            if (fpsCharacterController.IsRunning())
+            {
+                randX = Random.Range(0.15f, -0.15f);
+                randY = Random.Range(0.15f, -0.15f);
+            }
+            else if (fpsCharacterController.IsWalking())
+            {
+                randX = Random.Range(0.05f, -0.05f);
+                randY = Random.Range(0.05f, -0.05f);
+            }
+            else
+            {
+                randX = 0;
+                randY = 0;
+            }
+
+            if (_crosshair.GetState == CrossHairScale.Shoot && shootMaxCount < 5)
+            {
+                randX += Random.Range(0.01f, -0.01f);
+                randY += Random.Range(0.01f, -0.01f);
+                shootMaxCount++;
+            }
+
+
+
+            for(int i = 0; i < 10; i++)
+            {
+                var DirectionRay = handsParentTransform.TransformDirection(randX + Random.Range(-0.1f,0.1f), randY + Random.Range(-0.1f, 0.1f), 1);
+                Debug.DrawRay(shootRayOrigin, DirectionRay * heldItemPreviousFrame.Stats.range, Color.red);
+                if (Physics.Raycast(shootRayOrigin, DirectionRay, out hit, heldItemPreviousFrame.Stats.range))
+                {
+                    if (hit.collider.CompareTag("Enemy"))
+                    {
+                        Debug.Log(hit.collider.name + " is hit");
+
+                        if (hit.collider.TryGetComponent<IDamage>(out IDamage component_1))
+                        {
+                            component_1.Damage(heldItemPreviousFrame.Stats.damage);
+                        }
+                        else if (hit.collider.transform.parent.TryGetComponent<IDamage>(out IDamage component_2))
+                        {
+                            component_2.Damage(heldItemPreviousFrame.Stats.damage);
+
+                        }
+                    }
+                    else if (hit.collider.CompareTag("Ground"))
+                    {
+                        float angle = Vector3.Angle(hit.normal, transform.up);
+                        Quaternion startRot = Quaternion.LookRotation(hit.normal);
+                        GameObject bulletHole = Instantiate(heldItemPreviousFrame.Stats.ImpactMark, hit.point, startRot);
+                    }
+                }
+            }          
+           _crosshair.SetScale(CrossHairScale.Shoot, 1f);
+        }
     }
 }
 
