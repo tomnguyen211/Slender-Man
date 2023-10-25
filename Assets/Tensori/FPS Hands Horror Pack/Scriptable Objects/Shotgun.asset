@@ -12,6 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36e8c6027337e07448e0dd91076647c6, type: 3}
   m_Name: Shotgun
   m_EditorClassIdentifier: 
+  Stats:
+    bulletCase: {fileID: 8218674655098760532, guid: 5c4e98d2e1ad61d48bb8093c40cb1c09,
+      type: 3}
+    damage: 30
+    range: 10
   ItemPrefab: {fileID: 9016199863953354979, guid: 7d1eacc19d031a84b8421112d860841c,
     type: 3}
   HandsPivotBoneTransformName: shotgun
@@ -22,8 +27,10 @@ MonoBehaviour:
     AttackAnimationLength: 0.6
     AttackAnimationBlendTime: 0
     AnimationEvents:
-    - EventMessage: CheckForDamage
+    - EventMessage: Shoot
       EventPosition: 0.043
+    - EventMessage: Bullet
+      EventPosition: 0.7
   MovementBounceVelocityLimit: 3
   MovementBounceSpringStiffness: 10
   MovementBounceSpringDamping: 15
@@ -37,6 +44,8 @@ MonoBehaviour:
     MovementBounceStrength_Horizontal: 0.2
     MovementBounceStrength_Vertical: 0.2
     MovementBounceSpeed: 12
+    bulletPoint: {x: 0.1237, y: -1.0139, z: 0.0547}
+    bulletCasePos: {x: 0.1202, y: -0.5355, z: 0.0205}
   RunPose:
     HandsAnimationStateName: Shotgun_Idle
     ItemAnimationStateName: Shotgun_Idle
@@ -47,6 +56,8 @@ MonoBehaviour:
     MovementBounceStrength_Horizontal: 0.3
     MovementBounceStrength_Vertical: 0.3
     MovementBounceSpeed: 16
+    bulletPoint: {x: 0, y: 0, z: 0}
+    bulletCasePos: {x: 0, y: 0, z: 0}
   AimPose:
     HandsAnimationStateName: Shotgun_Idle
     ItemAnimationStateName: Shotgun_Idle
@@ -57,6 +68,8 @@ MonoBehaviour:
     MovementBounceStrength_Horizontal: 0.08
     MovementBounceStrength_Vertical: 0.06
     MovementBounceSpeed: 12
+    bulletPoint: {x: 0.1237, y: -1.0139, z: 0.0547}
+    bulletCasePos: {x: 0.1202, y: -0.5355, z: 0.0205}
   ReloadPose:
     HandsAnimationStateName: Shotgun_Reload
     ItemAnimationStateName: Shotgun_Reload
@@ -67,6 +80,8 @@ MonoBehaviour:
     MovementBounceStrength_Horizontal: 0.1
     MovementBounceStrength_Vertical: 0.1
     MovementBounceSpeed: 12
+    bulletPoint: {x: 0, y: 0, z: 0}
+    bulletCasePos: {x: 0, y: 0, z: 0}
     AnimationLength: 5
     AnimationEvents:
     - EventMessage: ReloadLogic

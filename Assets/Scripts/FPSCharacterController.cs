@@ -129,6 +129,15 @@ public class FPSCharacterController : MonoBehaviour
         return runInputHeld && velocity.sqrMagnitude > 0.1f;
     }
 
+    public bool isWalking()
+    {
+        if (characterController.isGrounded == false)
+            return false;
+        Vector3 velocity = characterController.velocity;
+        return velocity.sqrMagnitude > 0.1f && !runInputHeld;
+
+    }
+
     public float GetMoveVelocityMagnitude()
     {
         if (characterController.isGrounded == false)

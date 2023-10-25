@@ -69,6 +69,7 @@ public class FPSHandsController : MonoBehaviour
 
     #endregion
 
+
     private void Start()
     {
         _crosshair = _crosshairGameObject.GetComponent<CrosshairController>();
@@ -83,7 +84,6 @@ public class FPSHandsController : MonoBehaviour
         UpdateHandsPose();
         UpdateMovementBounce(deltaTime: Time.deltaTime);
         UpdateHandsPosition();
-
         if (IsAttacking || IsReloading || currentHandsPose == null)
             return;
 
@@ -354,7 +354,6 @@ public class FPSHandsController : MonoBehaviour
         PlayItemAnimation(attackAnimSettings.ItemAnimatorAttackStateName, attackAnimSettings.AttackAnimationBlendTime);
 
         float timer = 0f;
-
         while (timer < attackAnimSettings.AttackAnimationLength)
         {
             if (heldItem == null)
@@ -380,6 +379,7 @@ public class FPSHandsController : MonoBehaviour
                     continue;
 
                 triggeredAnimationEvents.Add(i);
+                Debug.Log(animationEvent.EventMessage);
                 OnAnimationEvent?.Invoke(animationEvent.EventMessage);
             }
 
@@ -399,7 +399,6 @@ public class FPSHandsController : MonoBehaviour
         currentHandsPose = animatedPose;
 
         triggeredAnimationEvents.Clear();
-
         PlayHandsAnimation(animatedPose.HandsAnimationStateName, animatedPose.AnimationStateBlendTime);
         PlayItemAnimation(animatedPose.ItemAnimationStateName, animatedPose.AnimationStateBlendTime);
 
@@ -429,6 +428,7 @@ public class FPSHandsController : MonoBehaviour
                     continue;
 
                 triggeredAnimationEvents.Add(i);
+                Debug.Log("Passed");
                 OnAnimationEvent?.Invoke(animationEvent.EventMessage);
             }
 
@@ -445,34 +445,54 @@ public class FPSHandsController : MonoBehaviour
 
     public void DebugLogAnimationEvent(string animationEvent)
     {
-        Debug.Log($"{GetType().Name}.DebugLogAnimationEvent(): {animationEvent}");
-        Shoot();
+        switch (animationEvent)
+        {
+            case "Bullet":
+                TriggerBulletCasingAnimation();
+                break;
+            case "Shoot":
+                TriggerAttackAnimation();
+                break;
+            default: break;
+        }
+
     }
 
-    private void Shoot()
+
+    public void TriggerBulletCasingAnimation()
+    {
+        GameObject cartridge = Instantiate(heldItemPreviousFrame.Stats.bulletCase, bulletCasing.transform.position, bulletCasing.transform.rotation);
+    }
+
+    public void TriggerAttackAnimation()
     {
         Vector3 shootRayOrigin = handsParentTransform.GetComponent<Camera>().ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0f));
         RaycastHit hit;
 
-        if(Physics.Raycast(shootRayOrigin,handsParentTransform.forward,out hit,500))
+        var randX = Random.Range(0.1f, -0.1f);
+        var randY = Random.Range(0.1f, -0.1f);
+
+        var DirectionRay = handsParentTransform.TransformDirection(randX, randY, 1);
+        Debug.DrawRay(shootRayOrigin, DirectionRay * heldItemPreviousFrame.Stats.range, Color.red);
+
+        if (Physics.Raycast(shootRayOrigin, DirectionRay, out hit, heldItemPreviousFrame.Stats.range))
         {
             if (hit.collider.CompareTag("Enemy"))
             {
                 Debug.Log(hit.collider.name + " is hit");
 
-                if(hit.collider.TryGetComponent<IDamage>(out IDamage component_1))
+                if (hit.collider.TryGetComponent<IDamage>(out IDamage component_1))
                 {
-                    component_1.Damage(10);
+                    component_1.Damage(heldItemPreviousFrame.Stats.damage);
                 }
-                else if(hit.collider.transform.parent.TryGetComponent<IDamage>(out IDamage component_2))
+                else if (hit.collider.transform.parent.TryGetComponent<IDamage>(out IDamage component_2))
                 {
-                    component_2.Damage(10);
+                    component_2.Damage(heldItemPreviousFrame.Stats.damage);
 
                 }
-            }    
+            }
         }
         _crosshair.SetScale(CrossHairScale.Shoot, 1f);
-
-        GameObject cartridge = Instantiate(heldItemPreviousFrame.Stats.bulletCase, bulletCasing.transform.position, bulletCasing.transform.rotation);
-    }    
+    }
 }
+

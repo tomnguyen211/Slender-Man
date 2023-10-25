@@ -27,8 +27,10 @@ MonoBehaviour:
     AttackAnimationLength: 0.27
     AttackAnimationBlendTime: 0
     AnimationEvents:
-    - EventMessage: CheckForDamage
-      EventPosition: 0.052
+    - EventMessage: Shoot
+      EventPosition: 0.064
+    - EventMessage: Bullet
+      EventPosition: 0.08
   MovementBounceVelocityLimit: 4
   MovementBounceSpringStiffness: 10
   MovementBounceSpringDamping: 10
@@ -43,7 +45,7 @@ MonoBehaviour:
     MovementBounceStrength_Vertical: 0.15
     MovementBounceSpeed: 12
     bulletPoint: {x: 0.1742, y: -0.7094, z: 0.0691}
-    bulletCasePos: {x: 0.2037, y: -0.5396, z: 0.0925}
+    bulletCasePos: {x: 0.1753, y: -0.5587, z: 0.0803}
   RunPose:
     HandsAnimationStateName: Handgun_Raised
     ItemAnimationStateName: Handgun_Idle
@@ -66,8 +68,8 @@ MonoBehaviour:
     MovementBounceStrength_Horizontal: 0.1
     MovementBounceStrength_Vertical: 0.07
     MovementBounceSpeed: 12
-    bulletPoint: {x: 0, y: 0, z: 0}
-    bulletCasePos: {x: 0, y: 0, z: 0}
+    bulletPoint: {x: 0.1742, y: -0.7094, z: 0.0691}
+    bulletCasePos: {x: 0.1754, y: -0.56642, z: 0.07976}
   ReloadPose:
     HandsAnimationStateName: Handgun_Reload
     ItemAnimationStateName: Handgun_Reload
