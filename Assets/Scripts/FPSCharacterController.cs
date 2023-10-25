@@ -57,6 +57,8 @@ public class FPSCharacterController : MonoBehaviour
 
         UpdateInput();
         UpdateTransform();
+        UpdateCameraRotation();
+
     }
 
     private void LateUpdate()
@@ -68,7 +70,6 @@ public class FPSCharacterController : MonoBehaviour
             return;
         }
 
-        UpdateCameraRotation();
         UpdateCameraPosition();
     }
 
@@ -129,7 +130,7 @@ public class FPSCharacterController : MonoBehaviour
         return runInputHeld && velocity.sqrMagnitude > 0.1f;
     }
 
-    public bool isWalking()
+    public bool IsWalking()
     {
         if (characterController.isGrounded == false)
             return false;

@@ -65,6 +65,9 @@ public class FPSHandsController : MonoBehaviour
 
     [SerializeField] GameObject _crosshairGameObject;
     CrosshairController _crosshair;
+    private int shootMaxCount = 0;
+    float randX = 0;
+    float randY = 0;
 
 
     #endregion
@@ -469,11 +472,38 @@ public class FPSHandsController : MonoBehaviour
         Vector3 shootRayOrigin = handsParentTransform.GetComponent<Camera>().ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0f));
         RaycastHit hit;
 
-        var randX = Random.Range(0.1f, -0.1f);
-        var randY = Random.Range(0.1f, -0.1f);
+        if (_crosshair.GetState == CrossHairScale.Default)
+        {
+            shootMaxCount = 0;
+        }
 
+        if (fpsCharacterController.IsRunning())
+        {
+            randX = Random.Range(0.15f, -0.15f);
+            randY = Random.Range(0.15f, -0.15f);
+        }
+        else if(fpsCharacterController.IsWalking())
+        {
+            randX = Random.Range(0.05f, -0.05f);
+            randY = Random.Range(0.05f, -0.05f);
+        }
+        else
+        {
+            randX = 0;
+            randY = 0;
+        }
+
+        if(_crosshair.GetState == CrossHairScale.Shoot && shootMaxCount < 5)
+        {
+            randX += Random.Range(0.01f, -0.01f);
+            randY += Random.Range(0.01f, -0.01f);
+            shootMaxCount++;
+        }
+        
         var DirectionRay = handsParentTransform.TransformDirection(randX, randY, 1);
+
         Debug.DrawRay(shootRayOrigin, DirectionRay * heldItemPreviousFrame.Stats.range, Color.red);
+        //Debug.DrawRay(shootRayOrigin, handsParentTransform.forward * heldItemPreviousFrame.Stats.range, Color.red);
 
         if (Physics.Raycast(shootRayOrigin, DirectionRay, out hit, heldItemPreviousFrame.Stats.range))
         {
