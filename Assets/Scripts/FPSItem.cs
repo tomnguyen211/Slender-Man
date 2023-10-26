@@ -122,5 +122,8 @@ public class FPSItem : ScriptableObject
 
         public float damage;
         public float range;
+
+        public GameObject MuzzleFlash;
+        public GameObject ImpactMark;
     }
 }

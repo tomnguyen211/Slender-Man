@@ -1,8 +1,9 @@
+using Unity.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
 [DefaultExecutionOrder(-1)]
-public class FPSCharacterController : MonoBehaviour
+public class FPSCharacterController : MonoBehaviour, IDamage
 {
     [Header("Input Settings")]
     [SerializeField] private string inputAxis_MoveHorizontal = "Horizontal";
@@ -31,6 +32,13 @@ public class FPSCharacterController : MonoBehaviour
 
     private CharacterController characterController = null;
 
+    #region Health
+    [SerializeField]
+    private float maxHealth;
+    [ReadOnly]
+    public float currentHealth;
+    #endregion
+
     private void Awake()
     {
         TryGetComponent(out characterController);
@@ -45,6 +53,10 @@ public class FPSCharacterController : MonoBehaviour
             cameraYaw = cameraEuler.y;
         }
     }
+    private void Start()
+    {
+        currentHealth = maxHealth;
+    }
 
     private void Update()
     {
@@ -57,6 +69,8 @@ public class FPSCharacterController : MonoBehaviour
 
         UpdateInput();
         UpdateTransform();
+        UpdateCameraRotation();
+
     }
 
     private void LateUpdate()
@@ -68,7 +82,6 @@ public class FPSCharacterController : MonoBehaviour
             return;
         }
 
-        UpdateCameraRotation();
         UpdateCameraPosition();
     }
 
@@ -129,7 +142,7 @@ public class FPSCharacterController : MonoBehaviour
         return runInputHeld && velocity.sqrMagnitude > 0.1f;
     }
 
-    public bool isWalking()
+    public bool IsWalking()
     {
         if (characterController.isGrounded == false)
             return false;
@@ -147,4 +160,13 @@ public class FPSCharacterController : MonoBehaviour
         velocity.y = 0f;
         return velocity.magnitude;
     }
+
+    public void Damage(float damage)
+    {
+        currentHealth -= damage;
+        if (currentHealth < 0f)
+            Debug.Log("You're Dead");
+    }
+
+
 }

@@ -15,8 +15,12 @@ MonoBehaviour:
   Stats:
     bulletCase: {fileID: 8218674655098760532, guid: 5c4e98d2e1ad61d48bb8093c40cb1c09,
       type: 3}
-    damage: 30
+    damage: 5
     range: 10
+    MuzzleFlash: {fileID: 3141232007039069051, guid: 06913e156a80f964b85dfcc75be0afde,
+      type: 3}
+    ImpactMark: {fileID: 4300086816366312831, guid: 3698fcc89068d4e4dbc426132521e30f,
+      type: 3}
   ItemPrefab: {fileID: 9016199863953354979, guid: 7d1eacc19d031a84b8421112d860841c,
     type: 3}
   HandsPivotBoneTransformName: shotgun
@@ -44,7 +48,7 @@ MonoBehaviour:
     MovementBounceStrength_Horizontal: 0.2
     MovementBounceStrength_Vertical: 0.2
     MovementBounceSpeed: 12
-    bulletPoint: {x: 0.1237, y: -1.0139, z: 0.0547}
+    bulletPoint: {x: 0.11634, y: -1.01342, z: 0.05577}
     bulletCasePos: {x: 0.1202, y: -0.5355, z: 0.0205}
   RunPose:
     HandsAnimationStateName: Shotgun_Idle
@@ -68,7 +72,7 @@ MonoBehaviour:
     MovementBounceStrength_Horizontal: 0.08
     MovementBounceStrength_Vertical: 0.06
     MovementBounceSpeed: 12
-    bulletPoint: {x: 0.1237, y: -1.0139, z: 0.0547}
+    bulletPoint: {x: 0.11634, y: -1.01342, z: 0.05577}
     bulletCasePos: {x: 0.1202, y: -0.5355, z: 0.0205}
   ReloadPose:
     HandsAnimationStateName: Shotgun_Reload

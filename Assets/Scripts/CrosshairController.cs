@@ -56,6 +56,9 @@ public class CrosshairController : MonoBehaviour
     }
     public void SetScale(CrossHairScale scale)
     { _currentScale = scale; }
+
+    public CrossHairScale GetState => _currentScale;
+
     public void SetScale(CrossHairScale scale, float resetTime)
     {
         if (isActiveAndEnabled)

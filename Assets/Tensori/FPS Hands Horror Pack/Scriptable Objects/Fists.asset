@@ -12,6 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36e8c6027337e07448e0dd91076647c6, type: 3}
   m_Name: Fists
   m_EditorClassIdentifier: 
+  Stats:
+    bulletCase: {fileID: 0}
+    damage: 2
+    range: 1
+    MuzzleFlash: {fileID: 0}
+    ImpactMark: {fileID: 0}
   ItemPrefab: {fileID: 0}
   HandsPivotBoneTransformName: WeaponPivot
   ItemAnimatorTimeParameter: AnimationTime
@@ -20,12 +26,16 @@ MonoBehaviour:
     ItemAnimatorAttackStateName: Fists_Hit
     AttackAnimationLength: 0.6
     AttackAnimationBlendTime: 0.02
-    AnimationEvents: []
+    AnimationEvents:
+    - EventMessage: Shoot
+      EventPosition: 0.5
   - HandsAnimatorAttackStateName: Fists_Hit_Secondary
     ItemAnimatorAttackStateName: Fists_Hit_Secondary
     AttackAnimationLength: 0.7
     AttackAnimationBlendTime: 0.02
-    AnimationEvents: []
+    AnimationEvents:
+    - EventMessage: Shoot
+      EventPosition: 0.4
   MovementBounceVelocityLimit: 2
   MovementBounceSpringStiffness: 10
   MovementBounceSpringDamping: 15
@@ -39,6 +49,8 @@ MonoBehaviour:
     MovementBounceStrength_Horizontal: 0.13
     MovementBounceStrength_Vertical: 0.11
     MovementBounceSpeed: 12
+    bulletPoint: {x: 0, y: 0, z: 0}
+    bulletCasePos: {x: 0, y: 0, z: 0}
   RunPose:
     HandsAnimationStateName: Fists_Idle
     ItemAnimationStateName: 
@@ -49,6 +61,8 @@ MonoBehaviour:
     MovementBounceStrength_Horizontal: 0.22
     MovementBounceStrength_Vertical: 0.18
     MovementBounceSpeed: 12
+    bulletPoint: {x: 0, y: 0, z: 0}
+    bulletCasePos: {x: 0, y: 0, z: 0}
   AimPose:
     HandsAnimationStateName: Fists_Idle
     ItemAnimationStateName: 
@@ -59,6 +73,8 @@ MonoBehaviour:
     MovementBounceStrength_Horizontal: 0.1
     MovementBounceStrength_Vertical: 0.1
     MovementBounceSpeed: 12
+    bulletPoint: {x: 0, y: 0, z: 0}
+    bulletCasePos: {x: 0, y: 0, z: 0}
   ReloadPose:
     HandsAnimationStateName: Fists_Idle
     ItemAnimationStateName: 
@@ -69,5 +85,7 @@ MonoBehaviour:
     MovementBounceStrength_Horizontal: 0.1
     MovementBounceStrength_Vertical: 0.1
     MovementBounceSpeed: 12
+    bulletPoint: {x: 0, y: 0, z: 0}
+    bulletCasePos: {x: 0, y: 0, z: 0}
     AnimationLength: 1
     AnimationEvents: []

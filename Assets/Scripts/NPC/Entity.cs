@@ -22,9 +22,12 @@ public class Entity : MonoBehaviour
     public Animator anim;
     [HideInInspector]
     public CharacterController characterController;
+    public Transform rayCenter;
+    [SerializeField]
+    WeaponManager[] weaponManagers;
 
     [Header("DETECTION")]
-    [HideInInspector]
+    [ReadOnly]
     public GameObject enemy;
     [ReadOnly]
     public bool CanSeePlayer;
@@ -52,6 +55,9 @@ public class Entity : MonoBehaviour
     protected float max_Health;
     [SerializeField]
     protected float current_Health;
+    [HideInInspector]
+    public bool CheckPoint;
+    public SpawnDecal SpawnDecal;
     #endregion
 
 
@@ -158,11 +164,11 @@ public class Entity : MonoBehaviour
     // EVENTS //
     public virtual void Reset_Weapon_Atk()
     {
-        /*for (int n = 0; n < weapon_manager.Length; n++)
+        for (int n = 0; n < weaponManagers.Length; n++)
         {
-            weapon_manager[n].damaged_Object.Clear();
-            weapon_manager[n].PierceController();
-        }*/
+            weaponManagers[n].damaged_Object.Clear();
+            weaponManagers[n].PierceController();
+        }
     }
     
     #endregion
@@ -229,7 +235,7 @@ public class Entity : MonoBehaviour
     #region Detection Functions
     public virtual void FieldOfViewCheck()
     {
-        Collider[] rangeChecks = Physics.OverlapSphere(transform.position, RadiusDetection, entityData.character);
+        Collider[] rangeChecks = Physics.OverlapSphere(rayCenter.position, RadiusDetection, entityData.armor);
 
 
         if (rangeChecks.Length != 0)
@@ -237,12 +243,12 @@ public class Entity : MonoBehaviour
             for (int i = 0; i < rangeChecks.Length; i++)
             {
                 Transform target = rangeChecks[i].transform;
-                Vector3 directionToTarget = (target.position - transform.position).normalized;
+                Vector3 directionToTarget = (target.position - rayCenter.position).normalized;
 
-                if (Vector3.Angle(transform.forward, directionToTarget) < entityData.angleDetection / 2)
+                if (Vector3.Angle(rayCenter.forward, directionToTarget) < entityData.angleDetection / 2)
                 {
-                    float distanceToTarget = Vector3.Distance(transform.position, target.position);
-                    if (!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, entityData.whatIsGround) && target.CompareTag("Player"))
+                    float distanceToTarget = Vector3.Distance(rayCenter.position, target.position);
+                    if (!Physics.Raycast(rayCenter.position, directionToTarget, distanceToTarget, entityData.whatIsGround) && target.CompareTag("Player"))
                     {
                         NoTargetFound = false;
                         CanSeePlayer = true;
@@ -265,9 +271,10 @@ public class Entity : MonoBehaviour
             return;
         }
 
-        Vector3 dir = (enemy.transform.position - transform.position).normalized;
+        Vector3 dir = (enemy.transform.position - rayCenter.position).normalized;
 
-        RaycastHit[] hitInfo = Physics.RaycastAll(transform.position, dir, RadiusAfterDetection, entityData.character);
+
+        RaycastHit[] hitInfo = Physics.RaycastAll(rayCenter.position, dir, RadiusAfterDetection, entityData.armor);
 
         if (hitInfo.Length > 0)
         {
@@ -278,7 +285,7 @@ public class Entity : MonoBehaviour
                 RaycastHit hit = hitInfo[i];
                 GameObject a = hit.transform.gameObject;
 
-                Debug.DrawLine(transform.position, hit.point, Color.red);
+                Debug.DrawLine(rayCenter.position, hit.point, Color.green);
 
                 if (a.CompareTag("Player"))
                 {
@@ -295,6 +302,7 @@ public class Entity : MonoBehaviour
         }
         else
         {
+            Debug.DrawRay(rayCenter.position, dir * RadiusAfterDetection, Color.red);
             resetFindTargetEnable = true;
         }
     }
@@ -362,5 +370,12 @@ public class Entity : MonoBehaviour
     {
 
     }
+
+    public virtual void DestroyObject()
+    {
+        Destroy(gameObject);
+    }
     #endregion
+
+
 }
