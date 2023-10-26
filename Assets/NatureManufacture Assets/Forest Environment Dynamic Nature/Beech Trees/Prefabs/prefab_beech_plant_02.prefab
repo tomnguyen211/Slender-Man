@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1141479743119424137}
   - component: {fileID: 4818415780812709333}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: prefab_beech_plant_02
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 80
@@ -24,6 +24,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1141479743118927529}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -32,7 +33,6 @@ Transform:
   - {fileID: 2448658378034652125}
   - {fileID: 8252434312721598015}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!205 &4818415780812709333
 LODGroup:
@@ -68,7 +68,7 @@ GameObject:
   - component: {fileID: 2448658378034652125}
   - component: {fileID: 5016103489128204922}
   - component: {fileID: 6825160552366960455}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: beech_plant_02_LOD0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -82,13 +82,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3854938273946587382}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1141479743119424137}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &5016103489128204922
 MeshFilter:
@@ -151,7 +151,7 @@ GameObject:
   - component: {fileID: 8252434312721598015}
   - component: {fileID: 5582891139225657111}
   - component: {fileID: 495770419509863332}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: beech_plant_02_LOD1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -165,13 +165,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6015774026739123997}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1141479743119424137}
-  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &5582891139225657111
 MeshFilter:

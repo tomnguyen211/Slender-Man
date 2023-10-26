@@ -312,6 +312,7 @@ public class Beast_Move : MoveState
             }
             else if (character.Beast_Attack.CheckIfDistance() && character.Beast_Attack.CheckIfCanUseAbility())
             {
+                Debug.Log(Vector3.Distance(character.rayCenter.position, character.enemy.transform.position));
                 stateMachine.ChangeState(character.Beast_Attack);
             }
             else if (character.IsBetween(Vector2.Distance(character.transform.position, character.enemy.transform.position), stateData.move_Thresholds[0].thresholdMin, stateData.move_Thresholds[0].thresholdMax) || character.reachedEndOfPath)
@@ -324,15 +325,37 @@ public class Beast_Move : MoveState
 
     public void PresetMove()
     {
-        if (character.DetectionCheck)
-            character.anim.SetInteger("Type", 2);
-        else
+        if(!character.DetectionCheck)
+        {
             character.anim.SetInteger("Type", 1);
+
+        }
+        else
+        {
+            if(Vector3.Distance(character.rayCenter.position,character.enemy.transform.position) >= 3f)
+                character.anim.SetInteger("Type", 2);
+            else
+                character.anim.SetInteger("Type", 1);
+
+
+        }
     }
 
+    public void PresetMove(int type)
+    {
+
+        switch(type)
+        {
+            case 1:
+                character.anim.SetInteger("Type", 1);
+                break;
+            case 2:
+                character.anim.SetInteger("Type", 2);
+                break;
+        }
+    }      
     public bool CheckIfCanMove()
     {
-        Debug.Log(Vector3.Distance(character.rayCenter.position, character.enemy.transform.position));
         return !character.IsBetween(Vector3.Distance(character.rayCenter.position, character.enemy.transform.position), stateData.move_Thresholds[0].thresholdMin, stateData.move_Thresholds[0].thresholdMax);
     }
 }

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7391735032840821725}
   - component: {fileID: 3656357261575558042}
   - component: {fileID: 3057231643630072111}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: beech_tree_06_LOD0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -26,13 +26,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 402231074841112697}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0, y: -0.15, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5464645483336778220}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &7391735032840821725
 MeshFilter:
@@ -93,8 +93,17 @@ CapsuleCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 402231074841112697}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
+  serializedVersion: 2
   m_Radius: 0.45
   m_Height: 24.057701
   m_Direction: 1
@@ -110,7 +119,7 @@ GameObject:
   - component: {fileID: 6409057458661898612}
   - component: {fileID: 578637493316728598}
   - component: {fileID: 6243954337748365146}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: beech_tree_06_LOD3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -124,13 +133,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2783166917596898679}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -0.15, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5464645483336778220}
-  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &578637493316728598
 MeshFilter:
@@ -193,7 +202,7 @@ GameObject:
   - component: {fileID: 6308037252056613722}
   - component: {fileID: 842662914198009773}
   - component: {fileID: 4348421166397924619}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: beech_tree_06_LOD1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -207,13 +216,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3165581000933246620}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0, y: -0.15, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5464645483336778220}
-  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &842662914198009773
 MeshFilter:
@@ -277,7 +286,7 @@ GameObject:
   - component: {fileID: 4170073895821691101}
   - component: {fileID: 3367869249938752965}
   - component: {fileID: 7966449104201464641}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: beech_tree_06_LOD2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -291,13 +300,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8367630982504019013}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0, y: -0.15, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5464645483336778220}
-  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &3367869249938752965
 MeshFilter:
@@ -360,9 +369,9 @@ GameObject:
   m_Component:
   - component: {fileID: 5464645483336778220}
   - component: {fileID: 4874527070508635944}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: prefab_beech_tree_06
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 80
@@ -374,6 +383,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9046900170786976767}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -384,7 +394,6 @@ Transform:
   - {fileID: 4170073895821691101}
   - {fileID: 6409057458661898612}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!205 &4874527070508635944
 LODGroup:
