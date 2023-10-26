@@ -11,6 +11,7 @@ public class BFX_BloodDecalLayers : MonoBehaviour
     DepthTextureMode defaultMode;
     RenderTexture rt;
     Camera depthCamera;
+    private GameObject cameraGameObject;
 
     void OnEnable()
     {
@@ -21,32 +22,15 @@ public class BFX_BloodDecalLayers : MonoBehaviour
             currentCam.depthTextureMode |= DepthTextureMode.Depth;
         }
 
-        var go = new GameObject("DecalLayersCamera");
-        go.transform.parent = currentCam.transform;
-        go.transform.localPosition = Vector3.zero;
-        go.transform.localRotation = Quaternion.identity;
-        depthCamera = go.AddComponent<Camera>();
-
-        depthCamera.transform.position = currentCam.transform.position;
-        depthCamera.transform.rotation = currentCam.transform.rotation;
-        depthCamera.fieldOfView = currentCam.fieldOfView;
-        depthCamera.nearClipPlane = currentCam.nearClipPlane;
-        depthCamera.farClipPlane = currentCam.farClipPlane;
-        depthCamera.rect = currentCam.rect;
-
-        if (currentCam.usePhysicalProperties)
-        {
-            depthCamera.usePhysicalProperties = true;
-            depthCamera.focalLength = currentCam.focalLength;
-            depthCamera.sensorSize = currentCam.sensorSize;
-            depthCamera.lensShift = currentCam.lensShift;
-            depthCamera.gateFit = currentCam.gateFit;
-        }
-
+        cameraGameObject = new GameObject("DecalLayersCamera");
+        cameraGameObject.transform.parent = currentCam.transform;
+        cameraGameObject.transform.localPosition = Vector3.zero;
+        cameraGameObject.transform.localRotation = Quaternion.identity;
+        depthCamera = cameraGameObject.AddComponent<Camera>();
+        depthCamera.CopyFrom(currentCam);
         depthCamera.renderingPath = RenderingPath.Forward;
         depthCamera.depth = currentCam.depth - 1;
         depthCamera.cullingMask = DecalLayers;
-       // depthCamera.CopyFrom(currentCam);
 
         CreateDepthTexture();
         depthCamera.targetTexture = rt;
@@ -59,7 +43,8 @@ public class BFX_BloodDecalLayers : MonoBehaviour
     void OnDisable()
     {
         GetComponent<Camera>().depthTextureMode = defaultMode;
-        if (rt != null) rt.Release();
+        Destroy(cameraGameObject);
+        RenderTexture.ReleaseTemporary(rt);
         Shader.DisableKeyword("USE_CUSTOM_DECAL_LAYERS");
         if (DecalRenderingMode == DecalLayersProperty.IgnoreSelectedLayers) Shader.DisableKeyword("USE_CUSTOM_DECAL_LAYERS_IGNORE_MODE");
     }
@@ -69,13 +54,13 @@ public class BFX_BloodDecalLayers : MonoBehaviour
         switch (LayerDepthResoulution)
         {
             case DepthMode.FullScreen:
-                rt = new RenderTexture(Screen.width, Screen.height, 24, RenderTextureFormat.Depth);
+                rt = RenderTexture.GetTemporary(Screen.width, Screen.height, 24, RenderTextureFormat.Depth);
                 break;
             case DepthMode.HalfScreen:
-                rt = new RenderTexture((int)(Screen.width * 0.5f), (int)(Screen.height * 0.5f), 24, RenderTextureFormat.Depth);
+                rt = RenderTexture.GetTemporary((int)(Screen.width * 0.5f), (int)(Screen.height * 0.5f), 24, RenderTextureFormat.Depth);
                 break;
             case DepthMode.QuarterScreen:
-                rt = new RenderTexture((int)(Screen.width * 0.25f), (int)(Screen.height * 0.25f), 24, RenderTextureFormat.Depth);
+                rt = RenderTexture.GetTemporary((int)(Screen.width * 0.25f), (int)(Screen.height * 0.25f), 24, RenderTextureFormat.Depth);
                 break;
             default:
                 break;

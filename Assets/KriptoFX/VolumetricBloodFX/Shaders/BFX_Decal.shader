@@ -15,9 +15,10 @@ Shader "KriptoFX/BFX/BFX_Decal"
 
 	SubShader
 	{
-		Tags{ "Queue" = "AlphaTest"}
+		Tags{ "Queue" = "Transparent"}
 		Blend DstColor SrcColor
-		//Blend SrcAlpha OneMinusSrcAlpha
+		//	Blend SrcAlpha OneMinusSrcAlpha
+
 		Cull Front
 		ZTest Always
 		ZWrite Off
@@ -25,15 +26,16 @@ Shader "KriptoFX/BFX/BFX_Decal"
 		Pass
 		{
 
-			CGPROGRAM
+			HLSLPROGRAM
 				#pragma vertex vert
 				#pragma fragment frag
 
 				#pragma multi_compile_fog
 				#pragma multi_compile_instancing
 				#pragma multi_compile _ USE_CUSTOM_DECAL_LAYERS
-				#pragma shader_feature CLAMP_SIDE_SURFACE
 				#pragma multi_compile _ USE_CUSTOM_DECAL_LAYERS_IGNORE_MODE
+				#pragma shader_feature CLAMP_SIDE_SURFACE
+
 
 				#include "UnityCG.cginc"
 
@@ -65,27 +67,7 @@ Shader "KriptoFX/BFX/BFX_Decal"
 				float4 _SunPos;
 				half _DepthMul;
 				half3 _DecalForwardDir;
-
-				struct appdata_t {
-					float4 vertex : POSITION;
-					float4 normal : NORMAL;
-					half4 color : COLOR;
-					UNITY_VERTEX_INPUT_INSTANCE_ID
-				};
-
-				struct v2f {
-					float4 vertex : SV_POSITION;
-					half4 color : COLOR;
-
-					float4 screenUV : TEXCOORD0;
-					float4 screenPos : TEXCOORD1;
-					float3 viewDir : TEXCOORD2;
-					UNITY_FOG_COORDS(3)
-					float4x4 inverseVP : TEXCOORD4;
-
-					UNITY_VERTEX_INPUT_INSTANCE_ID
-					UNITY_VERTEX_OUTPUT_STEREO
-				};
+				float4x4 UNITY_MATRIX_I_VP;
 
 				float4x4 inverse(float4x4 m) {
 					float
@@ -128,6 +110,29 @@ Shader "KriptoFX/BFX/BFX_Decal"
 						a20 * b03 - a21 * b01 + a22 * b00) / det;
 				}
 
+				struct appdata_t {
+					float4 vertex : POSITION;
+					float4 normal : NORMAL;
+					half4 color : COLOR;
+					UNITY_VERTEX_INPUT_INSTANCE_ID
+				};
+
+				struct v2f {
+					float4 vertex : SV_POSITION;
+					half4 color : COLOR;
+
+					float4 screenUV : TEXCOORD0;
+					float3 viewDir : TEXCOORD1;
+					float4 screenPos : TEXCOORD2;
+					UNITY_FOG_COORDS(3)
+					float4x4 inverseVP : TEXCOORD4;
+					
+
+
+					UNITY_VERTEX_INPUT_INSTANCE_ID
+					UNITY_VERTEX_OUTPUT_STEREO
+				};
+
 				float3 WorldSpacePositionFromDepth(float2 positionNDC, float deviceDepth, float4x4 inverseVP)
 				{
 					float4 positionCS = float4(positionNDC * 2.0 - 1.0, deviceDepth, 1.0);
@@ -148,35 +153,38 @@ Shader "KriptoFX/BFX/BFX_Decal"
 					o.vertex = UnityObjectToClipPos(v.vertex);
 					o.color = v.color;
 
-					o.screenPos = ComputeScreenPos(o.vertex);
+					o.screenUV = ComputeScreenPos(o.vertex);
 					o.viewDir = normalize(ObjSpaceViewDir(v.vertex));
+					o.screenPos = ComputeGrabScreenPos(o.vertex);
 					UNITY_TRANSFER_FOG(o,o.vertex);
-
 					o.inverseVP = inverse(UNITY_MATRIX_VP);
-
 					return o;
 				}
 
-			
 
 				half4 frag(v2f i) : SV_Target
 				{
 					UNITY_SETUP_INSTANCE_ID(i);
+
 					float2 screenUV = i.screenPos.xy / i.screenPos.w;
+
 
 #if USE_CUSTOM_DECAL_LAYERS
 					float depth = SAMPLE_DEPTH_TEXTURE(_LayerDecalDepthTexture, screenUV);
 					float depthMask = SAMPLE_DEPTH_TEXTURE(_CameraDepthTexture, screenUV);
 					float fade = depth < depthMask - 0.0005 ? 0 : 1;
-	#if USE_CUSTOM_DECAL_LAYERS_IGNORE_MODE
-						fade = 1 - fade;
-						depth = depthMask;
-	#endif
+
+#if USE_CUSTOM_DECAL_LAYERS_IGNORE_MODE
+
+					fade = 1 - fade;
+					depth = depthMask;
+#endif
 #else
 					float depth = SAMPLE_DEPTH_TEXTURE(_CameraDepthTexture, screenUV);
 #endif
 
 					float3 worldPos = WorldSpacePositionFromDepth(screenUV, depth, i.inverseVP);
+					
 					float3 decalSpaceScenePos = mul(unity_WorldToObject, float4(worldPos, 1));
 
 					float3 stepVal = saturate((0.5 - abs(decalSpaceScenePos.xyz)) * 10000);
@@ -217,6 +225,7 @@ Shader "KriptoFX/BFX/BFX_Decal"
 					float3 normal = normalize(float3(normAlpha.x, 1, normAlpha.y));
 
 					half3 mask = tex2D(_CutoutTex, uvCutout).xyz;
+					//mask = LinearToGammaSpace(mask);
 					half cutout = 0.5 + UNITY_ACCESS_INSTANCED_PROP(Props, _Cutout) * i.color.a * 0.5;
 
 					half alphaMask = saturate((mask.r - (cutout * 2 - 1)) * 20) * res.a;
@@ -231,21 +240,20 @@ Shader "KriptoFX/BFX/BFX_Decal"
 					light *= (1 - mask.z * colorMask);
 
 					float4 tintColor = UNITY_ACCESS_INSTANCED_PROP(Props, _TintColor);
-					#if !UNITY_COLORSPACE_GAMMA
-							tintColor = tintColor * 1.35;
-					#endif
-					res.rgb = lerp(tintColor.rgb, tintColor.rgb * 0.25, mask.z * colorMask) + light;
+					tintColor *= tintColor;
+					res.rgb = lerp(tintColor.rgb * 2, tintColor.rgb * 0.25, mask.z * colorMask) + light;
 
 
 					half fresnel = (1 - dot(normal, normalize(i.viewDir)));
 					fresnel = pow(fresnel + 0.1, 5);
 
 					UNITY_APPLY_FOG_COLOR(i.fogCoord, res, half4(0.5, 0.5, 0.5, 0.5));
-					return saturate(lerp(0.5, res, res.a * tintColor.a));
+					return lerp(0.5, res, res.a);
 
+					return res;
 				}
 
-			ENDCG
+			ENDHLSL
 	}
 
 	}

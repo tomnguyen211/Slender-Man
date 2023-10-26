@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 //[ExecuteAlways]
 public class BFX_DecalSettings : MonoBehaviour
@@ -27,39 +28,39 @@ public class BFX_DecalSettings : MonoBehaviour
     Transform t, tParent;
     BFX_ShaderProperies shaderProperies;
 
-    Vector3         averageRay;
-    bool            isPositionInitialized;
+    Vector3 averageRay;
+    bool isPositionInitialized;
     private Vector3 initializedPosition;
-    private bool    isInitialized;
+    private DecalProjector decal;
 
-    private void Initialize()
+    private void Awake()
     {
+        decal = GetComponent<DecalProjector>();
         startOffset = transform.localPosition;
         startScale = transform.localScale;
         t = transform;
         tParent = parent.transform;
         shaderProperies = GetComponent<BFX_ShaderProperies>();
         shaderProperies.OnAnimationFinished += ShaderCurve_OnAnimationFinished;
-        isInitialized = true;
     }
 
     private void ShaderCurve_OnAnimationFinished()
     {
-        GetComponent<Renderer>().enabled = false;
+        decal.enabled = false;
     }
 
     private void Update()
     {
-        if (!isInitialized) Initialize();
         if (!isPositionInitialized) InitializePosition();
         if (shaderProperies.enabled && initializedPosition.x < float.PositiveInfinity) transform.position = initializedPosition;
     }
 
     void InitializePosition()
     {
-        GetComponent<Renderer>().enabled = false;
+
+        decal.enabled = false;
+
         var currentHeight = parent.position.y;
-      
         float ground = currentHeight;
         if (BloodSettings.AutomaticGroundHeightDetection)
         {
@@ -74,28 +75,30 @@ public class BFX_DecalSettings : MonoBehaviour
             ground = BloodSettings.GroundHeight;
         }
 
-        var currentScale = parent.localScale.y;
-        var scaledTimeHeightMax = TimeHeightMax * currentScale;
-        var scaledTimeHeightMin = TimeHeightMin * currentScale;
+        var currentScale = parent.localScale;
+        var scaledTimeHeightMax = TimeHeightMax * currentScale.y;
+        var scaledTimeHeightMin = TimeHeightMin * currentScale.y;
 
         if (currentHeight - ground >= scaledTimeHeightMax || currentHeight - ground <= scaledTimeHeightMin)
         {
-            GetComponent<MeshRenderer>().enabled = false;
+            decal.enabled = false;
         }
         else
         {
-            GetComponent<MeshRenderer>().enabled = true;
+            decal.enabled = true;
         }
 
         float diff = (tParent.position.y - ground) / scaledTimeHeightMax;
         diff = Mathf.Abs(diff);
 
         var scaleMul = Vector3.Lerp(TimeScaleMin, TimeScaleMax, diff);
-        t.localScale = new Vector3(scaleMul.x * startScale.x, startScale.y, scaleMul.z * startScale.z);
+        scaleMul.x *= currentScale.x;
+        scaleMul.z *= currentScale.z;
+        decal.size = new Vector3(scaleMul.x * startScale.x, scaleMul.z * startScale.z, startScale.y);
 
         var lastOffset = Vector3.Lerp(TimeOffsetMin, TimeOffsetMax, diff);
         t.localPosition = startOffset + lastOffset;
-        t.position = new Vector3(t.position.x, ground + 0.01f, t.position.z);
+        t.position = new Vector3(t.position.x, ground + 0.05f, t.position.z);
 
 
         timeDelay = TimeByHeight.Evaluate(diff);
@@ -105,18 +108,11 @@ public class BFX_DecalSettings : MonoBehaviour
 
         if (BloodSettings.DecalRenderingMode == BFX_BloodSettings.DecalRenderingModeEnum.DiagonalSurfaces)
         {
-            averageRay = (tParent.position + tParent.right).normalized;
+            t.localRotation = Quaternion.Euler(120, -90, 90);
 
-            float decalAngle = Vector3.Angle(Vector3.up, averageRay);
-            var zRotation = Mathf.Clamp(decalAngle, -90, 90);
-            var decalRotation = t.localRotation.eulerAngles;
-            t.localRotation = Quaternion.Euler(decalRotation.x, decalRotation.y, -(zRotation) * 0.5f);
-
-            var scaleRelativeToAngle = Mathf.Abs(zRotation) / 90f;
-            var decalScale = t.localScale;
-            decalScale.y = Mathf.Lerp(decalScale.y, decalScale.x * 1.5f, scaleRelativeToAngle);
-
-            t.localScale = decalScale * 0.75f;
+            var decalSize = decal.size;
+            decalSize.z = 5;
+            decal.size = decalSize;
         }
 
         //if (BloodSettings.ClampDecalSideSurface) Shader.EnableKeyword("CLAMP_SIDE_SURFACE");
@@ -126,12 +122,21 @@ public class BFX_DecalSettings : MonoBehaviour
 
     private void OnDisable()
     {
-       // if (BloodSettings.ClampDecalSideSurface) Shader.DisableKeyword("CLAMP_SIDE_SURFACE");
+        //if (BloodSettings.ClampDecalSideSurface) Shader.DisableKeyword("CLAMP_SIDE_SURFACE");
         isPositionInitialized = false;
         initializedPosition = Vector3.positiveInfinity;
     }
-    Vector3 startTest, dirTest;
-   
+
+    Vector3 GetAverageRay(Vector3 start, Vector3 forward)
+    {
+        if (Physics.Raycast(start, -forward, out RaycastHit bulletRay))
+        {
+            return (bulletRay.normal + Vector3.up).normalized;
+        }
+
+        return Vector3.up;
+    }
+
     void EnableDecalAnimation()
     {
         shaderProperies.enabled = true;
@@ -148,6 +153,6 @@ public class BFX_DecalSettings : MonoBehaviour
         Gizmos.color = new Color(49 / 255.0f, 136 / 255.0f, 1, 0.85f);
         Gizmos.DrawWireCube(Vector3.zero, Vector3.one);
 
-        Debug.DrawRay(startTest, -dirTest);
+
     }
 }

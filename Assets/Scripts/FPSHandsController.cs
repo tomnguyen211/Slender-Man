@@ -59,6 +59,9 @@ public class FPSHandsController : MonoBehaviour
     private float resetTimerAnimationCount = 1;
     #endregion
 
+    public LayerMask armorLayer;
+    public LayerMask groundLayer;
+
     #region Shooting
     [SerializeField] Transform bulletPoint;
     [SerializeField] Transform bulletCasing;
@@ -519,11 +522,11 @@ public class FPSHandsController : MonoBehaviour
 
                     if (hit.collider.TryGetComponent<IDamage>(out IDamage component_1))
                     {
-                        component_1.Damage(heldItemPreviousFrame.Stats.damage);
+                        component_1.Damage(heldItemPreviousFrame.Stats.damage, hit);
                     }
-                    else if (hit.collider.transform.parent.TryGetComponent<IDamage>(out IDamage component_2))
+                    else if (hit.collider.transform.parent != null && hit.collider.transform.parent.TryGetComponent<IDamage>(out IDamage component_2))
                     {
-                        component_2.Damage(heldItemPreviousFrame.Stats.damage);
+                        component_2.Damage(heldItemPreviousFrame.Stats.damage, hit);
 
                     }
                 }
@@ -579,6 +582,7 @@ public class FPSHandsController : MonoBehaviour
             {
                 var DirectionRay = handsParentTransform.TransformDirection(randX + Random.Range(-0.1f,0.1f), randY + Random.Range(-0.1f, 0.1f), 1);
                 Debug.DrawRay(shootRayOrigin, DirectionRay * heldItemPreviousFrame.Stats.range, Color.red);
+
                 if (Physics.Raycast(shootRayOrigin, DirectionRay, out hit, heldItemPreviousFrame.Stats.range))
                 {
                     if (hit.collider.CompareTag("Enemy"))
@@ -587,11 +591,11 @@ public class FPSHandsController : MonoBehaviour
 
                         if (hit.collider.TryGetComponent<IDamage>(out IDamage component_1))
                         {
-                            component_1.Damage(heldItemPreviousFrame.Stats.damage);
+                            component_1.Damage(heldItemPreviousFrame.Stats.damage,hit);
                         }
-                        else if (hit.collider.transform.parent.TryGetComponent<IDamage>(out IDamage component_2))
+                        else if (hit.collider.transform.parent != null && hit.collider.transform.parent.TryGetComponent<IDamage>(out IDamage component_2))
                         {
-                            component_2.Damage(heldItemPreviousFrame.Stats.damage);
+                            component_2.Damage(heldItemPreviousFrame.Stats.damage,hit);
 
                         }
                     }
@@ -604,6 +608,120 @@ public class FPSHandsController : MonoBehaviour
                 }
             }          
            _crosshair.SetScale(CrossHairScale.Shoot, 1f);
+        }
+        else if (heldItemPreviousFrame.HandsPivotBoneTransformName == "fireaxe")
+        {
+            Debug.Log("Fire Axe");
+            Vector3 shootRayOrigin = handsParentTransform.GetComponent<Camera>().ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0f));
+            RaycastHit hit;
+
+            shootMaxCount = 0;
+
+            bulletPoint.position = shootRayOrigin + (handsParentTransform.forward * heldItemPreviousFrame.Stats.range);
+
+             Collider[] rangeChecks = Physics.OverlapSphere(bulletPoint.position, heldItemPreviousFrame.Stats.range, armorLayer | groundLayer);
+
+            if(rangeChecks.Length > 0)
+            {
+                for (int i = 0; i < rangeChecks.Length; i++)
+                {
+                    Transform target = rangeChecks[i].transform;
+                    if (target.TryGetComponent<IDamage>(out IDamage component_1))
+                    {
+                        if (Physics.Raycast(shootRayOrigin, handsParentTransform.forward, out hit, heldItemPreviousFrame.Stats.range * 2))
+                            component_1.Damage(heldItemPreviousFrame.Stats.damage, hit);
+                        else
+                            component_1.Damage(heldItemPreviousFrame.Stats.damage);
+                    }
+                    else if (target.parent != null && target.parent.TryGetComponent<IDamage>(out IDamage component_2))
+                    {
+                        if (Physics.Raycast(shootRayOrigin, handsParentTransform.forward, out hit, heldItemPreviousFrame.Stats.range * 2))
+                            component_2.Damage(heldItemPreviousFrame.Stats.damage, hit);
+                        else
+                            component_2.Damage(heldItemPreviousFrame.Stats.damage);
+                    }
+                }
+            }
+
+            if (Physics.Raycast(shootRayOrigin, handsParentTransform.forward, out hit, heldItemPreviousFrame.Stats.range))
+            {
+                /*if (hit.collider.CompareTag("Ground"))
+                {
+                    float angle = Vector3.Angle(hit.normal, transform.up);
+                    Quaternion startRot = Quaternion.LookRotation(hit.normal);
+                    GameObject bulletHole = Instantiate(heldItemPreviousFrame.Stats.ImpactMark, hit.point, startRot);
+                }*/
+            }
+
+            _crosshair.SetScale(CrossHairScale.Shoot, 1f);
+        }
+        else if (heldItemPreviousFrame.HandsPivotBoneTransformName == "kombat knife")
+        {
+            Vector3 shootRayOrigin = handsParentTransform.GetComponent<Camera>().ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0f));
+            RaycastHit hit;
+
+            shootMaxCount = 0;
+
+
+            if (Physics.Raycast(shootRayOrigin, handsParentTransform.forward, out hit, heldItemPreviousFrame.Stats.range))
+            {
+
+                if (hit.collider.CompareTag("Enemy"))
+                {
+                    Debug.Log(hit.collider.name + " is hit");
+
+                    if (hit.collider.TryGetComponent<IDamage>(out IDamage component_1))
+                    {
+                        component_1.Damage(heldItemPreviousFrame.Stats.damage, hit);
+                    }
+                    else if (hit.collider.transform.parent != null && hit.collider.transform.parent.TryGetComponent<IDamage>(out IDamage component_2))
+                    {
+                        component_2.Damage(heldItemPreviousFrame.Stats.damage, hit);
+
+                    }
+                }
+                /*else if (hit.collider.CompareTag("Ground"))
+                {
+                    float angle = Vector3.Angle(hit.normal, transform.up);
+                    Quaternion startRot = Quaternion.LookRotation(hit.normal);
+                    GameObject bulletHole = Instantiate(heldItemPreviousFrame.Stats.ImpactMark, hit.point, startRot);
+                }*/
+            }
+            _crosshair.SetScale(CrossHairScale.Shoot, 1f);
+        }
+        else if (heldItemPreviousFrame.HandsPivotBoneTransformName == "WeaponPivot")
+        {
+            Vector3 shootRayOrigin = handsParentTransform.GetComponent<Camera>().ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0f));
+            RaycastHit hit;
+
+            shootMaxCount = 0;
+
+
+            if (Physics.Raycast(shootRayOrigin, handsParentTransform.forward, out hit, heldItemPreviousFrame.Stats.range))
+            {
+
+                if (hit.collider.CompareTag("Enemy"))
+                {
+                    Debug.Log(hit.collider.name + " is hit");
+
+                    if (hit.collider.TryGetComponent<IDamage>(out IDamage component_1))
+                    {
+                        component_1.Damage(heldItemPreviousFrame.Stats.damage, hit);
+                    }
+                    else if (hit.collider.transform.parent != null && hit.collider.transform.parent.TryGetComponent<IDamage>(out IDamage component_2))
+                    {
+                        component_2.Damage(heldItemPreviousFrame.Stats.damage, hit);
+
+                    }
+                }
+                /*else if (hit.collider.CompareTag("Ground"))
+                {
+                    float angle = Vector3.Angle(hit.normal, transform.up);
+                    Quaternion startRot = Quaternion.LookRotation(hit.normal);
+                    GameObject bulletHole = Instantiate(heldItemPreviousFrame.Stats.ImpactMark, hit.point, startRot);
+                }*/
+            }
+            _crosshair.SetScale(CrossHairScale.Shoot, 1f);
         }
     }
 }

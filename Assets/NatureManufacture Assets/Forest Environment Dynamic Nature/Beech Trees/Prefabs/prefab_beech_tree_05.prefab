@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 415994498624245239}
   - component: {fileID: 4633090424860859869}
   - component: {fileID: 8802547311315083075}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: beech_tree_05_LOD1
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 81
@@ -25,13 +25,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3615250104489591855}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0, y: -0.15, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8844759585902561750}
-  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &4633090424860859869
 MeshFilter:
@@ -95,10 +95,10 @@ GameObject:
   - component: {fileID: 8234112743456403155}
   - component: {fileID: 1288180105291442478}
   - component: {fileID: 3304849754271002493}
-  - component: {fileID: 8482295315468269853}
-  m_Layer: 0
+  - component: {fileID: 4222460669030922535}
+  m_Layer: 6
   m_Name: beech_tree_05_LOD0
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 81
@@ -110,13 +110,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4981224030066559435}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0, y: -0.15, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8844759585902561750}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &1288180105291442478
 MeshFilter:
@@ -169,20 +169,28 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &8482295315468269853
-CapsuleCollider:
+--- !u!64 &4222460669030922535
+MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4981224030066559435}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  m_Radius: 0.45
-  m_Height: 21.643736
-  m_Direction: 1
-  m_Center: {x: -0.01, y: 10.85, z: -0.03}
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300000, guid: 9d4df208067725447833f38ff5d2a09f, type: 2}
 --- !u!1 &5247014761237110722
 GameObject:
   m_ObjectHideFlags: 0
@@ -194,9 +202,9 @@ GameObject:
   - component: {fileID: 3130361070834643646}
   - component: {fileID: 4395153708979866513}
   - component: {fileID: 2673514157634418281}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: beech_tree_05_LOD3
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 81
@@ -208,13 +216,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5247014761237110722}
+  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: -0.15, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8844759585902561750}
-  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &4395153708979866513
 MeshFilter:
@@ -276,9 +284,9 @@ GameObject:
   m_Component:
   - component: {fileID: 8844759585902561750}
   - component: {fileID: 8272403799528578834}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: prefab_beech_tree_05
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 80
@@ -290,6 +298,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5541041778127469509}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -300,7 +309,6 @@ Transform:
   - {fileID: 3137021972292855313}
   - {fileID: 3130361070834643646}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!205 &8272403799528578834
 LODGroup:
@@ -344,9 +352,9 @@ GameObject:
   - component: {fileID: 3137021972292855313}
   - component: {fileID: 85015610640000724}
   - component: {fileID: 983118397315937725}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: beech_tree_05_LOD2
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 81
@@ -358,13 +366,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5986487456288766384}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0, y: -0.15, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8844759585902561750}
-  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &85015610640000724
 MeshFilter:

@@ -1,11 +1,9 @@
-﻿// Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
-
-Shader "KriptoFX/BFX/BFX_Blood"
+﻿Shader "KriptoFX/BFX/BFX_Blood"
 {
     Properties
     {
         _Color("Color", Color) = (1,1,1,1)
-
+ 	_SpecColor("SpecularColor", Color) = (1,1,1,1)
         _boundingMax("Bounding Max", Float) = 1.0
         _boundingMin("Bounding Min", Float) = 1.0
         _numOfFrames("Number Of Frames", int) = 240
@@ -54,7 +52,7 @@ Shader "KriptoFX/BFX/BFX_Blood"
                 float4 screenPos : TEXCOORD4;
                 float3 viewDir : TEXCOORD5;
                 float height : TEXCOORD6;
- UNITY_FOG_COORDS(7)
+                UNITY_FOG_COORDS(7)
 
                 UNITY_VERTEX_INPUT_INSTANCE_ID
                 UNITY_VERTEX_OUTPUT_STEREO
@@ -68,6 +66,7 @@ Shader "KriptoFX/BFX/BFX_Blood"
             uniform float _speed;
             uniform int _numOfFrames;
             half4 _Color;
+half4 _SpecColor;
 
             float4 _HeightOffset;
             float _HDRFix;
@@ -111,14 +110,13 @@ Shader "KriptoFX/BFX/BFX_Blood"
 
                 o.worldNormal = textureN.xzy * 2 - 1;
                 o.worldNormal.x *= -1;
-                o.worldNormal = mul((float3x3)unity_ObjectToWorld, o.worldNormal);
-
-                o.viewDir = WorldSpaceViewDir(v.vertex);
+                o.viewDir = ObjSpaceViewDir(v.vertex);
 
                 o.pos = UnityObjectToClipPos(v.vertex);
                 o.screenPos = ComputeGrabScreenPos(o.pos);
-                UNITY_TRANSFER_FOG(o,o.pos);
 
+
+                UNITY_TRANSFER_FOG(o,o.pos);
                 return o;
             }
 
@@ -127,25 +125,24 @@ Shader "KriptoFX/BFX/BFX_Blood"
                 UNITY_SETUP_INSTANCE_ID(i);
 
                 i.worldNormal = normalize(i.worldNormal);
-
                 i.viewDir = normalize(i.viewDir);
 
                 half fresnel = saturate(1 - dot(i.worldNormal, i.viewDir));
                 half intencity = UNITY_ACCESS_INSTANCED_PROP(Props, _LightIntencity);
-                half3 grabColor = intencity * 0.75;
+                half3 grabColor = intencity * 0.25;
                 half light = max(0.001, dot(normalize(i.worldNormal), normalize(_SunPos.xyz)));
                 light = pow(light, 50) * 10;
 #if !UNITY_COLORSPACE_GAMMA
-                _Color.rgb = _Color.rgb * .65;
+                _Color.rgb = _Color.rgb * .6;
                 fresnel = fresnel * fresnel;
 #endif
                 grabColor *= _Color.rgb;
-                grabColor = lerp(grabColor * 0.15, grabColor, fresnel);
+                grabColor = lerp(grabColor * 0.15, grabColor, fresnel); 
                 grabColor = min(grabColor, _Color.rgb * 0.55);
 
-                half3 color = grabColor.xyz + saturate(light) * intencity;
+                half3 color = grabColor.xyz + saturate(light) * intencity * _SpecColor.xyz * _SpecColor.a;
                 UNITY_APPLY_FOG(i.fogCoord, color);
-                return half4(color, _Color.a);
+                return half4(color, 1);
 
             }
             ENDCG
@@ -208,7 +205,6 @@ Shader "KriptoFX/BFX/BFX_Blood"
                 float timeInFrames;
                 float currentSpeed = 1.0f / (_numOfFrames / _speed);
                 timeInFrames = UNITY_ACCESS_INSTANCED_PROP(Props, _TimeInFrames);
-
                 float4 texturePos = tex2Dlod(_posTex, float4(v.uv.x, (timeInFrames + v.uv.y), 0, 0));
 
 #if !UNITY_COLORSPACE_GAMMA
