@@ -60,7 +60,7 @@ public class AttackState : AI_State
 
     public bool CheckIfDistance()
     {
-        return entity.IsBetween(Vector2.Distance(entity.rayCenter.transform.position, entity.enemy.transform.position), stateData.minDistance, stateData.maxDistance);
+        return entity.IsBetween(Vector3.Distance(entity.rayCenter.transform.position, entity.enemy.transform.position), stateData.minDistance, stateData.maxDistance);
     }
 
     public void ResetAbilityAttack() => isAbilityEnable = true;

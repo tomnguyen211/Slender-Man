@@ -4,6 +4,8 @@ public class Beast_Entity : Entity, IDamage
 {
     public Beast_Idle Beast_Idle { get; private set; }
     public Beast_Move Beast_Move { get; private set; }
+
+
     public Beast_Attack Beast_Attack { get; private set; }
     public Beast_Dead Beast_Dead { get; private set; }
     public Beast_Patrol Beast_Patrol { get; private set; }
@@ -15,7 +17,8 @@ public class Beast_Entity : Entity, IDamage
     public D_MoveState D_MoveState;
 
 
-  
+
+
     public override void Awake()
     {
         base.Awake();
@@ -230,6 +233,7 @@ public class Beast_Idle : IdleState
 
                     if (character.Beast_Attack.CheckIfDistance() && character.Beast_Attack.CheckIfCanUseAbility())
                     {
+                        Debug.Log(Vector3.Distance(character.rayCenter.position, character.enemy.transform.position));
                         stateMachine.ChangeState(character.Beast_Attack);
                     }
                     else if (character.Beast_Move.CheckIfCanMove())
@@ -270,6 +274,7 @@ public class Beast_Move : MoveState
 {
     Beast_Entity character;
     private Vector3 direction;
+    int moveType;
     public Beast_Move(Entity entity, FiniteStateMachine stateMachine, string animBoolName, D_MoveState stateData, Beast_Entity character) : base(entity, stateMachine, animBoolName, stateData)
     {
         this.character = character;
@@ -303,8 +308,11 @@ public class Beast_Move : MoveState
                 isMoveReset = false;
                 startTime = Time.time;
             }
+            if(moveType == 1)
+                character.Move(stateData.movingSpeed * 0.7f,out direction);
+            else
+                character.Move(stateData.movingSpeed, out direction);
 
-            character.Move(stateData.movingSpeed,out direction);
             if (!character.CanSeePlayer)
             {
                 character.Beast_Idle.PresetIdle();
@@ -332,7 +340,7 @@ public class Beast_Move : MoveState
         }
         else
         {
-            if(Vector3.Distance(character.rayCenter.position,character.enemy.transform.position) >= 3f)
+            if(Vector3.Distance(character.rayCenter.position,character.enemy.transform.position) >= 6f)
                 character.anim.SetInteger("Type", 2);
             else
                 character.anim.SetInteger("Type", 1);
@@ -353,12 +361,15 @@ public class Beast_Move : MoveState
                 character.anim.SetInteger("Type", 2);
                 break;
         }
+
+        moveType = type;
     }      
     public bool CheckIfCanMove()
     {
         return !character.IsBetween(Vector3.Distance(character.rayCenter.position, character.enemy.transform.position), stateData.move_Thresholds[0].thresholdMin, stateData.move_Thresholds[0].thresholdMax);
     }
 }
+
 public class Beast_Patrol : PatrolState
 {
     Beast_Entity character;
