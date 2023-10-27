@@ -13,6 +13,7 @@ public class D_Entity : ScriptableObject
 
     public LayerMask whatIsGround;
     public LayerMask character;
+    public LayerMask armor;
     public LayerMask miscellaneous;
 
     public float radiusAfterDetection = 6;
