@@ -238,6 +238,7 @@ public class Beast_Idle : IdleState
                     }
                     else if (character.Beast_Move.CheckIfCanMove())
                     {
+                        Debug.Log(Vector3.Distance(character.transform.position, character.enemy.transform.position));
                         character.Beast_Move.PresetMove();
                         stateMachine.ChangeState(character.Beast_Move);
                     }
@@ -323,8 +324,9 @@ public class Beast_Move : MoveState
                 Debug.Log(Vector3.Distance(character.rayCenter.position, character.enemy.transform.position));
                 stateMachine.ChangeState(character.Beast_Attack);
             }
-            else if (character.IsBetween(Vector2.Distance(character.transform.position, character.enemy.transform.position), stateData.move_Thresholds[0].thresholdMin, stateData.move_Thresholds[0].thresholdMax) || character.reachedEndOfPath)
+            else if (character.IsBetween(Vector3.Distance(character.transform.position, character.enemy.transform.position), stateData.move_Thresholds[0].thresholdMin, stateData.move_Thresholds[0].thresholdMax))
             {
+                Debug.Log(Vector3.Distance(character.transform.position, character.enemy.transform.position));
                 character.Beast_Idle.PresetIdle();
                 stateMachine.ChangeState(character.Beast_Idle);
             }
