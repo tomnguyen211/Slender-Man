@@ -310,7 +310,7 @@ public class Beast_Move : MoveState
                 startTime = Time.time;
             }
             if(moveType == 1)
-                character.Move(stateData.movingSpeed * 0.7f,out direction);
+                character.Move(stateData.movingSpeed * 0.6f,out direction);
             else
                 character.Move(stateData.movingSpeed, out direction);
 
