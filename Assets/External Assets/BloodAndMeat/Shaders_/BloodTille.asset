@@ -1,0 +1,71 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78b2425a2284af743826c689403a4924, type: 3}
+  m_Name: BloodTille
+  m_EditorClassIdentifier: 
+  m_functionInfo: "// Made with Amplify Shader Editor\n// Available at the Unity Asset
+    Store - http://u3d.as/y3X \n/*ASEBEGIN\nVersion=17400\n0;26;1906;993;2631.005;-263.437;1.214768;True;True\nNode;AmplifyShaderEditor.FunctionInput;28;-1883.022,557.7315;Inherit;False;SizeBlood;1;1;False;1;0;FLOAT;0;False;1;FLOAT;0\nNode;AmplifyShaderEditor.FunctionInput;30;-1806.695,1042.777;Inherit;False;MaxDist;1;0;False;1;0;FLOAT;100;False;1;FLOAT;0\nNode;AmplifyShaderEditor.WorldSpaceCameraPos;32;-1552.792,1110.345;Inherit;False;0;4;FLOAT3;0;FLOAT;1;FLOAT;2;FLOAT;3\nNode;AmplifyShaderEditor.RangedFloatNode;2;-1894.488,468.5097;Float;False;Property;_SizeBlood;SizeBlood;0;0;Create;True;0;0;False;0;1;-0.07;0;0;0;1;FLOAT;0\nNode;AmplifyShaderEditor.FunctionInput;26;-1814.34,952.2253;Inherit;False;Texture;9;3;False;1;0;SAMPLER2D;0;False;1;SAMPLER2D;0\nNode;AmplifyShaderEditor.RangedFloatNode;25;-1859.149,840.6029;Half;False;Global;LengthArray;LengthArray;5;0;Create;True;0;0;False;0;0;0;0;0;0;1;FLOAT;0\nNode;AmplifyShaderEditor.WorldNormalVector;34;-1512.517,761.2391;Inherit;False;False;1;0;FLOAT3;0,0,1;False;4;FLOAT3;0;FLOAT;1;FLOAT;2;FLOAT;3\nNode;AmplifyShaderEditor.FunctionInput;27;-1852.185,749.2615;Inherit;False;Dist;1;2;False;1;0;FLOAT;0;False;1;FLOAT;0\nNode;AmplifyShaderEditor.WorldPosInputsNode;1;-1916.157,308.9207;Float;False;0;4;FLOAT3;0;FLOAT;1;FLOAT;2;FLOAT;3\nNode;AmplifyShaderEditor.CustomExpressionNode;23;-1111.636,517.7109;Float;False;float
+    Distance = distance(CameraPos,WorldPos)@$\t\t\thalf4 Final = _BackColor@$\t\t\tif
+    (Distance < MaxDistance) {$\t\t\tfloat3 projNormal = ( pow( abs( WorldNormal ),
+    1 ) )@$\t\t\t\t\t\tfloat3 nsign = sign( WorldNormal )@$\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t$\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tfor
+    (int i = 0@i < LengthArr@i++) {$\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tfloat
+    dist_ = distance(float4( WorldPos , 0.0 ),BloodPointArray[i])@$\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tif
+    (dist_ < MaxDist) {$\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tfloat2 _uv_x = (
+    ( (WorldPos).zy * SizeBlood ) + ( float2( 0.5,0.5 ) - ( BloodPointArray[i].zy
+    * SizeBlood ) ) )@$\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tfloat2 _uv_y = (
+    ( (WorldPos).xz * SizeBlood ) + ( float2( 0.5,0.5 ) - ( BloodPointArray[i].xz
+    * SizeBlood ) ) )@$\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tfloat2 _uv_z = (
+    ( (WorldPos).xy * SizeBlood ) + ( float2( 0.5,0.5 ) - ( BloodPointArray[i].xy
+    * SizeBlood ) ) )@$\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t$\t\t\t\t\t\t\t\t
+    \                       \tfloat cos43 = cos( BloodPointArray[i].a )@$\t\t\t\t\t\t\t\t
+    \                        \tfloat sin43 = sin( BloodPointArray[i].a )@$\t\t\t\t\t\t\t\t
+    \                       \tfloat2 rotatorX = mul( _uv_x - float2( 0.5,0.5 ), float2x2(
+    cos43 , -sin43 , sin43 , cos43 )) + float2( 0.5,0.5 )@$\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tfloat2
+    rotatorY = mul( _uv_y - float2( 0.5,0.5 ), float2x2( cos43 , -sin43 , sin43 ,
+    cos43 )) + float2( 0.5,0.5 )@$\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tfloat2 rotatorZ =
+    mul( _uv_z - float2( 0.5,0.5 ), float2x2( cos43 , -sin43 , sin43 , cos43 )) +
+    float2( 0.5,0.5 )@$\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\thalf4 tX = 0@$\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\thalf4
+    tY = 0@$\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\thalf4 tZ = 0@$\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tif
+    (rotatorX.x < 1 && rotatorX.x > 0 && rotatorX.y < 1 && rotatorX.y > 0) {$\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t$\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\ttX
+    = tex2D(_BloodTexture_,rotatorX * float2( nsign.x, 1.0 ))@$\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t}$\t\t\tif
+    (rotatorY.x < 1 && rotatorY.x > 0 && rotatorY.y < 1 && rotatorY.y > 0) {$\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\ttY
+    = tex2D(_BloodTexture_,rotatorY * float2( nsign.y, 1.0 ))@$\t\t\t}$\t\t\tif (rotatorZ.x
+    < 1 && rotatorZ.x > 0 && rotatorZ.y < 1 && rotatorZ.y > 0) {$\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\ttZ
+    = tex2D(_BloodTexture_,rotatorZ * float2( -nsign.z, 1.0 ))@$\t\t\t}$\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\thalf4
+    tt_ = tX * projNormal.x + tY * projNormal.y + tZ * projNormal.z@$\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t$\t\t\t\t\t\t\t\t\t
+    \                    \tFinal.a += tt_.a@$\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tFinal =
+    lerp(Final,tt_,tt_.a)@$\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t$\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t}$\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t}$\t\t\t}$\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\treturn
+    Final@;4;False;10;True;WorldPos;FLOAT3;0,0,0;In;;Float;False;True;SizeBlood;FLOAT;0;In;;Float;False;True;Array;FLOAT;0;In;;Float;False;True;LengthArr;INT;0;In;;Float;False;True;MaxDist;FLOAT;0;In;;Float;False;True;_BloodTexture_;SAMPLER2D;;In;;Float;False;True;_BackColor;FLOAT4;0,0,0,0;In;;Float;False;True;WorldNormal;FLOAT3;0,0,0;In;;Float;False;True;MaxDistance;FLOAT;0;In;;Float;False;True;CameraPos;FLOAT;0;In;;Float;False;My
+    Custom Expression;True;False;0;10;0;FLOAT3;0,0,0;False;1;FLOAT;0;False;2;FLOAT;0;False;3;INT;0;False;4;FLOAT;0;False;5;SAMPLER2D;;False;6;FLOAT4;0,0,0,0;False;7;FLOAT3;0,0,0;False;8;FLOAT;0;False;9;FLOAT;0;False;1;FLOAT4;0\nNode;AmplifyShaderEditor.GlobalArrayNode;24;-1871.402,627.694;Inherit;False;BloodPointArray;0;40;2;False;False;0;1;False;Object;-1;4;0;INT;0;False;2;INT;0;False;1;INT;0;False;3;INT;0;False;1;FLOAT4;0\nNode;AmplifyShaderEditor.FunctionOutput;0;-805.3547,491.3885;Inherit;False;True;-1;Blood;0;False;1;0;FLOAT4;0,0,0,0;False;1;FLOAT4;0\nWireConnection;23;0;1;0\nWireConnection;23;1;28;0\nWireConnection;23;2;24;0\nWireConnection;23;3;25;0\nWireConnection;23;4;27;0\nWireConnection;23;5;26;0\nWireConnection;23;7;34;0\nWireConnection;23;8;30;0\nWireConnection;23;9;32;0\nWireConnection;0;0;23;0\nASEEND*/\n//CHKSM=A4D0CFB21BD8BFFA75E961233A7CD15355E1827C"
+  m_functionName: 
+  m_description: 
+  m_additionalIncludes:
+    m_additionalIncludes: []
+    m_outsideIncludes: []
+  m_additionalPragmas:
+    m_additionalPragmas: []
+    m_outsidePragmas: []
+  m_additionalDirectives:
+    m_validData: 0
+    m_isDirty: 0
+    m_moduleName: ' Additional Directives'
+    m_independentModule: 1
+    m_additionalDirectives: []
+    m_shaderFunctionDirectives: []
+    m_nativeDirectives: []
+    m_nativeDirectivesIndex: -1
+    m_nativeDirectivesFoldout: 0
+    m_directivesSaveItems: []
+  m_nodeCategory: 3
+  m_customNodeCategory: 
+  m_previewPosition: 0
+  m_hidden: 0

@@ -1,0 +1,92 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36e8c6027337e07448e0dd91076647c6, type: 3}
+  m_Name: Handgun
+  m_EditorClassIdentifier: 
+  Stats:
+    bulletCase: {fileID: 1170647774315830, guid: 522b470e09ed8b8488c6b8788f9d6206,
+      type: 3}
+    damage: 10
+    range: 20
+    MuzzleFlash: {fileID: 8066342488965651439, guid: d1daaaf365f8bcb40a53af1cacb36f33,
+      type: 3}
+    ImpactMark: {fileID: 4300086816366312831, guid: 3698fcc89068d4e4dbc426132521e30f,
+      type: 3}
+  ItemPrefab: {fileID: 4259820314644530675, guid: b8fc9818562b00146b2b1cd0c52b2560,
+    type: 3}
+  HandsPivotBoneTransformName: handgun
+  ItemAnimatorTimeParameter: AnimationTime
+  AttackAnimations:
+  - HandsAnimatorAttackStateName: Handgun_Shoot
+    ItemAnimatorAttackStateName: Handgun_Shoot
+    AttackAnimationLength: 0.27
+    AttackAnimationBlendTime: 0
+    AnimationEvents:
+    - EventMessage: Shoot
+      EventPosition: 0.064
+    - EventMessage: Bullet
+      EventPosition: 0.08
+  MovementBounceVelocityLimit: 4
+  MovementBounceSpringStiffness: 10
+  MovementBounceSpringDamping: 10
+  IdlePose:
+    HandsAnimationStateName: Handgun_Idle
+    ItemAnimationStateName: Handgun_Idle
+    AnimationStateBlendTime: 0.1
+    PositionOffset: {x: -0.12, y: -0.1, z: -0.2}
+    EulerOffset: {x: 0, y: 7.21, z: 0}
+    TransformSmoothDampTime: 0.12
+    MovementBounceStrength_Horizontal: 0.2
+    MovementBounceStrength_Vertical: 0.15
+    MovementBounceSpeed: 12
+    bulletPoint: {x: 0.17516, y: -0.70967, z: 0.07375}
+    bulletCasePos: {x: 0.1753, y: -0.5587, z: 0.0803}
+  RunPose:
+    HandsAnimationStateName: Handgun_Raised
+    ItemAnimationStateName: Handgun_Idle
+    AnimationStateBlendTime: 0.1
+    PositionOffset: {x: -0.05, y: -0.16, z: -0.05}
+    EulerOffset: {x: 0, y: 0, z: 0}
+    TransformSmoothDampTime: 0.1
+    MovementBounceStrength_Horizontal: 0.26
+    MovementBounceStrength_Vertical: 0.25
+    MovementBounceSpeed: 16
+    bulletPoint: {x: 0, y: 0, z: 0}
+    bulletCasePos: {x: 0, y: 0, z: 0}
+  AimPose:
+    HandsAnimationStateName: Handgun_Idle
+    ItemAnimationStateName: Handgun_Idle
+    AnimationStateBlendTime: 0.1
+    PositionOffset: {x: -0.175, y: -0.084, z: -0.21}
+    EulerOffset: {x: 0.1, y: -0.09, z: 0}
+    TransformSmoothDampTime: 0.1
+    MovementBounceStrength_Horizontal: 0.1
+    MovementBounceStrength_Vertical: 0.07
+    MovementBounceSpeed: 12
+    bulletPoint: {x: 0.17516, y: -0.70967, z: 0.07375}
+    bulletCasePos: {x: 0.1754, y: -0.56642, z: 0.07976}
+  ReloadPose:
+    HandsAnimationStateName: Handgun_Reload
+    ItemAnimationStateName: Handgun_Reload
+    AnimationStateBlendTime: 0.1
+    PositionOffset: {x: -0.08, y: -0.1, z: -0.1}
+    EulerOffset: {x: 0, y: 0, z: 0}
+    TransformSmoothDampTime: 0.1
+    MovementBounceStrength_Horizontal: 0.1
+    MovementBounceStrength_Vertical: 0.1
+    MovementBounceSpeed: 12
+    bulletPoint: {x: 0, y: 0, z: 0}
+    bulletCasePos: {x: 0, y: 0, z: 0}
+    AnimationLength: 1.8
+    AnimationEvents:
+    - EventMessage: ReloadLogic
+      EventPosition: 0.8
