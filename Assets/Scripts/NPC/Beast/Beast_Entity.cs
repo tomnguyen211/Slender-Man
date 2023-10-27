@@ -9,6 +9,7 @@ public class Beast_Entity : Entity, IDamage
     public Beast_Attack Beast_Attack { get; private set; }
     public Beast_Dead Beast_Dead { get; private set; }
     public Beast_Patrol Beast_Patrol { get; private set; }
+    public Beast_Damage Beast_Damage { get; private set; }
 
     public D_AttackState D_AttackState;
     public D_IdleState D_IdleState;
@@ -28,6 +29,7 @@ public class Beast_Entity : Entity, IDamage
         Beast_Attack = new Beast_Attack(this,stateMachine,"Attack",D_AttackState, this);
         Beast_Patrol = new Beast_Patrol(this,stateMachine,"Move",D_PatrolState, this);  
         Beast_Dead = new Beast_Dead(this,stateMachine,"Dead",D_DeadState, this);
+        Beast_Damage = new Beast_Damage(this, stateMachine, "Damage", false ,this);
 
         stateMachine.Initialize(Beast_Idle);
 
@@ -80,6 +82,10 @@ public class Beast_Entity : Entity, IDamage
             //AdjustAllTag("Dead");
             CancelInvoke();
             StopAllCoroutines();
+        }
+        else if(!beingStun && current_Health > 0 && StunLogic(amount))
+        {
+            stateMachine.ChangeState(Beast_Damage);
         }
     }
 
@@ -464,5 +470,34 @@ public class Beast_Dead : DeadState
             character.DestroyObject();
         else
             deadTime -= Time.deltaTime;
+    }
+}
+public class Beast_Damage : AI_State
+{
+    Beast_Entity character;
+
+    public Beast_Damage(Entity entity, FiniteStateMachine stateMachine, string animBoolName, bool playAnim, Beast_Entity character) : base(entity, stateMachine, animBoolName, playAnim)
+    {
+        this.character = character;
+    }
+
+    public override void AnimationFinishTrigger()
+    {
+        base.AnimationFinishTrigger();
+        stateMachine.ChangeState(character.Beast_Idle);
+    }
+
+    public override void Enter()
+    {
+        base.Enter();
+        character.anim.SetTrigger(animBoolName);
+        character.seeker.CancelCurrentPathRequest();
+        character.beingStun = true;
+    }
+
+    public override void Exit()
+    {
+        base.Exit();
+        character.beingStun = false;
     }
 }

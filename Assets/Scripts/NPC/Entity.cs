@@ -58,6 +58,8 @@ public class Entity : MonoBehaviour
     [HideInInspector]
     public bool CheckPoint;
     public SpawnDecal SpawnDecal;
+    [ReadOnly]
+    public bool beingStun;
     #endregion
 
 
@@ -363,6 +365,24 @@ public class Entity : MonoBehaviour
     {
        
     }   
+
+    public bool StunLogic(float damage)
+    {
+        float chance = 0;
+
+        if(damage > current_Health)
+            chance = (1 - entityData.stunRes) * 100;
+        else
+            chance = (Mathf.Abs(damage / current_Health) - entityData.stunRes) * 100;
+
+
+        if(chance < 0)
+            return false;
+
+        if (ProbabilityCheck(chance))
+            return true;
+        return false;
+    }
     #endregion
 
     #region Audio

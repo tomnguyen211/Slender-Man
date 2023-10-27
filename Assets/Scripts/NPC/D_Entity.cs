@@ -6,6 +6,8 @@ using UnityEngine;
 public class D_Entity : ScriptableObject
 {
     public float healthCount = 100;
+    [Range(0f, 1f)]
+    public float stunRes = 0;
 
     public float wallCheckDistance = 0.5f;
     public float groundCheckDistance = 0.5f;

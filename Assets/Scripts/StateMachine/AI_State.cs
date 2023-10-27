@@ -14,11 +14,22 @@ public class AI_State : MonoBehaviour
 
     public string animBoolName;
 
+    public bool playAnim;
+
     public AI_State(Entity entity, FiniteStateMachine stateMachine, string animBoolName)
     {
         this.entity = entity;
         this.stateMachine = stateMachine;
         this.animBoolName = animBoolName;
+        playAnim = true;
+    }
+
+    public AI_State(Entity entity, FiniteStateMachine stateMachine, string animBoolName, bool playAnim)
+    {
+        this.entity = entity;
+        this.stateMachine = stateMachine;
+        this.animBoolName = animBoolName;
+        this.playAnim = playAnim;
     }
 
     public virtual void Enter()
@@ -26,7 +37,9 @@ public class AI_State : MonoBehaviour
         DoCheck();
 
         startTime = Time.time;
-        entity.anim.SetBool(animBoolName, true);
+
+        if(playAnim)
+            entity.anim.SetBool(animBoolName, true);
 
         isAnimationFinished = false;
         isExitingState = false;
@@ -36,8 +49,8 @@ public class AI_State : MonoBehaviour
 
     public virtual void Exit()
     {
-
-        entity.anim.SetBool(animBoolName, false);
+        if(playAnim)
+            entity.anim.SetBool(animBoolName, false);
 
         isExitingState = true;
 

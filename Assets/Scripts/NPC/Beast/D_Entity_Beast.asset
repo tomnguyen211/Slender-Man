@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: D_Entity_Beast
   m_EditorClassIdentifier: 
   healthCount: 100
+  stunRes: 0.35
   wallCheckDistance: 3
   groundCheckDistance: 5
   characterCheckDistance: 2
@@ -22,9 +23,6 @@ MonoBehaviour:
   character:
     serializedVersion: 2
     m_Bits: 256
-  protection:
-    serializedVersion: 2
-    m_Bits: 0
   armor:
     serializedVersion: 2
     m_Bits: 512
