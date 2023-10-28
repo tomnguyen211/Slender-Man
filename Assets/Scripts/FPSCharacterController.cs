@@ -37,6 +37,10 @@ public class FPSCharacterController : MonoBehaviour, IDamage
     private float maxHealth;
     [ReadOnly]
     public float currentHealth;
+    [SerializeField]
+    ScreenDamage ScreenDamage;
+    [ReadOnly]
+    GameObject Attacker;
     #endregion
 
     private void Awake()
@@ -55,7 +59,7 @@ public class FPSCharacterController : MonoBehaviour, IDamage
     }
     private void Start()
     {
-        currentHealth = maxHealth;
+        ScreenDamage.maxHealth = ScreenDamage.CurrentHealth = currentHealth = maxHealth;
     }
 
     private void Update()
@@ -161,9 +165,11 @@ public class FPSCharacterController : MonoBehaviour, IDamage
         return velocity.magnitude;
     }
 
-    public void Damage(float damage)
+    public void Damage(float damage, GameObject attacker)
     {
         currentHealth -= damage;
+        ScreenDamage.CurrentHealth -= damage;
+        Attacker = attacker;
         if (currentHealth < 0f)
             Debug.Log("You're Dead");
     }

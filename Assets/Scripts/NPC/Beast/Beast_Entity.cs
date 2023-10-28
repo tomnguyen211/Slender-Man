@@ -1,3 +1,4 @@
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class Beast_Entity : Entity, IDamage
@@ -10,15 +11,13 @@ public class Beast_Entity : Entity, IDamage
     public Beast_Dead Beast_Dead { get; private set; }
     public Beast_Patrol Beast_Patrol { get; private set; }
     public Beast_Damage Beast_Damage { get; private set; }
+    public Beast_Shout Beast_Shout { get; private set; }
 
     public D_AttackState D_AttackState;
     public D_IdleState D_IdleState;
     public D_DeadState D_DeadState;
     public D_PatrolState D_PatrolState;
     public D_MoveState D_MoveState;
-
-
-
 
     public override void Awake()
     {
@@ -28,8 +27,9 @@ public class Beast_Entity : Entity, IDamage
         Beast_Move = new Beast_Move(this, stateMachine, "Move",D_MoveState, this);
         Beast_Attack = new Beast_Attack(this,stateMachine,"Attack",D_AttackState, this);
         Beast_Patrol = new Beast_Patrol(this,stateMachine,"Move",D_PatrolState, this);  
-        Beast_Dead = new Beast_Dead(this,stateMachine,"Dead",D_DeadState, this);
+        Beast_Dead = new Beast_Dead(this,stateMachine,"Dead", false,D_DeadState, this);;
         Beast_Damage = new Beast_Damage(this, stateMachine, "Damage", false ,this);
+        Beast_Shout = new Beast_Shout(this, stateMachine, "Shout", this);
 
         stateMachine.Initialize(Beast_Idle);
 
@@ -44,11 +44,15 @@ public class Beast_Entity : Entity, IDamage
     {
         base.Start();
         seeker.pathCallback += OnPathComplete;
+        DetectionTrigger += DisableDetection;
+
     }
 
     private void OnDisable()
     {
         seeker.pathCallback -= OnPathComplete;
+        DetectionTrigger -= DisableDetection;
+
     }
 
     public override void Update()
@@ -83,7 +87,7 @@ public class Beast_Entity : Entity, IDamage
             CancelInvoke();
             StopAllCoroutines();
         }
-        else if(!beingStun && current_Health > 0 && StunLogic(amount))
+        else if(!beingStun && current_Health > 0 && StunLogic(amount) && !CheckPoint && !Beast_Shout.hasShout)
         {
             stateMachine.ChangeState(Beast_Damage);
         }
@@ -153,11 +157,32 @@ public class Beast_Entity : Entity, IDamage
 
         Quaternion rot = Quaternion.LookRotation(dir, Vector3.up);
 
-       /* float newRotX = Mathf.Clamp(rot.x,)*/
+        /* float newRotX = Mathf.Clamp(rot.x,)*/
 
-        float angle = Mathf.Abs(Vector3.Angle(dir, transform.forward));
+        float angle = 0;
 
-        if(angle > 90)
+        if (enemy != null)
+        {
+            Vector3 enemyDir = enemy.transform.position - transform.position;
+            angle = Vector3.Angle(enemyDir, transform.forward);
+
+            float leftRight = AngleDir(transform.forward, enemyDir, transform.up);
+
+            if(leftRight == 1)
+                anim.SetFloat("xDir", angle);
+            else if(leftRight == -1)
+                anim.SetFloat("xDir", -angle);
+            else
+                anim.SetFloat("xDir", 0);
+
+
+
+        }
+        Debug.Log(angle);
+
+
+        angle = Mathf.Abs(angle);
+        if (angle > 90)
             transform.rotation = Quaternion.RotateTowards(transform.rotation, rot, 300 * Time.deltaTime);
         else
             transform.rotation = Quaternion.RotateTowards(transform.rotation, rot, 150 * Time.deltaTime);
@@ -191,14 +216,27 @@ public class Beast_Entity : Entity, IDamage
     public override void TriggerDetection()
     {
         base.TriggerDetection();
-        stateMachine.ChangeState(Beast_Idle);
+        stateMachine.ChangeState(Beast_Damage);
         Beast_Idle.isIdleTimeOver = true;
     }
 
-    public void Damage(float damage,RaycastHit ray)
+    public void Damage(float damage,RaycastHit ray, GameObject attacker)
     {
+        if (enemy == null)
+            enemy = attacker;
         MainHealthSet(damage);
         SpawnDecal.SpawnDecals(ray);
+    }
+
+    public void SendAttackSignal(GameObject attacker)
+    {
+        if (enemy == null)
+            enemy = attacker;
+    }
+
+    private void DisableDetection()
+    {
+        Beast_Shout.hasShout = false;
     }
 }
 
@@ -316,7 +354,7 @@ public class Beast_Move : MoveState
                 startTime = Time.time;
             }
             if(moveType == 1)
-                character.Move(stateData.movingSpeed * 0.6f,out direction);
+                character.Move(stateData.movingSpeed * 0.5f,out direction);
             else
                 character.Move(stateData.movingSpeed, out direction);
 
@@ -426,7 +464,7 @@ public class Beast_Patrol : PatrolState
     }
     public void PresetMPatrol()
     {
-        character.anim.SetInteger("Type", 1);
+        character.anim.SetInteger("Type", 3);
     }
 }
 public class Beast_Attack : AttackState
@@ -446,7 +484,8 @@ public class Beast_Attack : AttackState
 public class Beast_Dead : DeadState
 {
     Beast_Entity character;
-    public Beast_Dead(Entity entity, FiniteStateMachine stateMachine, string animBoolName, D_DeadState stateData, Beast_Entity character) : base(entity, stateMachine, animBoolName, stateData)
+
+    public Beast_Dead(Entity entity, FiniteStateMachine stateMachine, string animBoolName, bool playAnim, D_DeadState stateData, Beast_Entity character) : base(entity, stateMachine, animBoolName, playAnim, stateData)
     {
         this.character = character;
     }
@@ -454,6 +493,7 @@ public class Beast_Dead : DeadState
     public override void Enter()
     {
         base.Enter();
+        character.anim.SetTrigger(animBoolName);
         deadTime = stateData.deadTime;
         character.seeker.CancelCurrentPathRequest();
     }
@@ -484,7 +524,10 @@ public class Beast_Damage : AI_State
     public override void AnimationFinishTrigger()
     {
         base.AnimationFinishTrigger();
-        stateMachine.ChangeState(character.Beast_Idle);
+        if(character.Beast_Shout.hasShout)
+            stateMachine.ChangeState(character.Beast_Idle);
+        else
+            stateMachine.ChangeState(character.Beast_Shout);
     }
 
     public override void Enter()
@@ -499,5 +542,45 @@ public class Beast_Damage : AI_State
     {
         base.Exit();
         character.beingStun = false;
+    }
+}
+
+public class Beast_Shout : AI_State
+{
+    Beast_Entity character;
+    public bool hasShout;
+    private Vector3 target;
+    public Beast_Shout(Entity entity, FiniteStateMachine stateMachine, string animBoolName, Beast_Entity character) : base(entity, stateMachine, animBoolName)
+    {
+        this.character = character;
+    }
+
+    public override void AnimationFinishTrigger()
+    {
+        base.AnimationFinishTrigger();
+        hasShout = true;
+        stateMachine.ChangeState(character.Beast_Idle);
+    }
+
+    public override void Enter()
+    {
+        base.Enter();
+        target = character.enemy.transform.position;
+    }
+
+    public override void LogicUpdate()
+    {
+        base.LogicUpdate();
+
+        Vector3 dir = (target - character.transform.position).normalized;
+
+        Quaternion rot = Quaternion.LookRotation(dir, Vector3.up);
+
+        float angle = Mathf.Abs(Vector3.Angle(dir, character.transform.forward));
+
+        if (angle > 90)
+            character.transform.rotation = Quaternion.RotateTowards(character.transform.rotation, rot, 800 * Time.deltaTime);
+        else
+            character.transform.rotation = Quaternion.RotateTowards(character.transform.rotation, rot, 600 * Time.deltaTime);
     }
 }

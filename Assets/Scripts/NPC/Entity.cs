@@ -43,6 +43,8 @@ public class Entity : MonoBehaviour
     [ReadOnly]
     public bool NoTargetFound;
 
+    public UnityAction DetectionTrigger;
+
     #region Check Transforms
     [SerializeField]
     private Transform groundCheck;
@@ -232,6 +234,25 @@ public class Entity : MonoBehaviour
         return testValue >= bound1 && testValue <= bound2;
     }
 
+    public float AngleDir(Vector3 fwd, Vector3 targetDir, Vector3 up)
+    {
+        Vector3 perp = Vector3.Cross(fwd, targetDir);
+        float dir = Vector3.Dot(perp, up);
+
+        if (dir > 0f)
+        {
+            return 1f;
+        }
+        else if (dir < 0f)
+        {
+            return -1f;
+        }
+        else
+        {
+            return 0f;
+        }
+    }
+
     #endregion
 
     #region Detection Functions
@@ -345,7 +366,6 @@ public class Entity : MonoBehaviour
         {
             if (TargetFindTimerReset <= 0)
             {
-                Debug.Log("Here");
                 TargetFindTimerReset = 2;
                 CanSeePlayer = false;
                 resetFindTargetEnable = false;

@@ -266,7 +266,6 @@ public class WeaponManager : MonoBehaviour
 
     private void Colliding_Manager_Armor(Collider col)
     {
-        Debug.Log("CRIT CHANCE!");
         //Collider Object
         collision_Collider = col;
         // Effect Direction
@@ -274,7 +273,7 @@ public class WeaponManager : MonoBehaviour
 
         if (col.TryGetComponent<IDamage>(out IDamage damage))
         {
-            damage.Damage(weapon_Damage);
+            damage.Damage(weapon_Damage,parentObject);
         }
 
         pierceCount++;

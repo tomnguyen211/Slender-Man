@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using Tensori.FPSHandsHorrorPack;
 using UnityEngine;
 using UnityEngine.Events;
@@ -74,7 +75,7 @@ public class FPSHandsController : MonoBehaviour
 
 
     #endregion
-
+    [SerializeField] GameObject DetectReference;
 
     private void Start()
     {
@@ -434,7 +435,6 @@ public class FPSHandsController : MonoBehaviour
                     continue;
 
                 triggeredAnimationEvents.Add(i);
-                Debug.Log("Passed");
                 OnAnimationEvent?.Invoke(animationEvent.EventMessage);
             }
 
@@ -522,11 +522,12 @@ public class FPSHandsController : MonoBehaviour
 
                     if (hit.collider.TryGetComponent<IDamage>(out IDamage component_1))
                     {
-                        component_1.Damage(heldItemPreviousFrame.Stats.damage, hit);
+                        component_1.Damage(heldItemPreviousFrame.Stats.damage, hit, DetectReference);
+
                     }
                     else if (hit.collider.transform.parent != null && hit.collider.transform.parent.TryGetComponent<IDamage>(out IDamage component_2))
                     {
-                        component_2.Damage(heldItemPreviousFrame.Stats.damage, hit);
+                        component_2.Damage(heldItemPreviousFrame.Stats.damage, hit, DetectReference);
 
                     }
                 }
@@ -591,11 +592,13 @@ public class FPSHandsController : MonoBehaviour
 
                         if (hit.collider.TryGetComponent<IDamage>(out IDamage component_1))
                         {
-                            component_1.Damage(heldItemPreviousFrame.Stats.damage,hit);
+                            component_1.Damage(heldItemPreviousFrame.Stats.damage,hit, DetectReference);
+
                         }
                         else if (hit.collider.transform.parent != null && hit.collider.transform.parent.TryGetComponent<IDamage>(out IDamage component_2))
                         {
-                            component_2.Damage(heldItemPreviousFrame.Stats.damage,hit);
+                            component_2.Damage(heldItemPreviousFrame.Stats.damage,hit, DetectReference);
+
 
                         }
                     }
@@ -626,19 +629,20 @@ public class FPSHandsController : MonoBehaviour
                 for (int i = 0; i < rangeChecks.Length; i++)
                 {
                     Transform target = rangeChecks[i].transform;
-                    if (target.TryGetComponent<IDamage>(out IDamage component_1))
+                    if (target.CompareTag("Enemy") && target.TryGetComponent<IDamage>(out IDamage component_1))
                     {
                         if (Physics.Raycast(shootRayOrigin, handsParentTransform.forward, out hit, heldItemPreviousFrame.Stats.range * 2))
-                            component_1.Damage(heldItemPreviousFrame.Stats.damage, hit);
+                            component_1.Damage(heldItemPreviousFrame.Stats.damage, hit, gameObject);
                         else
-                            component_1.Damage(heldItemPreviousFrame.Stats.damage);
+                            component_1.Damage(heldItemPreviousFrame.Stats.damage, DetectReference);
                     }
-                    else if (target.parent != null && target.parent.TryGetComponent<IDamage>(out IDamage component_2))
+                    else if (target.parent.CompareTag("Enemy") && target.parent != null && target.parent.TryGetComponent<IDamage>(out IDamage component_2))
                     {
                         if (Physics.Raycast(shootRayOrigin, handsParentTransform.forward, out hit, heldItemPreviousFrame.Stats.range * 2))
-                            component_2.Damage(heldItemPreviousFrame.Stats.damage, hit);
+                            component_2.Damage(heldItemPreviousFrame.Stats.damage, hit, gameObject);
                         else
-                            component_2.Damage(heldItemPreviousFrame.Stats.damage);
+                            component_2.Damage(heldItemPreviousFrame.Stats.damage, DetectReference);
+
                     }
                 }
             }
@@ -672,11 +676,12 @@ public class FPSHandsController : MonoBehaviour
 
                     if (hit.collider.TryGetComponent<IDamage>(out IDamage component_1))
                     {
-                        component_1.Damage(heldItemPreviousFrame.Stats.damage, hit);
+                        component_1.Damage(heldItemPreviousFrame.Stats.damage, hit, DetectReference);
                     }
                     else if (hit.collider.transform.parent != null && hit.collider.transform.parent.TryGetComponent<IDamage>(out IDamage component_2))
                     {
-                        component_2.Damage(heldItemPreviousFrame.Stats.damage, hit);
+                        component_2.Damage(heldItemPreviousFrame.Stats.damage, hit, DetectReference);
+
 
                     }
                 }
@@ -706,12 +711,12 @@ public class FPSHandsController : MonoBehaviour
 
                     if (hit.collider.TryGetComponent<IDamage>(out IDamage component_1))
                     {
-                        component_1.Damage(heldItemPreviousFrame.Stats.damage, hit);
+                        component_1.Damage(heldItemPreviousFrame.Stats.damage, hit, DetectReference);
+
                     }
                     else if (hit.collider.transform.parent != null && hit.collider.transform.parent.TryGetComponent<IDamage>(out IDamage component_2))
                     {
-                        component_2.Damage(heldItemPreviousFrame.Stats.damage, hit);
-
+                        component_2.Damage(heldItemPreviousFrame.Stats.damage, hit, DetectReference);
                     }
                 }
                 /*else if (hit.collider.CompareTag("Ground"))

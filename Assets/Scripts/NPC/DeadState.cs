@@ -8,7 +8,7 @@ public class DeadState : AI_State
 
     protected float deadTime;
 
-    public DeadState(Entity entity, FiniteStateMachine stateMachine, string animBoolName, D_DeadState stateData) : base(entity, stateMachine, animBoolName)
+    public DeadState(Entity entity, FiniteStateMachine stateMachine, string animBoolName, bool playAnim, D_DeadState stateData) : base(entity, stateMachine, animBoolName, playAnim)
     {
         this.stateData = stateData;
     }
