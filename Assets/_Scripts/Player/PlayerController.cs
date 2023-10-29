@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityTutorial.Manager;
 
 namespace UnityTutorial.PlayerControl
@@ -41,6 +42,15 @@ namespace UnityTutorial.PlayerControl
         [SerializeField] private LayerMask pickUpLayerMask;
         [SerializeField] GameObject flashLight;
 
+        // Stamina Bar and Movement
+        public Image StaminaBar_Canvas;
+        public float Stamina, MaxStamina;
+        public float RunCost;
+        public float MoveSpeed = 5f;
+        public bool running = false;
+        public Coroutine recharge;
+        public float ChargeRate;
+
 
         private void Start() {
             _hasAnimator = TryGetComponent<Animator>(out _animator);
@@ -67,6 +77,42 @@ namespace UnityTutorial.PlayerControl
                     itemPickup.SetActive(false);
                     flashLight.SetActive(true);
                 }
+            }
+
+            // Stamina Bar 
+            Vector2 direction = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+            direction.Normalize();
+            if(Input.GetKeyDown("left shift")) { 
+                running = true;
+            } else if (Input.GetKeyUp("left shift")) { 
+                running = false;
+            }
+            if(running && (direction.x != 0 || direction.y != 0)) {
+                _playerRigidbody.velocity = direction * MoveSpeed * 1.5f;
+
+                // Stamina Bar
+                Stamina -= RunCost * Time.deltaTime;
+                if (Stamina < 0) Stamina = 0;
+                StaminaBar_Canvas.fillAmount = Stamina / MaxStamina;
+
+                // Recharge Stamina
+                if(recharge != null) StopCoroutine(recharge);
+                recharge = StartCoroutine(RechargeStamina());
+
+            } else {
+                _playerRigidbody.velocity = direction * MoveSpeed;
+            }
+        }
+
+        // Stamina Bar Recharge
+        private IEnumerator RechargeStamina() {
+            yield return new WaitForSeconds(1f);
+
+            while(Stamina < MaxStamina) {
+                Stamina += ChargeRate / 10f;
+                if(Stamina > MaxStamina) Stamina = MaxStamina;
+                StaminaBar_Canvas.fillAmount = Stamina / MaxStamina;
+                yield return new WaitForSeconds(.1f);
             }
         }
 
