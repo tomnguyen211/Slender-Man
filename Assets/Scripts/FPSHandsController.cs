@@ -632,14 +632,14 @@ public class FPSHandsController : MonoBehaviour
                     if (target.CompareTag("Enemy") && target.TryGetComponent<IDamage>(out IDamage component_1))
                     {
                         if (Physics.Raycast(shootRayOrigin, handsParentTransform.forward, out hit, heldItemPreviousFrame.Stats.range * 2))
-                            component_1.Damage(heldItemPreviousFrame.Stats.damage, hit, gameObject);
+                            component_1.Damage(heldItemPreviousFrame.Stats.damage, hit, DetectReference);
                         else
                             component_1.Damage(heldItemPreviousFrame.Stats.damage, DetectReference);
                     }
                     else if (target.parent != null && target.parent.CompareTag("Enemy")  && target.parent.TryGetComponent<IDamage>(out IDamage component_2))
                     {
                         if (Physics.Raycast(shootRayOrigin, handsParentTransform.forward, out hit, heldItemPreviousFrame.Stats.range * 2))
-                            component_2.Damage(heldItemPreviousFrame.Stats.damage, hit, gameObject);
+                            component_2.Damage(heldItemPreviousFrame.Stats.damage, hit, DetectReference);
                         else
                             component_2.Damage(heldItemPreviousFrame.Stats.damage, DetectReference);
 
