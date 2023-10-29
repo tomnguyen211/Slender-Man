@@ -72,6 +72,7 @@ public class Beast_Entity : Entity, IDamage
         {
             DetectionCheck = true;
             DetectionTimer = entityData.detectionTimer;
+            stateMachine.ChangeState(Beast_Damage);
             TriggerDetection();
         }
 
@@ -216,7 +217,7 @@ public class Beast_Entity : Entity, IDamage
     public override void TriggerDetection()
     {
         base.TriggerDetection();
-        stateMachine.ChangeState(Beast_Damage);
+        stateMachine.ChangeState(Beast_Shout);
         Beast_Idle.isIdleTimeOver = true;
     }
 
@@ -226,12 +227,6 @@ public class Beast_Entity : Entity, IDamage
             enemy = attacker;
         MainHealthSet(damage);
         SpawnDecal.SpawnDecals(ray);
-    }
-
-    public void SendAttackSignal(GameObject attacker)
-    {
-        if (enemy == null)
-            enemy = attacker;
     }
 
     private void DisableDetection()
