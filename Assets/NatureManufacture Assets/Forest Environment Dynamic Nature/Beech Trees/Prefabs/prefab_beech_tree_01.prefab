@@ -11,9 +11,10 @@ GameObject:
   - component: {fileID: 4940044577566757288}
   - component: {fileID: 6230838869549815849}
   - component: {fileID: 6321489549929681998}
-  m_Layer: 0
+  - component: {fileID: 7688530867821171289}
+  m_Layer: 3
   m_Name: beech_tree_01_LOD2
-  m_TagString: Untagged
+  m_TagString: Tree
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 81
@@ -84,6 +85,28 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &7688530867821171289
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2493473939148820682}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300000, guid: e87dcc2f4a591fe47aee14397aef906f, type: 2}
 --- !u!1 &3669178314528439117
 GameObject:
   m_ObjectHideFlags: 0
@@ -95,9 +118,10 @@ GameObject:
   - component: {fileID: 1760345254378696619}
   - component: {fileID: 5736930428127654841}
   - component: {fileID: 4985112955804759787}
-  m_Layer: 0
+  - component: {fileID: 2698441158636619873}
+  m_Layer: 3
   m_Name: beech_tree_01_LOD3
-  m_TagString: Untagged
+  m_TagString: Tree
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 81
@@ -167,6 +191,28 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &2698441158636619873
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3669178314528439117}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300000, guid: 56f13f268c8f8de47bb7ea597662bba4, type: 2}
 --- !u!1 &7078907134251479745
 GameObject:
   m_ObjectHideFlags: 0
@@ -177,9 +223,9 @@ GameObject:
   m_Component:
   - component: {fileID: 6081562986216898770}
   - component: {fileID: 6635372108582311446}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: prefab_beech_tree_01
-  m_TagString: Untagged
+  m_TagString: Tree
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 80
@@ -245,9 +291,10 @@ GameObject:
   - component: {fileID: 3655386325329646617}
   - component: {fileID: 4982920338625448945}
   - component: {fileID: 3182346908635609112}
-  m_Layer: 0
+  - component: {fileID: 4835313906219974133}
+  m_Layer: 3
   m_Name: beech_tree_01_LOD1
-  m_TagString: Untagged
+  m_TagString: Tree
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 81
@@ -318,6 +365,28 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &4835313906219974133
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7590580875848450626}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300000, guid: d9f39679147131b48ac806edd09554b7, type: 2}
 --- !u!1 &7683460461932659776
 GameObject:
   m_ObjectHideFlags: 0
@@ -329,10 +398,10 @@ GameObject:
   - component: {fileID: 5765618847363556618}
   - component: {fileID: 790231255967960891}
   - component: {fileID: 7220996404875604635}
-  - component: {fileID: 4846686975992879102}
-  m_Layer: 0
+  - component: {fileID: 7466996107567412759}
+  m_Layer: 3
   m_Name: beech_tree_01_LOD0
-  m_TagString: Untagged
+  m_TagString: Tree
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 81
@@ -403,8 +472,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &4846686975992879102
-CapsuleCollider:
+--- !u!64 &7466996107567412759
+MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -421,8 +490,7 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.2
-  m_Height: 9.8840685
-  m_Direction: 1
-  m_Center: {x: 0.05, y: 4.932565, z: 0.04}
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300000, guid: c15f602f049a7f74686747fee308e744, type: 2}

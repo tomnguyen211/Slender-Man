@@ -76,6 +76,8 @@ public class FPSHandsController : MonoBehaviour
 
     #endregion
     [SerializeField] GameObject DetectReference;
+    [SerializeField]
+    Terrain terrain;
 
     private void Start()
     {
@@ -531,11 +533,17 @@ public class FPSHandsController : MonoBehaviour
 
                     }
                 }
-                else if (hit.collider.CompareTag("Ground"))
-                {
+                else if (hit.collider.CompareTag("Tree"))
+                {                    
                     float angle = Vector3.Angle(hit.normal, transform.up);
                     Quaternion startRot = Quaternion.LookRotation(hit.normal);
                     GameObject bulletHole = Instantiate(heldItemPreviousFrame.Stats.ImpactMark, hit.point, startRot);
+                }
+                else if (hit.collider.CompareTag("Ground"))
+                {
+                    /*float angle = Vector3.Angle(hit.normal, transform.up);
+                    Quaternion startRot = Quaternion.LookRotation(hit.normal);
+                    GameObject bulletHole = Instantiate(heldItemPreviousFrame.Stats.ImpactMark, hit.point, startRot);*/
                 }
             }
             _crosshair.SetScale(CrossHairScale.Shoot, 1f);
@@ -602,11 +610,17 @@ public class FPSHandsController : MonoBehaviour
 
                         }
                     }
-                    else if (hit.collider.CompareTag("Ground"))
+                    else if (hit.collider.CompareTag("Tree"))
                     {
                         float angle = Vector3.Angle(hit.normal, transform.up);
                         Quaternion startRot = Quaternion.LookRotation(hit.normal);
                         GameObject bulletHole = Instantiate(heldItemPreviousFrame.Stats.ImpactMark, hit.point, startRot);
+                    }
+                    else if (hit.collider.CompareTag("Ground"))
+                    {
+                        /*float angle = Vector3.Angle(hit.normal, transform.up);
+                        Quaternion startRot = Quaternion.LookRotation(hit.normal);
+                        GameObject bulletHole = Instantiate(heldItemPreviousFrame.Stats.ImpactMark, hit.point, startRot);*/
                     }
                 }
             }          

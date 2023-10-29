@@ -1,9 +1,10 @@
-﻿using UnityEngine;
+﻿using Unity.Collections;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class Door : MonoBehaviour
 {
-
+    [SerializeField,ReadOnly]
     bool trig, open;//trig-проверка входа выхода в триггер(игрок должен быть с тегом Player) open-закрыть и открыть дверь
     public float smooth = 2.0f;//скорость вращения
     public float DoorOpenAngle = 90.0f;//угол вращения 
@@ -23,6 +24,9 @@ public class Door : MonoBehaviour
         if (open)//открыть
         {
             transform.eulerAngles = Vector3.Slerp(transform.eulerAngles, openRot, Time.deltaTime * smooth);
+            Debug.Log(transform.rotation.eulerAngles.y);
+            if (transform.rotation.eulerAngles.y % 90 == 1)
+                open = false;
         }
         else//закрыть
         {
@@ -34,28 +38,28 @@ public class Door : MonoBehaviour
         }
         if (trig)
         {
-            if (open)
+           /* if (open)
             {
                 txt.text = "Close E";
             }
             else
             {
                 txt.text = "Open E";
-            }
+            }*/
         }
     }
     private void OnTriggerEnter(Collider coll)//вход и выход в\из  триггера 
     {
         if (coll.tag == "Player")
         {
-            if (!open)
+            /*if (!open)
             {
                 txt.text = "Close E ";
             }
             else
             {
                 txt.text = "Open E";
-            }
+            }*/
             trig = true;
         }
     }
@@ -63,7 +67,7 @@ public class Door : MonoBehaviour
     {
         if (coll.tag == "Player")
         {
-            txt.text = " ";
+            //txt.text = " ";
             trig = false;
         }
     }
