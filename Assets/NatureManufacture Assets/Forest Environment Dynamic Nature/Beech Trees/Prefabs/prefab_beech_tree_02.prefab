@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4721953377515468594}
   - component: {fileID: 1663617574321970635}
   - component: {fileID: 7504623069162937421}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: beech_tree_02_LOD1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25,13 +25,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1168419490129809306}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0, y: -0.1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1367800509374139010}
-  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &1663617574321970635
 MeshFilter:
@@ -94,9 +94,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1367800509374139010}
   - component: {fileID: 1912052673047305286}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: prefab_beech_tree_02
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 80
@@ -108,6 +108,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2639178135799527569}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -118,7 +119,6 @@ Transform:
   - {fileID: 8958417718527371274}
   - {fileID: 3655851260709576769}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!205 &1912052673047305286
 LODGroup:
@@ -162,7 +162,7 @@ GameObject:
   - component: {fileID: 3655851260709576769}
   - component: {fileID: 8053008370207183675}
   - component: {fileID: 8977786695120647829}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: beech_tree_02_LOD3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -176,13 +176,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4918266806633766423}
+  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: -0.1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1367800509374139010}
-  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &8053008370207183675
 MeshFilter:
@@ -245,7 +245,7 @@ GameObject:
   - component: {fileID: 8958417718527371274}
   - component: {fileID: 3595408448599168606}
   - component: {fileID: 9017207178537837584}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: beech_tree_02_LOD2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -259,13 +259,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5792662326375333564}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0, y: -0.1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1367800509374139010}
-  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &3595408448599168606
 MeshFilter:
@@ -330,7 +330,7 @@ GameObject:
   - component: {fileID: 959379675677069679}
   - component: {fileID: 4583983361586107736}
   - component: {fileID: 4864148313454019913}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: beech_tree_02_LOD0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -344,13 +344,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5800833144279262303}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0, y: -0.1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1367800509374139010}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &959379675677069679
 MeshFilter:
@@ -411,8 +411,17 @@ CapsuleCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5800833144279262303}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
+  serializedVersion: 2
   m_Radius: 0.27
   m_Height: 13.328926
   m_Direction: 1

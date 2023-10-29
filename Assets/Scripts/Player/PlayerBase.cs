@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerBase : MonoBehaviour
 {
@@ -18,11 +19,14 @@ public class PlayerBase : MonoBehaviour
     public PlayerInAirState PlayerInAirState { get; set; }
     public PlayerLandState PlayerLandState { get; set; }
 
+    public Player_GroundState Player_GroundState { get; set; }
+
     #endregion
 
     #region Components
     public Animator Anim;
     public Rigidbody RB { get; private set; }
+
     #endregion
 
     #region Check Transforms
@@ -40,6 +44,8 @@ public class PlayerBase : MonoBehaviour
     List<Collider> colliders;
     protected bool Checkpoint;
     public Vector3 CurrentVelocity { get; private set; }
+    public Vector3 CurrentForceVelocity;
+
     private Vector3 workspace;
     [SerializeField]
     Transform orientation;
@@ -64,11 +70,13 @@ public class PlayerBase : MonoBehaviour
 
     public virtual void Start()
     {
-        StateMachine.Initialize(PlayerIdleState);
 
         RB = GetComponent<Rigidbody>();
         RB.constraints = RigidbodyConstraints.FreezeRotation;
         InputHandler = GetComponent<Player_Input_Manager>();
+
+        StateMachine.Initialize(PlayerIdleState);
+
     }
 
     public virtual void Update()
@@ -94,10 +102,18 @@ public class PlayerBase : MonoBehaviour
     }
     public void SetVelocity(float velocity, Vector3 direction)
     {
-        workspace = orientation.forward * direction.x + orientation.right * direction.z;
-        workspace = direction * velocity;
+
+        /* Ray groundCheckRay = new Ray(transform.position, Vector3.down);
+         if (Physics.Raycast(groundCheckRay, 2f))
+         {
+             CurrentForceVelocity.y = -2f;
+         }*/
+        //workspace = orientation.forward * direction.x + orientation.right * direction.z;
+        workspace = orientation.forward * verticalInput + orientation.right * horizontalInput;
+        RB.AddForce(workspace.normalized * velocity * 10, ForceMode.Force);
+        /*workspace = direction * velocity;
         RB.velocity = workspace;
-        CurrentVelocity = workspace;
+        CurrentVelocity = workspace;*/
     }
     public void SetVelocityX(float velocity)
     {
@@ -132,6 +148,7 @@ public class PlayerBase : MonoBehaviour
     public bool CheckIfGrounded()
     {
         return colliders.Count > 0;
+        //return Physics.Raycast(transform.position, Vector3.down, 2, playerData.whatisGround);
         //return Physics.OverlapSphere(groundCheck.position, playerData.groundCheckRadius, playerData.whatisGround).Length > 0;
     }
     public bool CheckForCeiling()
@@ -260,11 +277,15 @@ public class Player_GroundState : PlayerState
     public override void Enter()
     {
         base.Enter();
+        player.RB.drag = 5;
+
     }
 
     public override void Exit()
     {
         base.Exit();
+
+
     }
 
     public override void LogicUpdate()
@@ -277,7 +298,7 @@ public class Player_GroundState : PlayerState
         jumpInput = player.InputHandler.JumpInput;
         grabInput = player.InputHandler.GrabInput;
 
-
+ 
        /* if (jumpInput && player.PlayerJumpStage_Scorpion.CanJump())
         {
             stateMachine.ChangeState(_player.PlayerJumpStage_Scorpion);
@@ -292,6 +313,7 @@ public class Player_GroundState : PlayerState
     public override void PhysicUpdate()
     {
         base.PhysicUpdate();
+
     }
 }
 public class PlayerInAirState : PlayerState
@@ -343,6 +365,7 @@ public class PlayerInAirState : PlayerState
     {
         base.Enter();
         isCheckGround = false;
+        player.RB.drag = 0;
     }
 
     public override void Exit()
@@ -414,7 +437,6 @@ public class PlayerInAirState : PlayerState
     public override void PhysicUpdate()
     {
         base.PhysicUpdate();
-        player.RB.drag = 0;
     }
 
     private void CheckCoyoteTime()
@@ -526,19 +548,18 @@ public class PlayerIdleState : Player_GroundState
 
     public override void Exit()
     {
-        player.RB.drag = 0;
         base.Exit();
     }
 
     public override void LogicUpdate()
     {
         base.LogicUpdate();
-        if (isGrounded && Mathf.Abs(player.RB.velocity.x) > 1f && player.CollisionManager(player.playerData.whatisGround))
+       /* if (isGrounded && Mathf.Abs(player.RB.velocity.x) > 1f && player.CollisionManager(player.playerData.whatisGround))
             player.RB.drag = 20;
         else if (isGrounded && Mathf.Abs(player.RB.velocity.x) > 0.1f && player.CollisionManager(player.playerData.whatisGround))
             player.RB.drag = 10;
         else
-            player.RB.drag = 0;
+            player.RB.drag = 0;*/
 
         Debug.Log("Xinput: " + xInput);
         Debug.Log("Zinput: " + zInput);
@@ -574,7 +595,6 @@ public class PlayerMoveState : Player_GroundState
     public override void Exit()
     {
         base.Exit();
-        player.RB.drag = 0;
 
     }
 
@@ -582,12 +602,17 @@ public class PlayerMoveState : Player_GroundState
     {
         base.LogicUpdate();
 
+        Vector3 PlayerInput = new Vector3 { x = player.InputHandler.NormInputX, y = 0f, z = player.InputHandler.NormInputZ };
+        Vector3 MoveVector = player.transform.TransformDirection(PlayerInput);
 
-        player.SetVelocity(5, new Vector3(player.horizontalInput,0, player.verticalInput));
+        //player.SetVelocity(5, PlayerInput);
+
+        //player.SetVelocity(5, new Vector3(player.horizontalInput, 0, PlayerInput));
+
 
         RaycastHit2D rayGround = Physics2D.Raycast(player.transform.position, Vector2.down, 1, player.playerData.whatisGround);
 
-        if (rayGround)
+        /*if (rayGround)
         {
             float angle = Vector2.Angle(rayGround.normal, Vector2.up);
             if (isGrounded && Mathf.Abs(player.RB.velocity.x) > 0.1f && player.CollisionManager(player.playerData.whatisGround) && angle != 0)
@@ -596,7 +621,7 @@ public class PlayerMoveState : Player_GroundState
                 player.RB.drag = 0;
         }
         else
-            player.RB.drag = 0;
+            player.RB.drag = 0;*/
 
         if (xInput == 0f && !isExitingState)
         {
@@ -607,6 +632,9 @@ public class PlayerMoveState : Player_GroundState
     public override void PhysicUpdate()
     {
         base.PhysicUpdate();
+        Vector3 PlayerInput = new Vector3 { x = player.InputHandler.NormInputX, y = 0f, z = player.InputHandler.NormInputZ };
+        player.SetVelocity(5, PlayerInput);
+
     }
 }
 
@@ -621,9 +649,7 @@ public class PlayerLandState : Player_GroundState
 
     public override void Exit()
     {
-        base.Exit();
-        player.RB.drag = 0;
-    }
+        base.Exit();    }
 
     public override void LogicUpdate()
     {
@@ -631,12 +657,12 @@ public class PlayerLandState : Player_GroundState
 
         if (!isExitingState)
         {
-            if (isGrounded && Mathf.Abs(player.RB.velocity.x) > 1f && player.CollisionManager(player.playerData.whatisGround))
+           /* if (isGrounded && Mathf.Abs(player.RB.velocity.x) > 1f && player.CollisionManager(player.playerData.whatisGround))
                 player.RB.drag = 20;
             else if (isGrounded && Mathf.Abs(player.RB.velocity.x) > 0.1f && player.CollisionManager(player.playerData.whatisGround))
                 player.RB.drag = 10;
             else
-                player.RB.drag = 0;
+                player.RB.drag = 0;*/
 
             if (xInput != 0)
             {

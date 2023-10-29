@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36e8c6027337e07448e0dd91076647c6, type: 3}
+  m_Name: Flashlight
+  m_EditorClassIdentifier: 
+  ItemPrefab: {fileID: 8271269421579297201, guid: 1b6afc0bd4c84ba488888d67c0a19349,
+    type: 3}
+  HandsPivotBoneTransformName: flashlight
+  ItemAnimatorTimeParameter: AnimationTime
+  AttackAnimations: []
+  MovementBounceVelocityLimit: 3
+  MovementBounceSpringStiffness: 10
+  MovementBounceSpringDamping: 10
+  IdlePose:
+    HandsAnimationStateName: Flashlight_Idle
+    ItemAnimationStateName: Flashlight_Idle
+    AnimationStateBlendTime: 0.1
+    PositionOffset: {x: 0, y: -0.13, z: -0.06}
+    EulerOffset: {x: 0, y: 0, z: 0}
+    TransformSmoothDampTime: 0.1
+    MovementBounceStrength_Horizontal: 0.15
+    MovementBounceStrength_Vertical: 0.15
+    MovementBounceSpeed: 12
+  RunPose:
+    HandsAnimationStateName: Flashlight_Idle
+    ItemAnimationStateName: Flashlight_Idle
+    AnimationStateBlendTime: 0.1
+    PositionOffset: {x: 0, y: -0.16, z: -0.14}
+    EulerOffset: {x: 0, y: 0, z: 0}
+    TransformSmoothDampTime: 0.1
+    MovementBounceStrength_Horizontal: 0.2
+    MovementBounceStrength_Vertical: 0.2
+    MovementBounceSpeed: 16
+  AimPose:
+    HandsAnimationStateName: Flashlight_Idle
+    ItemAnimationStateName: Flashlight_Idle
+    AnimationStateBlendTime: 0.1
+    PositionOffset: {x: 0, y: -0.15, z: -0.17}
+    EulerOffset: {x: 0, y: 0, z: 0}
+    TransformSmoothDampTime: 0.1
+    MovementBounceStrength_Horizontal: 0.07
+    MovementBounceStrength_Vertical: 0.07
+    MovementBounceSpeed: 12
+  ReloadPose:
+    HandsAnimationStateName: Flashlight_Idle
+    ItemAnimationStateName: Flashlight_Idle
+    AnimationStateBlendTime: 0.1
+    PositionOffset: {x: 0, y: 0, z: 0}
+    EulerOffset: {x: 0, y: 0, z: 0}
+    TransformSmoothDampTime: 0.1
+    MovementBounceStrength_Horizontal: 0.1
+    MovementBounceStrength_Vertical: 0.1
+    MovementBounceSpeed: 12
+    AnimationLength: 1
+    AnimationEvents: []

@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4297611112345015096}
   - component: {fileID: 3735648063555012092}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: prefab_beech_tree_08
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 80
@@ -24,6 +24,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1008656033906581803}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -34,7 +35,6 @@ Transform:
   - {fileID: 7332817094815248180}
   - {fileID: 4186719548080240463}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!205 &3735648063555012092
 LODGroup:
@@ -79,7 +79,7 @@ GameObject:
   - component: {fileID: 4893556585017650888}
   - component: {fileID: 3163255065171482466}
   - component: {fileID: 6093428517948487052}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: beech_tree_08_LOD0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -93,13 +93,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1205567791571564243}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0, y: -0.1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4297611112345015096}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &4893556585017650888
 MeshFilter:
@@ -160,8 +160,17 @@ CapsuleCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1205567791571564243}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
+  serializedVersion: 2
   m_Radius: 0.3
   m_Height: 20.88624
   m_Direction: 1
@@ -177,7 +186,7 @@ GameObject:
   - component: {fileID: 6707375239886971484}
   - component: {fileID: 7007660346759972657}
   - component: {fileID: 6215074308248611359}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: beech_tree_08_LOD1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -191,13 +200,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2090418646560244708}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0, y: -0.1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4297611112345015096}
-  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &7007660346759972657
 MeshFilter:
@@ -261,7 +270,7 @@ GameObject:
   - component: {fileID: 7332817094815248180}
   - component: {fileID: 1213510072805369691}
   - component: {fileID: 8056265477292504926}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: beech_tree_08_LOD2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -275,13 +284,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6755844535358184946}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0, y: -0.1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4297611112345015096}
-  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &1213510072805369691
 MeshFilter:
@@ -345,7 +354,7 @@ GameObject:
   - component: {fileID: 4186719548080240463}
   - component: {fileID: 662585271048731988}
   - component: {fileID: 5299494229147412573}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: beech_tree_08_LOD3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -359,13 +368,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8695192952596493541}
+  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: -0.1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4297611112345015096}
-  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &662585271048731988
 MeshFilter:
