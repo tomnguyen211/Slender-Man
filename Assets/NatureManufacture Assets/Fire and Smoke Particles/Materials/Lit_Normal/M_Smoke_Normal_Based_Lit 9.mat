@@ -13,12 +13,9 @@ Material:
   - EMISSION_PROCEDURAL_MASK_ON
   - USE_TRANSPARENCY_INTERSECTION_ON
   - USE_WIND_ON
-  - _Read_Color_Mask
-  - _Use_Scene_Light_s_Direction
-  m_InvalidKeywords:
-  - _BUILTIN_ALPHATEST_ON
-  - _BUILTIN_AlphaClip
-  - _BUILTIN_SURFACE_TYPE_TRANSPARENT
+  - _ALPHATEST_ON
+  - _SURFACE_TYPE_TRANSPARENT
+  m_InvalidKeywords: []
   m_LightmapFlags: 1
   m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
@@ -165,10 +162,6 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _texcoord:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -225,17 +218,6 @@ Material:
     - _Alpha_Multiplier: 1
     - _Ambient_Occlusion: 1
     - _Anisotropy: 0
-    - _BUILTIN_AlphaClip: 1
-    - _BUILTIN_Blend: 0
-    - _BUILTIN_CullMode: 2
-    - _BUILTIN_DstBlend: 10
-    - _BUILTIN_QueueControl: 0
-    - _BUILTIN_QueueOffset: 0
-    - _BUILTIN_SrcBlend: 5
-    - _BUILTIN_Surface: 1
-    - _BUILTIN_ZTest: 4
-    - _BUILTIN_ZWrite: 0
-    - _BUILTIN_ZWriteControl: 0
     - _Bend_Strength: 2
     - _Blend: 0
     - _BlendMode: 0
@@ -382,7 +364,6 @@ Material:
     - _ZTestTransparent: 4
     - _ZWrite: 0
     - _ZWriteControl: 0
-    - __dirty: 1
     m_Colors:
     - Color_a50e477de13e4a4a9e884a6a3f1b6acf: {r: 766.9961, g: 12.047059, b: 0, a: 0}
     - Color_c33f52ff5e6f4ddd88d3ec3d21c1b0fd: {r: 1, g: 1, b: 1, a: 0}
@@ -406,7 +387,7 @@ Material:
     - _ParticleColor: {r: 1, g: 1, b: 1, a: 1}
     - _Particle_Color_RGB_Alpha_A: {r: 1, g: 1, b: 1, a: 1}
     - _Particle_Color__RGB__Alpha__A_: {r: 1, g: 1, b: 1, a: 1}
-    - _Shadow_Color: {r: 0.43316126, g: 0.48671815, b: 0.5849056, a: 1}
+    - _Shadow_Color: {r: 0.8228907, g: 0.83790195, b: 0.8679245, a: 1}
     - _SpecularColor: {r: 1, g: 1, b: 1, a: 1}
     - _ThicknessRemap: {r: 0, g: 1, b: 0, a: 0}
     - _TilingandOffset: {r: 1, g: 1, b: 0, a: 0}
@@ -430,19 +411,6 @@ MonoBehaviour:
   m_DiffusionProfileReferences:
   - {fileID: 11400000, guid: 87501308e8c335b4fb22f9626ec9b308, type: 2}
   m_MaterialReferences: []
---- !u!114 &5747094887015467072
-MonoBehaviour:
-  m_ObjectHideFlags: 11
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 639247ca83abc874e893eb93af2b5e44, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  version: 0
 --- !u!114 &6675795790523924633
 MonoBehaviour:
   m_ObjectHideFlags: 11
