@@ -178,7 +178,6 @@ public class Ripper_Entity : Entity, IDamage
 
 
         }
-        Debug.Log(angle);
 
 
         angle = Mathf.Abs(angle);
