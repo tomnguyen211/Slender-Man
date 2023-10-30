@@ -12,13 +12,24 @@ public class Door : MonoBehaviour
     Quaternion DoorOpen;
     Quaternion DoorClosed;
 
+    [SerializeField]
+    bool isOpen;
+
     public Text txt;//text 
     // Start is called before the first frame update
     void Start()
     {
-        DoorOpen = Quaternion.Euler(0, DoorOpenAngle, 0);
-        DoorClosed = transform.rotation;
-
+        if(isOpen)
+        {
+            open = true;
+            DoorOpen = Quaternion.Euler(0, 0, 0);
+            DoorClosed = Quaternion.Euler(0, DoorOpenAngle, 0);
+        }
+        else
+        {
+            DoorOpen = Quaternion.Euler(0, DoorOpenAngle, 0);
+            DoorClosed = transform.rotation;
+        }
     }
 
     // Update is called once per frame
@@ -27,7 +38,6 @@ public class Door : MonoBehaviour
         if (open)//открыть
         {
             transform.rotation = Quaternion.RotateTowards(transform.rotation, DoorOpen, Time.deltaTime * smooth);
-          
         }
         else//закрыть
         {
