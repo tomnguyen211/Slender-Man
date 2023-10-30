@@ -7,15 +7,18 @@ public class Door : MonoBehaviour
     [SerializeField,ReadOnly]
     bool trig, open;//trig-проверка входа выхода в триггер(игрок должен быть с тегом Player) open-закрыть и открыть дверь
     public float smooth = 2.0f;//скорость вращения
-    public float DoorOpenAngle = 90.0f;//угол вращения 
-    private Vector3 defaulRot;
-    private Vector3 openRot;
+    public float DoorOpenAngle = 90.0f;//угол вращения
+  
+    Quaternion DoorOpen;
+    Quaternion DoorClosed;
+
     public Text txt;//text 
     // Start is called before the first frame update
     void Start()
     {
-        defaulRot = transform.eulerAngles;
-        openRot = new Vector3(defaulRot.x, defaulRot.y + DoorOpenAngle, defaulRot.z);
+        DoorOpen = Quaternion.Euler(0, DoorOpenAngle, 0);
+        DoorClosed = transform.rotation;
+
     }
 
     // Update is called once per frame
@@ -23,14 +26,12 @@ public class Door : MonoBehaviour
     {
         if (open)//открыть
         {
-            transform.eulerAngles = Vector3.Slerp(transform.eulerAngles, openRot, Time.deltaTime * smooth);
-            Debug.Log(transform.rotation.eulerAngles.y);
-            if (transform.rotation.eulerAngles.y % 90 == 1)
-                open = false;
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, DoorOpen, Time.deltaTime * smooth);
+          
         }
         else//закрыть
         {
-            transform.eulerAngles = Vector3.Slerp(transform.eulerAngles, defaulRot, Time.deltaTime * smooth);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, DoorClosed, Time.deltaTime * smooth);
         }
         if (Input.GetKeyDown(KeyCode.E) && trig)
         {
