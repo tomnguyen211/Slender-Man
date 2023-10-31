@@ -743,5 +743,7 @@ public class FPSHandsController : MonoBehaviour
             _crosshair.SetScale(CrossHairScale.Shoot, 1f);
         }
     }
+
+
 }
 

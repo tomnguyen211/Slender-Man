@@ -1,3 +1,4 @@
+using System.Collections;
 using Unity.Collections;
 using UnityEngine;
 
@@ -22,7 +23,11 @@ public class FPSCharacterController : MonoBehaviour, IDamage
     [SerializeField] private float cameraMaxPitch = 0f;
     [SerializeField] private Transform cameraTransform = null;
 
+    [SerializeField]
     private bool runInputHeld = false;
+
+    private bool manaIEnumeratorRunning = false;
+    IEnumerator manaIEnumerator;
 
     private float cameraPitch;
     private float cameraYaw;
@@ -32,11 +37,15 @@ public class FPSCharacterController : MonoBehaviour, IDamage
 
     private CharacterController characterController = null;
 
-    #region Health
+    #region Health, Manar
     [SerializeField]
     private float maxHealth;
     [ReadOnly]
     public float currentHealth;
+    [SerializeField]
+    private float maxMana;
+    [ReadOnly]
+    public float currentMana;
     [SerializeField]
     ScreenDamage ScreenDamage;
     [ReadOnly]
@@ -57,9 +66,12 @@ public class FPSCharacterController : MonoBehaviour, IDamage
             cameraYaw = cameraEuler.y;
         }
     }
+
     private void Start()
     {
         ScreenDamage.maxHealth = ScreenDamage.CurrentHealth = currentHealth = maxHealth;
+        currentMana = maxMana;
+        GameManager.Instance.CharacterBar.Init(maxHealth, maxMana);
     }
 
     private void Update()
@@ -87,6 +99,7 @@ public class FPSCharacterController : MonoBehaviour, IDamage
         }
 
         UpdateCameraPosition();
+        Mana();
     }
 
     private void UpdateInput()
@@ -128,7 +141,15 @@ public class FPSCharacterController : MonoBehaviour, IDamage
         if (cameraHorizontalForward != Vector3.zero)
             transform.forward = cameraHorizontalForward;
 
-        float moveSpeed = runInputHeld ? moveSpeed_Run : moveSpeed_Walk;
+        float moveSpeed = 0;
+
+        if (currentMana > 0 && runInputHeld)
+            moveSpeed = moveSpeed_Run;
+        else
+            moveSpeed = moveSpeed_Walk;
+
+
+        //float moveSpeed = runInputHeld ? moveSpeed_Run : moveSpeed_Walk;
 
         Vector3 moveVector = Time.deltaTime * moveSpeed * (movementInput.x * transform.right + movementInput.y * transform.forward);
         moveVector.y = Time.deltaTime * Physics.gravity.y;
@@ -143,7 +164,7 @@ public class FPSCharacterController : MonoBehaviour, IDamage
 
         Vector3 velocity = characterController.velocity;
         velocity.y = 0f;
-        return runInputHeld && velocity.sqrMagnitude > 0.1f;
+        return runInputHeld && velocity.sqrMagnitude > 0.1f && currentMana > 0;
     }
 
     public bool IsWalking()
@@ -170,9 +191,116 @@ public class FPSCharacterController : MonoBehaviour, IDamage
         currentHealth -= damage;
         ScreenDamage.CurrentHealth -= damage;
         Attacker = attacker;
+        GameManager.Instance.CharacterBar.TakeDamage(damage);
         if (currentHealth < 0f)
             Debug.Log("You're Dead");
     }
 
+    public void Mana()
+    {
+        if(runInputHeld && !manaIEnumeratorRunning && currentMana > 0)
+        {
+            manaIEnumeratorRunning = true;
+            manaIEnumerator = ManaChange_Deduct();
+            StartCoroutine(manaIEnumerator);
+        }
+        else if(currentMana < maxMana && !runInputHeld && !manaIEnumeratorRunning)
+        {
+            manaIEnumeratorRunning = true;
+            manaIEnumerator = ManaChange_Add();
+            StartCoroutine(manaIEnumerator);
+        }
+    }
 
+    IEnumerator ManaChange_Add()
+    {
+        /* float time = 1;
+         while (time > 0)
+         {
+             time -= Time.deltaTime;
+             if (manaIEnumeratorRunning)
+             {
+                 StopCoroutine(manaIEnumerator);
+                 yield break;
+             }
+             yield return null;
+         }
+
+         while (!manaIEnumeratorRunning && currentMana <= maxMana)
+         {
+             currentMana += Time.deltaTime * 2;
+             GameManager.Instance.CharacterBar.se
+             yield return null;
+         }
+         manaIEnumeratorRunning = false;
+         StopCoroutine(manaIEnumerator);*/
+
+        float time = 1;
+        while (time > 0)
+        {
+            time -= Time.deltaTime;
+            if (runInputHeld)
+            {
+                manaIEnumeratorRunning = false;
+                StopCoroutine(manaIEnumerator);
+                yield break;
+            }
+            yield return null;
+        }
+
+        time = 0.05f;
+
+        while (!runInputHeld && currentMana < maxMana)
+        {
+            time -= Time.smoothDeltaTime;
+
+            if(time < 0f)
+            {
+                currentMana += 1;
+                GameManager.Instance.CharacterBar.RefreshMana(1, 1);
+                time = 0.05f;
+            }
+            yield return null;
+        }
+        manaIEnumeratorRunning = false;
+        StopCoroutine(manaIEnumerator);
+
+    }
+
+    IEnumerator ManaChange_Deduct()
+    {
+        /* while (manaIEnumeratorRunning && currentMana > 0)
+         {
+             currentMana -= Time.deltaTime;
+             yield return null;
+         }        
+         StopCoroutine(manaIEnumerator);*/
+        float time = 0.1f;
+
+        while (runInputHeld && currentMana > 0)
+        {
+            time -= Time.smoothDeltaTime;
+
+            if (time < 0f)
+            {
+                currentMana -= 1;
+                GameManager.Instance.CharacterBar.UseMana(1, 1);
+                time = 0.1f;
+            }
+            yield return null;
+        }
+        manaIEnumeratorRunning = false;
+        StopCoroutine(manaIEnumerator);
+    }
+
+    public float GetHealth => currentHealth;
+    public float GetMaxHealth => maxHealth;
+
+    public float GetFirstAbilityBar => currentMana;
+    public float GetFirstAbilityBarMax => maxMana;
+
+   /* public float GetSecondAbilityBar => Stats_Manager.specialAbilityBarCount_2;
+    public float GetSeocondManaAbilityMax => Stats_Manager.SpecialAbilityBar_2.BaseValue;*/
+
+    
 }
