@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class FPSItemSelector : MonoBehaviour
@@ -23,6 +24,13 @@ public class FPSItemSelector : MonoBehaviour
 
     private void Start()
     {
+        for(int i = 0; i < SelectionOptions.Count;i++)
+        {
+            SelectionOptions[i].ItemAsset = Instantiate(SelectionOptions[i].ItemAsset);
+        }
+
+
+
         if (SelectionOptions.Count > 0)
         {
             var defaultOption = SelectionOptions[0];
@@ -55,5 +63,6 @@ public class FPSItemSelector : MonoBehaviour
     {
         public KeyCode InputKey;
         public FPSItem ItemAsset;
+
     }
 }

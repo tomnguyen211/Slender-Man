@@ -13,10 +13,15 @@ MonoBehaviour:
   m_Name: Shotgun
   m_EditorClassIdentifier: 
   Stats:
+    bulletUI: {fileID: 21300014, guid: 309ac3eb4cc441349b63128366ca98b6, type: 3}
     bulletCase: {fileID: 8218674655098760532, guid: 5c4e98d2e1ad61d48bb8093c40cb1c09,
       type: 3}
     damage: 5
     range: 10
+    currentBullet: 5
+    maxBullet: 5
+    totalBullet: 0
+    maxTotalBullet: 20
     MuzzleFlash: {fileID: 3141232007039069051, guid: 06913e156a80f964b85dfcc75be0afde,
       type: 3}
     ImpactMark: {fileID: 4300086816366312831, guid: 3698fcc89068d4e4dbc426132521e30f,

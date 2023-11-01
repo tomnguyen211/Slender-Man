@@ -4,6 +4,7 @@ using System.ComponentModel;
 using Tensori.FPSHandsHorrorPack;
 using UnityEngine;
 using UnityEngine.Events;
+using static FPSItem;
 
 public class FPSHandsController : MonoBehaviour
 {
@@ -172,17 +173,32 @@ public class FPSHandsController : MonoBehaviour
 
         if (heldItem.AttackAnimations.Count > 0 && Input.GetKeyDown(shootKey) && !resetTimerAnimationEnable) // Attacking
         {
-            StopActiveCoroutines();
+            if(!CheckAmmo())
+            {
+                if(CheckMaxTotalAmmo())
+                {
+                    StopActiveCoroutines();
 
-            resetTimerAnimationEnable = true;
-            resetTimerAnimationCount = 1;
+                    currentAttackAnimationIndex = 0;
 
-            attackCoroutine = StartCoroutine(Coroutine_updateAttackAnimation(currentAttackAnimationIndex));
+                    reloadCoroutine = StartCoroutine(Coroutine_updateAnimatedPose(heldItem.ReloadPose));
+                }
+            }
+            else
+            {
 
-            currentAttackAnimationIndex++;
+                StopActiveCoroutines();
 
-            if (currentAttackAnimationIndex >= heldItem.AttackAnimations.Count)
-                currentAttackAnimationIndex = 0;
+                resetTimerAnimationEnable = true;
+                resetTimerAnimationCount = 1;
+
+                attackCoroutine = StartCoroutine(Coroutine_updateAttackAnimation(currentAttackAnimationIndex));
+
+                currentAttackAnimationIndex++;
+
+                if (currentAttackAnimationIndex >= heldItem.AttackAnimations.Count)
+                    currentAttackAnimationIndex = 0;
+            }
         }
 
         if (Input.GetKeyDown(reloadKey))
@@ -363,7 +379,7 @@ public class FPSHandsController : MonoBehaviour
         PlayItemAnimation(attackAnimSettings.ItemAnimatorAttackStateName, attackAnimSettings.AttackAnimationBlendTime);
 
         float timer = 0f;
-        while (timer < attackAnimSettings.AttackAnimationLength)
+        while (timer < attackAnimSettings.AttackAnimationLength || attackCoroutine == null)
         {
             if (heldItem == null)
                 break;
@@ -413,7 +429,7 @@ public class FPSHandsController : MonoBehaviour
 
         float timer = 0f;
 
-        while (timer < animatedPose.AnimationLength)
+        while (timer < animatedPose.AnimationLength || reloadCoroutine == null)
         {
             if (heldItem == null)
                 break;
@@ -443,12 +459,32 @@ public class FPSHandsController : MonoBehaviour
             yield return null;
         }
 
+
+        Debug.Log("HasReloaded");
+
+
         reloadCoroutine = null;
     }
 
     public void SetHeldItem(FPSItem item)
     {
         heldItem = item;
+
+        switch(item.HandsPivotBoneTransformName)
+        {
+            case "handgun":
+                GameManager.Instance.CharacterBar.EnableAmmo();
+                GameManager.Instance.CharacterBar.UpdateIconAmmo(heldItem.Stats.bulletUI);
+                UpdateAmmoUI();
+                
+                break;
+            case "shotgun":
+                GameManager.Instance.CharacterBar.EnableAmmo();
+                GameManager.Instance.CharacterBar.UpdateIconAmmo(heldItem.Stats.bulletUI);
+                UpdateAmmoUI();
+                break;
+                default: break;
+        }
     }
 
     public void DebugLogAnimationEvent(string animationEvent)
@@ -461,9 +497,33 @@ public class FPSHandsController : MonoBehaviour
             case "Shoot":
                 TriggerAttackAnimation();
                 break;
+            case "ReloadHandgun":
+                ReloadHandgun();
+                break;
+            case "ReloadShotgun":
+
+                break;
             default: break;
         }
 
+    }
+
+    public void ReloadHandgun()
+    {
+        int requestAmmo = heldItem.Stats.maxBullet - heldItem.Stats.currentBullet;
+
+        if(heldItem.Stats.totalBullet >= requestAmmo)
+        {
+            heldItem.Stats.currentBullet += requestAmmo;
+            heldItem.Stats.totalBullet -= requestAmmo;
+        }
+        else
+        {
+            heldItem.Stats.currentBullet += heldItem.Stats.totalBullet;
+            heldItem.Stats.totalBullet = 0;
+        }
+
+        UpdateAmmoUI();
     }
 
 
@@ -546,7 +606,12 @@ public class FPSHandsController : MonoBehaviour
                     GameObject bulletHole = Instantiate(heldItemPreviousFrame.Stats.ImpactMark, hit.point, startRot);*/
                 }
             }
+
             _crosshair.SetScale(CrossHairScale.Shoot, 1f);
+
+            heldItem.Stats.currentBullet--;
+            UpdateAmmoUI();
+
         }
         else if(heldItemPreviousFrame.HandsPivotBoneTransformName == "shotgun")
         {
@@ -623,12 +688,15 @@ public class FPSHandsController : MonoBehaviour
                         GameObject bulletHole = Instantiate(heldItemPreviousFrame.Stats.ImpactMark, hit.point, startRot);*/
                     }
                 }
-            }          
+            }       
+            
            _crosshair.SetScale(CrossHairScale.Shoot, 1f);
+
         }
         else if (heldItemPreviousFrame.HandsPivotBoneTransformName == "fireaxe")
         {
             Debug.Log("Fire Axe");
+
             Vector3 shootRayOrigin = handsParentTransform.GetComponent<Camera>().ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0f));
             RaycastHit hit;
 
@@ -672,6 +740,7 @@ public class FPSHandsController : MonoBehaviour
             }
 
             _crosshair.SetScale(CrossHairScale.Shoot, 1f);
+
         }
         else if (heldItemPreviousFrame.HandsPivotBoneTransformName == "kombat knife")
         {
@@ -706,7 +775,9 @@ public class FPSHandsController : MonoBehaviour
                     GameObject bulletHole = Instantiate(heldItemPreviousFrame.Stats.ImpactMark, hit.point, startRot);
                 }*/
             }
+
             _crosshair.SetScale(CrossHairScale.Shoot, 1f);
+
         }
         else if (heldItemPreviousFrame.HandsPivotBoneTransformName == "WeaponPivot")
         {
@@ -740,10 +811,31 @@ public class FPSHandsController : MonoBehaviour
                     GameObject bulletHole = Instantiate(heldItemPreviousFrame.Stats.ImpactMark, hit.point, startRot);
                 }*/
             }
+
             _crosshair.SetScale(CrossHairScale.Shoot, 1f);
+
         }
     }
 
+
+    private void UpdateAmmoUI()
+    {
+        GameManager.Instance.CharacterBar.UpdateUIAmmo(heldItem.Stats.currentBullet, heldItem.Stats.totalBullet);
+    }
+
+    private bool CheckAmmo()
+    {
+        return heldItem.Stats.currentBullet > 0;
+    }
+    private bool CheckMaxAmmo()
+    {
+        return heldItem.Stats.currentBullet <= heldItem.Stats.maxBullet;
+    }
+
+    private bool CheckMaxTotalAmmo()
+    {
+        return heldItem.Stats.totalBullet <= heldItem.Stats.maxTotalBullet;
+    }
 
 }
 
