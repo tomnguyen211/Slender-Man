@@ -134,7 +134,7 @@ public class FPSItem : ScriptableObject
         public int maxTotalBullet;
 
 
-        public GameObject MuzzleFlash;
+        public GameObject[] MuzzleFlash;
         public GameObject ImpactMark;
     }
 }

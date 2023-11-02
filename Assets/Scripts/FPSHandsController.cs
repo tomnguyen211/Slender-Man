@@ -11,6 +11,8 @@ public class FPSHandsController : MonoBehaviour
     public bool IsAttacking => attackCoroutine != null;
     public bool IsReloading => reloadCoroutine != null;
 
+    private bool stopReload = false;
+
     [Tooltip("Current active item asset")]
     [SerializeField] private FPSItem heldItem = null;
 
@@ -18,6 +20,7 @@ public class FPSHandsController : MonoBehaviour
     [SerializeField] private KeyCode aimKey = KeyCode.Mouse1;
     [SerializeField] private KeyCode shootKey = KeyCode.Mouse0;
     [SerializeField] private KeyCode reloadKey = KeyCode.R;
+    [SerializeField] private KeyCode interact = KeyCode.E;
     public bool IsAiming = false;
 
     [Header("Animator Settings")]
@@ -63,6 +66,7 @@ public class FPSHandsController : MonoBehaviour
 
     public LayerMask armorLayer;
     public LayerMask groundLayer;
+    public LayerMask interactLayer;
 
     #region Shooting
     [SerializeField] Transform bulletPoint;
@@ -77,8 +81,7 @@ public class FPSHandsController : MonoBehaviour
 
     #endregion
     [SerializeField] GameObject DetectReference;
-    [SerializeField]
-    Terrain terrain;
+    [SerializeField] FPSItemSelector FPSItemSelector;
 
     private void Start()
     {
@@ -94,6 +97,7 @@ public class FPSHandsController : MonoBehaviour
         UpdateHandsPose();
         UpdateMovementBounce(deltaTime: Time.deltaTime);
         UpdateHandsPosition();
+
         if (IsAttacking || IsReloading || currentHandsPose == null)
             return;
 
@@ -173,9 +177,9 @@ public class FPSHandsController : MonoBehaviour
 
         if (heldItem.AttackAnimations.Count > 0 && Input.GetKeyDown(shootKey) && !resetTimerAnimationEnable) // Attacking
         {
-            if(!CheckAmmo())
+            if (!CheckAmmo())
             {
-                if(CheckMaxTotalAmmo())
+                if (CheckTotalAmmoIfThereAny())
                 {
                     StopActiveCoroutines();
 
@@ -201,7 +205,7 @@ public class FPSHandsController : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(reloadKey))
+        if (Input.GetKeyDown(reloadKey) && CheckTotalAmmoIfThereAny())
         {
             StopActiveCoroutines();
 
@@ -214,6 +218,8 @@ public class FPSHandsController : MonoBehaviour
             IsAiming = true;
         if (Input.GetKeyUp(aimKey))
             IsAiming = false;
+        if (Input.GetKeyUp(interact))
+            InteractManager();
     }
 
     private void StopActiveCoroutines()
@@ -429,6 +435,8 @@ public class FPSHandsController : MonoBehaviour
 
         float timer = 0f;
 
+        Debug.Log(timer / animatedPose.AnimationLength);
+
         while (timer < animatedPose.AnimationLength || reloadCoroutine == null)
         {
             if (heldItem == null)
@@ -436,6 +444,8 @@ public class FPSHandsController : MonoBehaviour
 
             timer += Time.deltaTime;
             float animationTime = timer / animatedPose.AnimationLength;
+
+            Debug.Log(timer);
 
             handsAnimator.SetFloat(handsAnimatorTimeParameter, animationTime);
 
@@ -454,14 +464,29 @@ public class FPSHandsController : MonoBehaviour
 
                 triggeredAnimationEvents.Add(i);
                 OnAnimationEvent?.Invoke(animationEvent.EventMessage);
+
+                if (stopReload)
+                {
+                    StopReload(3.75f, out timer);
+                    stopReload = false;
+                    float animationTime_Sub = timer / animatedPose.AnimationLength;
+                    for (int n = 0; n < animatedPose.AnimationEvents.Count; n++)
+                    {
+                        if (triggeredAnimationEvents.Contains(n))
+                            continue;
+
+                        var animationEvent_Sub = animatedPose.AnimationEvents[n];
+
+                        if (animationTime_Sub < animationEvent_Sub.EventPosition)
+                            continue;
+
+                        triggeredAnimationEvents.Add(n);
+                    }
+                }
             }
 
             yield return null;
         }
-
-
-        Debug.Log("HasReloaded");
-
 
         reloadCoroutine = null;
     }
@@ -470,20 +495,22 @@ public class FPSHandsController : MonoBehaviour
     {
         heldItem = item;
 
-        switch(item.HandsPivotBoneTransformName)
+        switch (item.HandsPivotBoneTransformName)
         {
             case "handgun":
                 GameManager.Instance.CharacterBar.EnableAmmo();
                 GameManager.Instance.CharacterBar.UpdateIconAmmo(heldItem.Stats.bulletUI);
                 UpdateAmmoUI();
-                
+
                 break;
             case "shotgun":
                 GameManager.Instance.CharacterBar.EnableAmmo();
                 GameManager.Instance.CharacterBar.UpdateIconAmmo(heldItem.Stats.bulletUI);
                 UpdateAmmoUI();
                 break;
-                default: break;
+            case "kombat knife":
+                break;
+            default: break;
         }
     }
 
@@ -501,7 +528,7 @@ public class FPSHandsController : MonoBehaviour
                 ReloadHandgun();
                 break;
             case "ReloadShotgun":
-
+                ReloadShotgun();
                 break;
             default: break;
         }
@@ -512,7 +539,7 @@ public class FPSHandsController : MonoBehaviour
     {
         int requestAmmo = heldItem.Stats.maxBullet - heldItem.Stats.currentBullet;
 
-        if(heldItem.Stats.totalBullet >= requestAmmo)
+        if (heldItem.Stats.totalBullet >= requestAmmo)
         {
             heldItem.Stats.currentBullet += requestAmmo;
             heldItem.Stats.totalBullet -= requestAmmo;
@@ -526,6 +553,27 @@ public class FPSHandsController : MonoBehaviour
         UpdateAmmoUI();
     }
 
+    private void StopReload(float timeIn, out float timeOut)
+    {
+        timeOut = timeIn;
+    }
+
+    public void ReloadShotgun()
+    {
+        if (heldItem.Stats.totalBullet > 0)
+        {
+            heldItem.Stats.currentBullet++;
+            heldItem.Stats.totalBullet--;
+        }
+
+        UpdateAmmoUI();
+
+        if (heldItem.Stats.currentBullet >= heldItem.Stats.maxBullet || heldItem.Stats.totalBullet <= 0)
+        {
+            stopReload = true;
+        }
+    }
+
 
     public void TriggerBulletCasingAnimation()
     {
@@ -536,7 +584,8 @@ public class FPSHandsController : MonoBehaviour
     {
         if (heldItemPreviousFrame.HandsPivotBoneTransformName == "handgun")
         {
-            GameObject muzzle = Instantiate(heldItemPreviousFrame.Stats.MuzzleFlash, bulletPoint.transform.position, Quaternion.identity);
+            
+            GameObject muzzle = Instantiate(heldItemPreviousFrame.Stats.MuzzleFlash[Random.Range(0, heldItemPreviousFrame.Stats.MuzzleFlash.Length)], bulletPoint.transform.position, Quaternion.identity);
             muzzle.transform.SetParent(bulletPoint);
             muzzle.transform.localEulerAngles = new Vector3(90, 90, 0);
 
@@ -577,7 +626,7 @@ public class FPSHandsController : MonoBehaviour
 
             if (Physics.Raycast(shootRayOrigin, DirectionRay, out hit, heldItemPreviousFrame.Stats.range))
             {
-               
+
                 if (hit.collider.CompareTag("Enemy"))
                 {
                     Debug.Log(hit.collider.name + " is hit");
@@ -594,7 +643,7 @@ public class FPSHandsController : MonoBehaviour
                     }
                 }
                 else if (hit.collider.CompareTag("Tree"))
-                {                    
+                {
                     float angle = Vector3.Angle(hit.normal, transform.up);
                     Quaternion startRot = Quaternion.LookRotation(hit.normal);
                     GameObject bulletHole = Instantiate(heldItemPreviousFrame.Stats.ImpactMark, hit.point, startRot);
@@ -613,9 +662,9 @@ public class FPSHandsController : MonoBehaviour
             UpdateAmmoUI();
 
         }
-        else if(heldItemPreviousFrame.HandsPivotBoneTransformName == "shotgun")
+        else if (heldItemPreviousFrame.HandsPivotBoneTransformName == "shotgun")
         {
-            GameObject muzzle = Instantiate(heldItemPreviousFrame.Stats.MuzzleFlash, bulletPoint.transform.position, Quaternion.identity);
+            GameObject muzzle = Instantiate(heldItemPreviousFrame.Stats.MuzzleFlash[Random.Range(0, heldItemPreviousFrame.Stats.MuzzleFlash.Length)], bulletPoint.transform.position, Quaternion.identity);
             muzzle.transform.SetParent(bulletPoint);
             muzzle.transform.localEulerAngles = new Vector3(90, 90, 0);
 
@@ -652,9 +701,9 @@ public class FPSHandsController : MonoBehaviour
 
 
 
-            for(int i = 0; i < 10; i++)
+            for (int i = 0; i < 10; i++)
             {
-                var DirectionRay = handsParentTransform.TransformDirection(randX + Random.Range(-0.1f,0.1f), randY + Random.Range(-0.1f, 0.1f), 1);
+                var DirectionRay = handsParentTransform.TransformDirection(randX + Random.Range(-0.1f, 0.1f), randY + Random.Range(-0.1f, 0.1f), 1);
                 Debug.DrawRay(shootRayOrigin, DirectionRay * heldItemPreviousFrame.Stats.range, Color.red);
 
                 if (Physics.Raycast(shootRayOrigin, DirectionRay, out hit, heldItemPreviousFrame.Stats.range))
@@ -665,12 +714,12 @@ public class FPSHandsController : MonoBehaviour
 
                         if (hit.collider.TryGetComponent<IDamage>(out IDamage component_1))
                         {
-                            component_1.Damage(heldItemPreviousFrame.Stats.damage,hit, DetectReference);
+                            component_1.Damage(heldItemPreviousFrame.Stats.damage, hit, DetectReference);
 
                         }
                         else if (hit.collider.transform.parent != null && hit.collider.transform.parent.TryGetComponent<IDamage>(out IDamage component_2))
                         {
-                            component_2.Damage(heldItemPreviousFrame.Stats.damage,hit, DetectReference);
+                            component_2.Damage(heldItemPreviousFrame.Stats.damage, hit, DetectReference);
 
 
                         }
@@ -688,9 +737,12 @@ public class FPSHandsController : MonoBehaviour
                         GameObject bulletHole = Instantiate(heldItemPreviousFrame.Stats.ImpactMark, hit.point, startRot);*/
                     }
                 }
-            }       
-            
-           _crosshair.SetScale(CrossHairScale.Shoot, 1f);
+            }
+
+            heldItem.Stats.currentBullet--;
+            UpdateAmmoUI();
+
+            _crosshair.SetScale(CrossHairScale.Shoot, 1f);
 
         }
         else if (heldItemPreviousFrame.HandsPivotBoneTransformName == "fireaxe")
@@ -704,9 +756,9 @@ public class FPSHandsController : MonoBehaviour
 
             bulletPoint.position = shootRayOrigin + (handsParentTransform.forward * heldItemPreviousFrame.Stats.range);
 
-             Collider[] rangeChecks = Physics.OverlapSphere(bulletPoint.position, heldItemPreviousFrame.Stats.range, armorLayer | groundLayer);
+            Collider[] rangeChecks = Physics.OverlapSphere(bulletPoint.position, heldItemPreviousFrame.Stats.range, armorLayer | groundLayer);
 
-            if(rangeChecks.Length > 0)
+            if (rangeChecks.Length > 0)
             {
                 for (int i = 0; i < rangeChecks.Length; i++)
                 {
@@ -718,7 +770,7 @@ public class FPSHandsController : MonoBehaviour
                         else
                             component_1.Damage(heldItemPreviousFrame.Stats.damage, DetectReference);
                     }
-                    else if (target.parent != null && target.parent.CompareTag("Enemy")  && target.parent.TryGetComponent<IDamage>(out IDamage component_2))
+                    else if (target.parent != null && target.parent.CompareTag("Enemy") && target.parent.TryGetComponent<IDamage>(out IDamage component_2))
                     {
                         if (Physics.Raycast(shootRayOrigin, handsParentTransform.forward, out hit, heldItemPreviousFrame.Stats.range * 2))
                             component_2.Damage(heldItemPreviousFrame.Stats.damage, hit, DetectReference);
@@ -825,17 +877,76 @@ public class FPSHandsController : MonoBehaviour
 
     private bool CheckAmmo()
     {
-        return heldItem.Stats.currentBullet > 0;
+        if (heldItem.HandsPivotBoneTransformName == "handgun" || heldItem.HandsPivotBoneTransformName == "shotgun")
+            return heldItem.Stats.currentBullet > 0;
+        return true;
     }
-    private bool CheckMaxAmmo()
+
+    private bool CheckIfAmmoExceedMaxAmmo()
     {
         return heldItem.Stats.currentBullet <= heldItem.Stats.maxBullet;
     }
 
-    private bool CheckMaxTotalAmmo()
+    private bool CheckTotalAmmoIfThereAny()
+    {
+        return heldItem.Stats.totalBullet > 0;
+    }
+    private bool ChecTotalAmmoIfExceedMaxCarry()
     {
         return heldItem.Stats.totalBullet <= heldItem.Stats.maxTotalBullet;
     }
 
+    public void InteractManager()
+    {
+        Vector3 shootRayOrigin = handsParentTransform.GetComponent<Camera>().ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0f));
+        RaycastHit hit;
+
+        if (Physics.Raycast(shootRayOrigin, handsParentTransform.forward, out hit, 10, interactLayer))
+        {
+            if (hit.collider.CompareTag("Pickup"))
+            {
+                if(hit.collider.name == "handgun")
+                {
+                    Debug.Log("handgun");
+
+                }
+                else if (hit.collider.name == "shotgun")
+                {
+                    for (int i = 0; i < FPSItemSelector.SelectionOptions.Count; i++)
+                    {
+                        if (FPSItemSelector.SelectionOptions[i].ItemAsset.HandsPivotBoneTransformName == "shotgun")
+                        {
+                            if (FPSItemSelector.SelectionOptions[i].hasUnlock)
+                            {
+                                int amount = FPSItemSelector.SelectionOptions[i].ItemAsset.Stats.maxTotalBullet - FPSItemSelector.SelectionOptions[i].ItemAsset.Stats.totalBullet;
+
+                                if (amount >= 5)
+                                    FPSItemSelector.SelectionOptions[i].ItemAsset.Stats.totalBullet += 5;
+                                else
+                                    FPSItemSelector.SelectionOptions[i].ItemAsset.Stats.totalBullet += amount;
+
+                                UpdateAmmoUI();
+                                hit.collider.gameObject.SetActive(false);
+                            }
+                            else
+                            {
+                                FPSItemSelector.SelectionOptions[i].hasUnlock = true;
+                                SetHeldItem(FPSItemSelector.SelectionOptions[i].ItemAsset);
+                                hit.collider.gameObject.SetActive(false);
+                            }
+                            break;
+                        }
+
+                    }
+                }
+            }
+            /*else if (hit.collider.CompareTag("Ground"))
+            {
+                float angle = Vector3.Angle(hit.normal, transform.up);
+                Quaternion startRot = Quaternion.LookRotation(hit.normal);
+                GameObject bulletHole = Instantiate(heldItemPreviousFrame.Stats.ImpactMark, hit.point, startRot);
+            }*/
+        }
+    }
 }
 
