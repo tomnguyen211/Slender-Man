@@ -509,6 +509,18 @@ public class FPSHandsController : MonoBehaviour
                 UpdateAmmoUI();
                 break;
             case "kombat knife":
+                for (int i = 0; i < FPSItemSelector.SelectionOptions.Count; i++)
+                {
+                    if (FPSItemSelector.SelectionOptions[i].ItemAsset.HandsPivotBoneTransformName == "WeaponPivot")
+                    {
+                        FPSItemSelector.SelectionOptions[i].hasUnlock = false;
+                        break;
+                    }
+                    GameManager.Instance.CharacterBar.DisableAmmo();
+                }
+                break;
+            case "fireaxe":
+                GameManager.Instance.CharacterBar.DisableAmmo();
                 break;
             default: break;
         }
@@ -901,14 +913,38 @@ public class FPSHandsController : MonoBehaviour
         Vector3 shootRayOrigin = handsParentTransform.GetComponent<Camera>().ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0f));
         RaycastHit hit;
 
-        if (Physics.Raycast(shootRayOrigin, handsParentTransform.forward, out hit, 10, interactLayer))
+        if (Physics.Raycast(shootRayOrigin, handsParentTransform.forward, out hit, 15, interactLayer))
         {
             if (hit.collider.CompareTag("Pickup"))
             {
                 if(hit.collider.name == "handgun")
                 {
-                    Debug.Log("handgun");
+                    for (int i = 0; i < FPSItemSelector.SelectionOptions.Count; i++)
+                    {
+                        if (FPSItemSelector.SelectionOptions[i].ItemAsset.HandsPivotBoneTransformName == "handgun")
+                        {
+                            if (FPSItemSelector.SelectionOptions[i].hasUnlock)
+                            {
+                                int amount = FPSItemSelector.SelectionOptions[i].ItemAsset.Stats.maxTotalBullet - FPSItemSelector.SelectionOptions[i].ItemAsset.Stats.totalBullet;
 
+                                if (amount >= 5)
+                                    FPSItemSelector.SelectionOptions[i].ItemAsset.Stats.totalBullet += 5;
+                                else
+                                    FPSItemSelector.SelectionOptions[i].ItemAsset.Stats.totalBullet += amount;
+
+                                UpdateAmmoUI();
+                                hit.collider.gameObject.SetActive(false);
+                            }
+                            else
+                            {
+                                FPSItemSelector.SelectionOptions[i].hasUnlock = true;
+                                SetHeldItem(FPSItemSelector.SelectionOptions[i].ItemAsset);
+                                hit.collider.gameObject.SetActive(false);
+                            }
+                            break;
+                        }
+
+                    }
                 }
                 else if (hit.collider.name == "shotgun")
                 {
@@ -934,6 +970,91 @@ public class FPSHandsController : MonoBehaviour
                                 SetHeldItem(FPSItemSelector.SelectionOptions[i].ItemAsset);
                                 hit.collider.gameObject.SetActive(false);
                             }
+                            break;
+                        }
+
+                    }
+                }
+                else if (hit.collider.name == "kombat knife")
+                {
+                    for (int i = 0; i < FPSItemSelector.SelectionOptions.Count; i++)
+                    {
+                        if (FPSItemSelector.SelectionOptions[i].ItemAsset.HandsPivotBoneTransformName == "kombat knife")
+                        {
+                            if (FPSItemSelector.SelectionOptions[i].hasUnlock)
+                            {
+                               
+                            }
+                            else
+                            {
+                                FPSItemSelector.SelectionOptions[i].hasUnlock = true;
+                                SetHeldItem(FPSItemSelector.SelectionOptions[i].ItemAsset);
+                                hit.collider.gameObject.SetActive(false);
+                            }
+                            break;
+                        }
+
+                    }
+                }
+                else if (hit.collider.name == "fireaxe")
+                {
+                    for (int i = 0; i < FPSItemSelector.SelectionOptions.Count; i++)
+                    {
+                        if (FPSItemSelector.SelectionOptions[i].ItemAsset.HandsPivotBoneTransformName == "fireaxe")
+                        {
+                            if (FPSItemSelector.SelectionOptions[i].hasUnlock)
+                            {
+
+                            }
+                            else
+                            {
+                                FPSItemSelector.SelectionOptions[i].hasUnlock = true;
+                                SetHeldItem(FPSItemSelector.SelectionOptions[i].ItemAsset);
+                                hit.collider.gameObject.SetActive(false);
+                            }
+                            break;
+                        }
+
+                    }
+                }
+            }
+            else if (hit.collider.CompareTag("Ammo"))
+            {
+                if (hit.collider.name == "PistolBullet")
+                {
+                    for (int i = 0; i < FPSItemSelector.SelectionOptions.Count; i++)
+                    {
+                        if (FPSItemSelector.SelectionOptions[i].ItemAsset.HandsPivotBoneTransformName == "handgun")
+                        {
+                            int amount = FPSItemSelector.SelectionOptions[i].ItemAsset.Stats.maxTotalBullet - FPSItemSelector.SelectionOptions[i].ItemAsset.Stats.totalBullet;
+
+                            if (amount >= 7)
+                                FPSItemSelector.SelectionOptions[i].ItemAsset.Stats.totalBullet += 7;
+                            else
+                                FPSItemSelector.SelectionOptions[i].ItemAsset.Stats.totalBullet += amount;
+
+                            UpdateAmmoUI();
+                            hit.collider.gameObject.SetActive(false);
+                            break;
+                        }
+
+                    }
+                }
+                else if (hit.collider.name == "ShotgunBullet")
+                {
+                    for (int i = 0; i < FPSItemSelector.SelectionOptions.Count; i++)
+                    {
+                        if (FPSItemSelector.SelectionOptions[i].ItemAsset.HandsPivotBoneTransformName == "shotgun")
+                        {
+                            int amount = FPSItemSelector.SelectionOptions[i].ItemAsset.Stats.maxTotalBullet - FPSItemSelector.SelectionOptions[i].ItemAsset.Stats.totalBullet;
+
+                            if (amount >= 5)
+                                FPSItemSelector.SelectionOptions[i].ItemAsset.Stats.totalBullet += 5;
+                            else
+                                FPSItemSelector.SelectionOptions[i].ItemAsset.Stats.totalBullet += amount;
+
+                            UpdateAmmoUI();
+                            hit.collider.gameObject.SetActive(false);
                             break;
                         }
 
