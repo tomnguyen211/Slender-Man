@@ -13,9 +13,14 @@ MonoBehaviour:
   m_Name: KombatKnife
   m_EditorClassIdentifier: 
   Stats:
+    bulletUI: {fileID: 0}
     bulletCase: {fileID: 0}
     damage: 5
     range: 1
+    currentBullet: 0
+    maxBullet: 0
+    totalBullet: 0
+    maxTotalBullet: 0
     MuzzleFlash: {fileID: 0}
     ImpactMark: {fileID: 0}
   ItemPrefab: {fileID: 4678895676951015249, guid: ec62e62492da7974a844d1dfb07bd78d,

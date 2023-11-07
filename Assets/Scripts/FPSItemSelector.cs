@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class FPSItemSelector : MonoBehaviour
@@ -23,9 +24,18 @@ public class FPSItemSelector : MonoBehaviour
 
     private void Start()
     {
+        for(int i = 0; i < SelectionOptions.Count;i++)
+        {
+            SelectionOptions[i].ItemAsset = Instantiate(SelectionOptions[i].ItemAsset);
+        }
+
+
+
         if (SelectionOptions.Count > 0)
         {
-            var defaultOption = SelectionOptions[0];
+            //var defaultOption = SelectionOptions[0];
+
+            var defaultOption = SelectionOptions[5];
 
             if (handsController != null)
                 handsController.SetHeldItem(defaultOption.ItemAsset);
@@ -40,7 +50,7 @@ public class FPSItemSelector : MonoBehaviour
         {
             var option = SelectionOptions[i];
 
-            if (Input.GetKeyDown(option.InputKey))
+            if (Input.GetKeyDown(option.InputKey) && option.hasUnlock)
             {
                 if (handsController != null)
                     handsController.SetHeldItem(option.ItemAsset);
@@ -53,7 +63,9 @@ public class FPSItemSelector : MonoBehaviour
     [System.Serializable]
     public class InputItemOption
     {
+        public bool hasUnlock = false;
         public KeyCode InputKey;
         public FPSItem ItemAsset;
+
     }
 }

@@ -13,12 +13,21 @@ MonoBehaviour:
   m_Name: Handgun
   m_EditorClassIdentifier: 
   Stats:
+    bulletUI: {fileID: 21300000, guid: 309ac3eb4cc441349b63128366ca98b6, type: 3}
     bulletCase: {fileID: 1170647774315830, guid: 522b470e09ed8b8488c6b8788f9d6206,
       type: 3}
     damage: 10
     range: 20
-    MuzzleFlash: {fileID: 8066342488965651439, guid: d1daaaf365f8bcb40a53af1cacb36f33,
-      type: 3}
+    currentBullet: 7
+    maxBullet: 7
+    totalBullet: 0
+    maxTotalBullet: 49
+    MuzzleFlash:
+    - {fileID: 124018, guid: 1f389bb139e76154582cf3c5e4f9214b, type: 3}
+    - {fileID: 146992, guid: 24bc114e4759e464eab5d9664127a034, type: 3}
+    - {fileID: 153266, guid: 39b2a3d1ecfa5614b97e75a9b5561f21, type: 3}
+    - {fileID: 160582, guid: 8ff371e17619a504b9822fc6a2facdb2, type: 3}
+    - {fileID: 183908, guid: fa6d29df930056640bf15fb9b6a54e4a, type: 3}
     ImpactMark: {fileID: 4300086816366312831, guid: 3698fcc89068d4e4dbc426132521e30f,
       type: 3}
   ItemPrefab: {fileID: 4259820314644530675, guid: b8fc9818562b00146b2b1cd0c52b2560,
@@ -88,5 +97,5 @@ MonoBehaviour:
     bulletCasePos: {x: 0, y: 0, z: 0}
     AnimationLength: 1.8
     AnimationEvents:
-    - EventMessage: ReloadLogic
-      EventPosition: 0.8
+    - EventMessage: ReloadHandgun
+      EventPosition: 0.95

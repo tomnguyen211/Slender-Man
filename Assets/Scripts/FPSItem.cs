@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 using UnityEngine;
+using UnityEngine.UI;
 
 [System.Serializable]
 [CreateAssetMenu(menuName = "Tensori/FPSHorrorPack/New FPS Item Asset")]
@@ -118,12 +119,22 @@ public class FPSItem : ScriptableObject
     [System.Serializable]
     public class DamageStats
     {
+        public Sprite bulletUI;
+
         public GameObject bulletCase;
 
         public float damage;
         public float range;
 
-        public GameObject MuzzleFlash;
+        public int currentBullet;
+        public int maxBullet;
+
+
+        public int totalBullet;
+        public int maxTotalBullet;
+
+
+        public GameObject[] MuzzleFlash;
         public GameObject ImpactMark;
     }
 }

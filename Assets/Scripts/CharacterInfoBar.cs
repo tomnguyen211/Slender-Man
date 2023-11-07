@@ -1,3 +1,4 @@
+using TMPro;
 using Unity.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -21,6 +22,11 @@ public class CharacterInfoBar : MonoBehaviour
     private float maxMana_2;
     [SerializeField, ReadOnly]
     private float currentMana_2;
+
+    public Image bulletIcon;
+    public TextMeshProUGUI text;
+
+    public GameObject[] bulletGameobject;
 
     /*private void Start()
     {
@@ -140,5 +146,26 @@ public class CharacterInfoBar : MonoBehaviour
                 break;
         }
         UpdateManaBar();
+    }
+
+    public void UpdateIconAmmo(Sprite icon)
+    {
+        bulletIcon.sprite = icon;
+    }
+
+    public void UpdateUIAmmo(int currentAmmo, int reserveAmmo)
+    {
+        text.SetText(currentAmmo.ToString()+"/"+ reserveAmmo.ToString());
+    }
+
+    public void EnableAmmo()
+    {
+        for(int n = 0; n < bulletGameobject.Length; n++)
+            bulletGameobject[n].SetActive(true);
+    }
+    public void DisableAmmo()
+    {
+        for (int n = 0; n < bulletGameobject.Length; n++)
+            bulletGameobject[n].SetActive(false);
     }
 }
