@@ -205,7 +205,7 @@ public class FPSHandsController : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(reloadKey) && CheckTotalAmmoIfThereAny())
+        if (Input.GetKeyDown(reloadKey) && CheckTotalAmmoIfThereAny() && CheckIfAmmoExceedMaxAmmo())
         {
             StopActiveCoroutines();
 
@@ -896,7 +896,7 @@ public class FPSHandsController : MonoBehaviour
 
     private bool CheckIfAmmoExceedMaxAmmo()
     {
-        return heldItem.Stats.currentBullet <= heldItem.Stats.maxBullet;
+        return heldItem.Stats.currentBullet < heldItem.Stats.maxBullet;
     }
 
     private bool CheckTotalAmmoIfThereAny()

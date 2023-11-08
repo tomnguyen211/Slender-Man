@@ -1,7 +1,5 @@
 using UnityEngine;
 using System.Collections;
-using Unity.Collections.LowLevel.Unsafe;
-using UnityEngine.UIElements;
 
 public class PickupItem_Highlight : MonoBehaviour
 {
