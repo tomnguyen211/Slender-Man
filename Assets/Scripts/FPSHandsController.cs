@@ -1,15 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
-using Tensori.FPSHandsHorrorPack;
+using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 using UnityEngine.Events;
-using static FPSItem;
 
 public class FPSHandsController : MonoBehaviour
 {
     public bool IsAttacking => attackCoroutine != null;
     public bool IsReloading => reloadCoroutine != null;
+    public bool IsHealing => healingCoroutine != null;
+
 
     private bool stopReload = false;
 
@@ -21,6 +21,8 @@ public class FPSHandsController : MonoBehaviour
     [SerializeField] private KeyCode shootKey = KeyCode.Mouse0;
     [SerializeField] private KeyCode reloadKey = KeyCode.R;
     [SerializeField] private KeyCode interact = KeyCode.E;
+    [SerializeField] private KeyCode heal = KeyCode.H;
+
     public bool IsAiming = false;
 
     [Header("Animator Settings")]
@@ -56,6 +58,7 @@ public class FPSHandsController : MonoBehaviour
     private FPSItem.ItemPose currentHandsPose = null;
     private Coroutine attackCoroutine = null;
     private Coroutine reloadCoroutine = null;
+    private Coroutine healingCoroutine = null;
     private List<Transform> handsChildTransforms = new List<Transform>();
     private List<int> triggeredAnimationEvents = new List<int>();
 
@@ -82,6 +85,12 @@ public class FPSHandsController : MonoBehaviour
     #endregion
     [SerializeField] GameObject DetectReference;
     [SerializeField] FPSItemSelector FPSItemSelector;
+
+    #region HealthPack
+    [Unity.Collections.ReadOnly]
+    public int healthPack = 0;
+
+    #endregion
 
     private void Start()
     {
@@ -220,6 +229,8 @@ public class FPSHandsController : MonoBehaviour
             IsAiming = false;
         if (Input.GetKeyUp(interact))
             InteractManager();
+        if (Input.GetKeyUp(heal) && !IsHealing && healthPack > 0 && fpsCharacterController.currentHealth < fpsCharacterController.GetMaxHealth)
+            Heal();
     }
 
     private void StopActiveCoroutines()
@@ -1017,6 +1028,14 @@ public class FPSHandsController : MonoBehaviour
 
                     }
                 }
+                else if (hit.collider.name == "medicine")
+                {
+                    if(healthPack < 3)
+                    {
+                        healthPack++;
+                        hit.collider.gameObject.SetActive(false);
+                    }
+                }
             }
             else if (hit.collider.CompareTag("Ammo"))
             {
@@ -1069,5 +1088,33 @@ public class FPSHandsController : MonoBehaviour
             }*/
         }
     }
+
+    public void Heal()
+    {
+        healingCoroutine = StartCoroutine(Healing_Coroutine());
+    }
+
+    IEnumerator Healing_Coroutine()
+    {
+        float totalTime = 5;
+        float time = 0.05f;
+
+        while (totalTime <= 0 ||  fpsCharacterController.currentHealth >= fpsCharacterController.GetMaxHealth)
+        {
+            totalTime -= Time.smoothDeltaTime;
+            time -= Time.smoothDeltaTime;
+
+            if (time < 0f)
+            {
+                fpsCharacterController.currentHealth += 1;
+                GameManager.Instance.CharacterBar.Heal(1);
+                time = 0.05f;
+            }
+            yield return null;
+        }
+        healingCoroutine = null;
+    }
+
+ 
 }
 

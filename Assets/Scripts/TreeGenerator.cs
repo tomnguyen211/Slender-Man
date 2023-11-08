@@ -13,7 +13,7 @@ public class TreeGenerator : MonoBehaviour
         foreach (var terrainTree in terrainData.treeInstances)
         {
             var worldTreePos = Vector3.Scale(terrainTree.position, terrainData.size) + Terrain.activeTerrain.transform.position;
-            var tree = Instantiate(trees[Random.Range(0, trees.Count)], worldTreePos, Quaternion.identity, transform);
+            var tree = Instantiate(trees[terrainTree.prototypeIndex], worldTreePos, Quaternion.identity, transform);
             tree.transform.localScale = Vector3.one * Random.Range(minSize, maxSize);
             tree.transform.rotation = Quaternion.AngleAxis(Random.Range(-360f, 360f), Vector3.up);
         }
