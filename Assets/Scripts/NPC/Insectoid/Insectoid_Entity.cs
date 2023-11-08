@@ -17,6 +17,13 @@ public class Insectoid_Entity : Entity, IDamage
     public D_DeadState D_DeadState;
     public D_PatrolState D_PatrolState;
 
+    public bool customPatrolEnable;
+    public Transform[] patrolPoint;
+
+    public bool customPatrolEnableRadius;
+    public Transform patrolPointRadius;
+    public float radiusPatrol;
+
     public override void Awake()
     {
         base.Awake();
@@ -391,17 +398,48 @@ public class Insectoid_Patrol : PatrolState
     public override void Enter()
     {
         base.Enter();
-
-        if (!character.CheckIfGround() || character.CheckIfTouchingWall() || !character.CheckIfTouchingLedge())
+        if (character.customPatrolEnable)
         {
-            patrolNewDestination = new Vector3(character.transform.position.x + Random.Range(Random.Range(5, 25), Random.Range(-5, -25)), character.transform.position.y, character.transform.position.z + Random.Range(Random.Range(5, 25), Random.Range(-5, -25)));
-            character.UpdatePath_Des(patrolNewDestination);
+            if (!character.CheckIfGround() || character.CheckIfTouchingWall() || !character.CheckIfTouchingLedge())
+            {
+                patrolNewDestination = character.patrolPoint[Random.Range(0, character.patrolPoint.Length)].position;
+                character.UpdatePath_Des(patrolNewDestination);
+            }
+            else
+            {
+                character.Insectoid_Idle.PresetIdle();
+                stateMachine.ChangeState(character.Insectoid_Idle);
+
+            }
+        }
+        else if (character.customPatrolEnableRadius)
+        {
+            if (!character.CheckIfGround() || character.CheckIfTouchingWall() || !character.CheckIfTouchingLedge())
+            {
+                var vector2 = Random.insideUnitCircle.normalized * character.radiusPatrol;
+                patrolNewDestination = new Vector3(vector2.x, 0, vector2.y);
+                character.UpdatePath_Des(patrolNewDestination);
+            }
+            else
+            {
+                character.Insectoid_Idle.PresetIdle();
+                stateMachine.ChangeState(character.Insectoid_Idle);
+
+            }
         }
         else
         {
-            character.Insectoid_Idle.PresetIdle();
-            stateMachine.ChangeState(character.Insectoid_Idle);
+            if (!character.CheckIfGround() || character.CheckIfTouchingWall() || !character.CheckIfTouchingLedge())
+            {
+                patrolNewDestination = new Vector3(character.transform.position.x + Random.Range(Random.Range(5, 25), Random.Range(-5, -25)), character.transform.position.y, character.transform.position.z + Random.Range(Random.Range(5, 25), Random.Range(-5, -25)));
+                character.UpdatePath_Des(patrolNewDestination);
+            }
+            else
+            {
+                character.Insectoid_Idle.PresetIdle();
+                stateMachine.ChangeState(character.Insectoid_Idle);
 
+            }
         }
     }
 
