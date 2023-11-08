@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using Unity.Collections;
 
 public class PickupItem_Highlight : MonoBehaviour
 {
@@ -8,6 +9,7 @@ public class PickupItem_Highlight : MonoBehaviour
     [SerializeField]
     SkinnedMeshRenderer meshSkin;
     Material mat;
+    [SerializeField,ReadOnly]
     LayerMask armor;
     private bool glowUp;
     IEnumerator CourRunning;
@@ -19,7 +21,7 @@ public class PickupItem_Highlight : MonoBehaviour
         else if(meshSkin != null)
             mat = meshSkin.transform.GetComponent<SkinnedMeshRenderer>().material;
 
-        armor = LayerMask.NameToLayer("Armor");
+        glowUp = true;
     }
 
     private void Update()
@@ -30,14 +32,16 @@ public class PickupItem_Highlight : MonoBehaviour
             for (int i = 0; i < rangeChecks.Length; i++)
             {
                 Transform target = rangeChecks[i].transform;
-
+                Debug.Log(target.tag);
                 if(target.CompareTag("Player"))
                 {
                     if(glowUp)
                     {
                         CourRunning = GlowUp();
                         StartCoroutine(CourRunning);
-                        glowUp = false; 
+                        glowUp = false;
+                        Debug.Log("Passed_1");
+
                     }
                     else
                     {
@@ -45,6 +49,8 @@ public class PickupItem_Highlight : MonoBehaviour
                         CourRunning = GlowDown();
                         StartCoroutine(CourRunning);
                         glowUp = true;
+                        Debug.Log("Passed_2");
+
 
                     }
                 }
@@ -57,13 +63,13 @@ public class PickupItem_Highlight : MonoBehaviour
     {
         float timer = 0;
         float oldVal = mat.GetFloat("_Emission_Strength");
-        while (mat.GetFloat("_Emission_Strength") < 0.7f)
+        while (mat.GetFloat("_Emission_Strength") < 0.1f)
         {
             timer += Time.deltaTime;
-            mat.SetFloat("_Emission_Strength", Mathf.Lerp(oldVal, 0.7f, timer / 1));
+            mat.SetFloat("_Emission_Strength", Mathf.Lerp(oldVal, 0.1f, timer / 2));
             yield return null;
         }
-        mat.SetFloat("_Emission_Strength", 0.7f);
+        mat.SetFloat("_Emission_Strength", 0.1f);
         CourRunning = null;
     }
     IEnumerator GlowDown()
@@ -73,7 +79,7 @@ public class PickupItem_Highlight : MonoBehaviour
         while (mat.GetFloat("_Emission_Strength") > 0)
         {
             timer += Time.deltaTime;
-            mat.SetFloat("_Emission_Strength", Mathf.Lerp(oldVal, 0f, timer / 1));
+            mat.SetFloat("_Emission_Strength", Mathf.Lerp(oldVal, 0f, timer / 2));
             yield return null;
         }
         mat.SetFloat("_Emission_Strength", 0f);
