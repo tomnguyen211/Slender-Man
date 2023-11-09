@@ -477,8 +477,7 @@ public class Zombie_1_Patrol : PatrolState
         {
             if (!character.CheckIfGround() || character.CheckIfTouchingWall() || !character.CheckIfTouchingLedge())
             {
-                var vector2 = Random.insideUnitCircle.normalized * character.radiusPatrol;
-                patrolNewDestination = new Vector3(vector2.x, 0, vector2.y);
+                patrolNewDestination = new Vector3(character.patrolPointRadius.position.x + Random.Range(Random.Range(0, character.radiusPatrol), Random.Range(0, -character.radiusPatrol)), character.patrolPointRadius.position.y, character.patrolPointRadius.position.z + Random.Range(Random.Range(0, character.radiusPatrol), Random.Range(0, -character.radiusPatrol)));
                 character.UpdatePath_Des(patrolNewDestination);
             }
             else

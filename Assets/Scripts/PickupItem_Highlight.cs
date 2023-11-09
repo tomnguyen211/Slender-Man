@@ -19,6 +19,8 @@ public class PickupItem_Highlight : MonoBehaviour
 
     GameObject Player;
 
+    private bool hasInteract;
+
     private void Start()
     {
         if(mesh != null)
@@ -33,7 +35,7 @@ public class PickupItem_Highlight : MonoBehaviour
 
     private void Update()
     {
-        if(CourRunning == null)
+        if(CourRunning == null && !hasInteract)
         {
             if(Vector3.Distance(transform.position,Player.transform.position) <= 10)
             {
@@ -78,6 +80,21 @@ public class PickupItem_Highlight : MonoBehaviour
                 
             }
         }*/
+    }
+
+    public void Interact()
+    {
+        hasInteract = true;
+        if (SpriteShaderEnable)
+        {          
+            mat.SetFloat("_StrongTintFade", 0f);
+            CourRunning = null;
+        }
+        else
+        {
+            mat.SetFloat("_Emission_Strength", 0f);
+            CourRunning = null;
+        }
     }
 
     IEnumerator GlowUp()

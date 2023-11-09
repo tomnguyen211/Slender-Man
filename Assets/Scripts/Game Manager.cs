@@ -74,18 +74,20 @@ public class GameManager : MonoBehaviour
     {
         int count = 0;
 
-        QuestItem prop = (QuestItem) item;
+        string prop = (string) item;
         for(int n = 0; n < questItems.Length; n++)
         {
             if (questItems[n].hasUnlock)
                 count++;
 
-            if (prop.item == questItems[n].item)
+            if (prop == questItems[n].item)
             {
                 questItems[n].hasUnlock = true;
                 count++;
             }
         }
+
+        CharacterBar.UpdateUIQuest(count);
 
         if (count == 2)
         {

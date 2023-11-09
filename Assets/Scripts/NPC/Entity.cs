@@ -124,6 +124,8 @@ public class Entity : MonoBehaviour
             path = p;
             currentWaypoint = 0;
         }
+        else
+            Debug.Log("Error");
     }
     #endregion
 

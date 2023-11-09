@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Ripper_Entity : Entity, IDamage
+public class Ripper_Entity : Entity, IDamage, IDetect
 {
     public Ripper_Idle Ripper_Idle { get;private set; }
     public Ripper_Move Ripper_Move { get; private set; }
@@ -17,6 +17,8 @@ public class Ripper_Entity : Entity, IDamage
     public D_DeadState D_DeadState;
     public D_PatrolState D_PatrolState;
     public D_MoveState D_MoveState;
+
+    public bool disablePatrol;
 
     public bool customPatrolEnable;
     public Transform[] patrolPoint;
@@ -64,6 +66,10 @@ public class Ripper_Entity : Entity, IDamage
     public override void Update()
     {
         base.Update();
+
+        Debug.Log(characterController.velocity.magnitude);
+
+    
     }
 
     public override void FixedUpdate()
@@ -238,6 +244,23 @@ public class Ripper_Entity : Entity, IDamage
     {
         Ripper_Shout.hasShout = false;
     }
+
+    public void EnableDetect()
+    {
+        isReturning = false;
+        isActive = true;
+    }
+    public void DisableDetect()
+    {
+        DisableDetection();
+        DetectionCheck = false;
+        CanSeePlayer = false;
+        stateMachine.ChangeState(Ripper_Idle);
+        if (!disablePatrol)
+            isReturning = true;
+        enemy = null;
+
+    }
 }
 
 public class Ripper_Idle : IdleState
@@ -290,10 +313,15 @@ public class Ripper_Idle : IdleState
                     return;
                 }
             }
-            else
+            else if (!character.disablePatrol && character.isActive)
             {
                 character.Ripper_Patrol.PresetPatrol();
                 stateMachine.ChangeState(character.Ripper_Patrol);
+            }
+            else
+            {
+                isIdleTimeOver = false;
+                SetRandomIdleTime();
             }
         }
     }
@@ -417,7 +445,10 @@ public class Ripper_Patrol : PatrolState
         {
             if (!character.CheckIfGround() || character.CheckIfTouchingWall() || !character.CheckIfTouchingLedge())
             {
-                patrolNewDestination = character.patrolPoint[Random.Range(0, character.patrolPoint.Length)].position;
+                while(patrolPreviousDestination == patrolNewDestination)
+                {
+                    patrolNewDestination = character.patrolPoint[Random.Range(0, character.patrolPoint.Length)].position;
+                }
                 character.UpdatePath_Des(patrolNewDestination);
             }
             else
@@ -431,8 +462,7 @@ public class Ripper_Patrol : PatrolState
         {
             if (!character.CheckIfGround() || character.CheckIfTouchingWall() || !character.CheckIfTouchingLedge())
             {
-                var vector2 = Random.insideUnitCircle.normalized * character.radiusPatrol;
-                patrolNewDestination = new Vector3(vector2.x, 0, vector2.y);
+                patrolNewDestination = new Vector3(character.patrolPointRadius.position.x + Random.Range(Random.Range(0, character.radiusPatrol), Random.Range(0, -character.radiusPatrol)), character.patrolPointRadius.position.y, character.patrolPointRadius.position.z + Random.Range(Random.Range(0, character.radiusPatrol), Random.Range(0, -character.radiusPatrol)));
                 character.UpdatePath_Des(patrolNewDestination);
             }
             else
@@ -456,6 +486,8 @@ public class Ripper_Patrol : PatrolState
 
             }
         }
+
+        patrolPreviousDestination = patrolNewDestination;
     }
 
     public override void Exit()

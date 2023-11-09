@@ -32,6 +32,8 @@ public class CharacterInfoBar : MonoBehaviour
 
     public TextMeshProUGUI text_Battery;
 
+    public TextMeshProUGUI text_Quest;
+
 
     /*private void Start()
     {
@@ -171,6 +173,11 @@ public class CharacterInfoBar : MonoBehaviour
     public void UpdateUIBattery(int current)
     {
         text_Battery.SetText(current.ToString());
+    }
+
+    public void UpdateUIQuest(int current)
+    {
+        text_Quest.SetText(current.ToString() +"/"+6);
     }
 
     public void EnableAmmo()

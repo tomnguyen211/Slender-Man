@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Ghoul_Entity : Entity, IDamage
+public class Ghoul_Entity : Entity, IDamage, IDetect
 {
     public Ghoul_Idle Ghoul_Idle { get; set; }
     public Ghoul_Move Ghoul_Move { get; set; }
@@ -16,6 +16,8 @@ public class Ghoul_Entity : Entity, IDamage
     public D_DeadState D_DeadState;
     public D_PatrolState D_PatrolState;
     public D_MoveState D_MoveState;
+
+    public bool disablePatrol;
 
     public bool customPatrolEnable;
     public Transform[] patrolPoint;
@@ -221,6 +223,22 @@ public class Ghoul_Entity : Entity, IDamage
             enemy = attacker;
         MainHealthSet(damage);
         SpawnDecal.SpawnDecals(ray);
+    }
+
+    public void EnableDetect()
+    {
+        isReturning = false;
+        isActive = true;
+    }
+    public void DisableDetect()
+    {
+        DetectionCheck = false;
+        CanSeePlayer = false;
+        stateMachine.ChangeState(Ghoul_Idle);
+        if (!disablePatrol)
+            isReturning = true;
+        enemy = null;
+
     }
 }
 

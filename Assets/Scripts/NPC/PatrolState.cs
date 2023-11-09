@@ -12,6 +12,8 @@ public class PatrolState : AI_State
     protected float patrolTimer;
 
     protected Vector3 patrolNewDestination;
+    protected Vector3 patrolPreviousDestination;
+
 
     protected bool frameDelay;
     protected float timer = 0.5f;

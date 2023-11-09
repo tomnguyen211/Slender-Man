@@ -1064,6 +1064,11 @@ public class FPSHandsController : MonoBehaviour
                     GameManager.Instance.CharacterBar.UpdateUHealth(battery);
                 }
             }
+            else if (hit.collider.CompareTag("Quest"))
+            {
+                EventManager.TriggerEvent("QuestItemCheck", hit.collider.name);
+                hit.collider.GetComponent<PickupItem_Highlight>().Interact();
+            }
             else if (hit.collider.CompareTag("Ammo"))
             {
                 if (hit.collider.name == "PistolBullet")
