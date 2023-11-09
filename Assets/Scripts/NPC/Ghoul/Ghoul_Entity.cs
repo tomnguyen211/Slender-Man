@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Ghoul_Entity : Entity
+public class Ghoul_Entity : Entity, IDamage
 {
     public Ghoul_Idle Ghoul_Idle { get; set; }
     public Ghoul_Move Ghoul_Move { get; set; }
@@ -374,8 +374,7 @@ public class Ghoul_Patrol : PatrolState
         {
             if (!character.CheckIfGround() || character.CheckIfTouchingWall() || !character.CheckIfTouchingLedge())
             {
-                var vector2 = Random.insideUnitCircle.normalized * character.radiusPatrol;
-                patrolNewDestination = new Vector3(vector2.x, 0, vector2.y);
+                patrolNewDestination = new Vector3(character.patrolPointRadius.position.x + Random.Range(Random.Range(0, character.radiusPatrol), Random.Range(0, -character.radiusPatrol)), character.patrolPointRadius.position.y, character.patrolPointRadius.position.z + Random.Range(Random.Range(0, character.radiusPatrol), Random.Range(0, -character.radiusPatrol)));
                 character.UpdatePath_Des(patrolNewDestination);
             }
             else

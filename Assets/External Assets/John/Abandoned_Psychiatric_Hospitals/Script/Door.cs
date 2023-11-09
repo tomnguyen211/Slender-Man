@@ -1,9 +1,21 @@
 ﻿using Unity.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 
 public class Door : MonoBehaviour
 {
+    [SerializeField]
+    Teleport_Building Teleport_Building;
+    [SerializeField]
+    bool teleportDoor;
+    [SerializeField]
+    Transform Teleport_Outside;
+    [SerializeField]
+    Transform Teleport_Inside;
+    public bool IsTransit => transitCoroutine != null;
+    private Coroutine transitCoroutine = null;
+
     [SerializeField,ReadOnly]
     bool trig, open;//trig-проверка входа выхода в триггер(игрок должен быть с тегом Player) open-закрыть и открыть дверь
     public float smooth = 2.0f;//скорость вращения
@@ -16,7 +28,18 @@ public class Door : MonoBehaviour
     bool isOpen;
 
     public Text txt;//text 
-    // Start is called before the first frame update
+
+
+    private void OnDisable()
+    {
+        
+    }
+
+    private void OnEnable()
+    {
+        
+    }
+
     void Start()
     {
         if(isOpen)
@@ -32,9 +55,9 @@ public class Door : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
     void Update()
     {
+
         if (open)//открыть
         {
             transform.rotation = Quaternion.RotateTowards(transform.rotation, DoorOpen, Time.deltaTime * smooth);
@@ -45,7 +68,13 @@ public class Door : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.E) && trig)
         {
-            open = !open;
+            if(teleportDoor && !IsTransit)
+            {
+                transitCoroutine = StartCoroutine(TransitTeleport());
+            }
+            else if(!teleportDoor)
+                open = !open;
+
         }
         if (trig)
         {
@@ -61,7 +90,7 @@ public class Door : MonoBehaviour
     }
     private void OnTriggerEnter(Collider coll)//вход и выход в\из  триггера 
     {
-        if (coll.tag == "Player")
+        if (coll.CompareTag("Player"))
         {
             /*if (!open)
             {
@@ -76,10 +105,28 @@ public class Door : MonoBehaviour
     }
     private void OnTriggerExit(Collider coll)//вход и выход в\из  триггера 
     {
-        if (coll.tag == "Player")
+        if (coll.CompareTag("Player"))
         {
             //txt.text = " ";
             trig = false;
         }
+    }
+
+    IEnumerator TransitTeleport()
+    {
+        yield return new WaitForSeconds(0.5f);
+        if (GameManager.Instance.Player.GetComponent<FPSCharacterController>().isOutside)
+        {
+            EventManager.TriggerEvent("PlayerTeleport", Teleport_Inside.position);
+            GameManager.Instance.Player.GetComponent<FPSCharacterController>().isOutside = false;
+            Teleport_Building.teleportInside?.Invoke();
+        }
+        else
+        {
+            EventManager.TriggerEvent("PlayerTeleport", Teleport_Outside.position);
+            GameManager.Instance.Player.GetComponent<FPSCharacterController>().isOutside = true;
+            Teleport_Building.teleportOutside?.Invoke();
+        }
+        transitCoroutine = null;
     }
 }

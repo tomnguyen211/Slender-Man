@@ -1118,7 +1118,10 @@ public class FPSHandsController : MonoBehaviour
 
     public void Heal()
     {
+        Debug.Log("Passed");
         healingCoroutine = StartCoroutine(Healing_Coroutine());
+        healthPack--;
+        GameManager.Instance.CharacterBar.UpdateUHealth(healthPack);
     }
 
     IEnumerator Healing_Coroutine()
@@ -1126,7 +1129,7 @@ public class FPSHandsController : MonoBehaviour
         float totalTime = 5;
         float time = 0.05f;
 
-        while (totalTime <= 0 ||  fpsCharacterController.currentHealth >= fpsCharacterController.GetMaxHealth)
+        while (totalTime > 0 &&  fpsCharacterController.currentHealth < fpsCharacterController.GetMaxHealth)
         {
             totalTime -= Time.smoothDeltaTime;
             time -= Time.smoothDeltaTime;

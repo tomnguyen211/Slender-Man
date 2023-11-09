@@ -4932,8 +4932,8 @@ CharacterController:
   m_Enabled: 1
   serializedVersion: 3
   m_Height: 1.8
-  m_Radius: 0.5
-  m_SlopeLimit: 45
+  m_Radius: 0.1
+  m_SlopeLimit: 30
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
@@ -4977,6 +4977,12 @@ MonoBehaviour:
   D_DeadState: {fileID: 11400000, guid: 6ace202585860474a8aa965d7333cafc, type: 2}
   D_PatrolState: {fileID: 11400000, guid: f4de3d64d9fc77c418b289630b9887a9, type: 2}
   D_MoveState: {fileID: 11400000, guid: 5449c003f5d5eaf48975fd2bb4d6f0c4, type: 2}
+  disablePatrol: 0
+  customPatrolEnable: 0
+  patrolPoint: []
+  customPatrolEnableRadius: 0
+  patrolPointRadius: {fileID: 0}
+  radiusPatrol: 0
 --- !u!54 &3859810901893583376
 Rigidbody:
   m_ObjectHideFlags: 0

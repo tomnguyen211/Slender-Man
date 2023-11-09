@@ -35,7 +35,7 @@ public class FPSCharacterController : MonoBehaviour, IDamage
     private Vector2 movementInput = Vector2.zero;
     private Vector2 inputMouseDelta = Vector2.zero;
 
-    private CharacterController characterController = null;
+    public CharacterController characterController = null;
     private FPSHandsController handController = null;
 
     #region Health, Manar
@@ -52,6 +52,20 @@ public class FPSCharacterController : MonoBehaviour, IDamage
     [ReadOnly]
     GameObject Attacker;
     #endregion
+
+    public bool isOutside = true;
+
+    private void OnEnable()
+    {
+        EventManager.StartListening("PlayerTeleport", Teleport);
+
+    }
+
+    private void OnDisable()
+    {
+        EventManager.StopListening("PlayerTeleport", Teleport);
+
+    }
 
     private void Awake()
     {
@@ -305,5 +319,11 @@ public class FPSCharacterController : MonoBehaviour, IDamage
    /* public float GetSecondAbilityBar => Stats_Manager.specialAbilityBarCount_2;
     public float GetSeocondManaAbilityMax => Stats_Manager.SpecialAbilityBar_2.BaseValue;*/
 
+
+    private void Teleport(object pos)
+    {
+        Vector3 newPos = (Vector3)pos;
+        transform.position = new Vector3(newPos.x,newPos.y,newPos.z);
+    }
     
 }

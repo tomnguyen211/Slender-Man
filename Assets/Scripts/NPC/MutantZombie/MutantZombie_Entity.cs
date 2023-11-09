@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MutantZombie_Entity : Entity, IDamage
+public class MutantZombie_Entity : Entity, IDamage, IDetect
 {
     public MutantZombie_Idle MutantZombie_Idle { get; private set; }
     public MutantZombie_Move MutantZombie_Move { get; private set; }
@@ -16,6 +16,8 @@ public class MutantZombie_Entity : Entity, IDamage
     public D_AttackState D_AttackState;
     public D_DeadState D_DeadState;
     public D_PatrolState D_PatrolState;
+
+    public bool disablePatrol;
 
 
     public bool customPatrolEnable;
@@ -174,8 +176,6 @@ public class MutantZombie_Entity : Entity, IDamage
 
         }
 
-        Debug.Log(angle);
-
 
         angle = Mathf.Abs(angle);
         if (angle > 90)
@@ -220,6 +220,23 @@ public class MutantZombie_Entity : Entity, IDamage
         MainHealthSet(damage);
         SpawnDecal.SpawnDecals(ray);
     }
+
+    public void EnableDetect()
+    {
+        isActive = true;
+        isReturning = false;
+    }
+    public void DisableDetect()
+    {
+        DetectionCheck = false;
+        CanSeePlayer = false;
+        stateMachine.ChangeState(MutantZombie_Idle);
+        seeker.CancelCurrentPathRequest();
+        seeker.StopAllCoroutines();
+        if (!disablePatrol)
+            isReturning = true; 
+        enemy = null;
+    }
 }
 
 public class MutantZombie_Idle : IdleState
@@ -239,11 +256,17 @@ public class MutantZombie_Idle : IdleState
     {
         base.Enter();
 
+        if(!character.DetectionCheck)
+        {
+            character.anim.SetFloat("Multiply", Random.Range(0.5f, 1.5f));
+        }
+
     }
 
     public override void Exit()
     {
         base.Exit();
+        character.anim.SetFloat("Multiply", 1f);
     }
 
     public override void LogicUpdate()
@@ -274,9 +297,14 @@ public class MutantZombie_Idle : IdleState
                     return;
                 }
             }
-            else
+            else if(!character.disablePatrol && character.isActive)
             {
                 stateMachine.ChangeState(character.MutantZombie_Patrol);
+            }
+            else
+            {
+                isIdleTimeOver = false;
+                SetRandomIdleTime();
             }
         }
     }   
@@ -442,6 +470,11 @@ public class MutantZombie_Patrol : PatrolState
         character.transform.rotation = Quaternion.LookRotation(direction);
         character.transform.eulerAngles = new Vector3(0, character.transform.eulerAngles.y, 0);
         character.seeker.CancelCurrentPathRequest();
+
+        if(character.isReturning)
+            character.isActive = false;
+
+        character.isReturning = false;
     }
 
     public override void LogicUpdate()
@@ -462,11 +495,14 @@ public class MutantZombie_Attack : AttackState
         this.character = character;
     }
 
+
     public override void AnimationFinishTrigger()
     {
         base.AnimationFinishTrigger();
         stateMachine.ChangeState(character.MutantZombie_Idle);
     }
+
+   
 }
 public class MutantZombie_Dead : DeadState
 {

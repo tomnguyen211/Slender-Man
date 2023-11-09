@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Build;
 using UnityEngine;
 
-public class Zombie_1_Entity : Entity,IDamage
+public class Zombie_1_Entity : Entity,IDamage,IDetect
 {
     public Zombie_1_Idle Zombie_1_Idle { get; set; }
     public Zombie_1_Move Zombie_1_Move { get; set; }
@@ -17,6 +18,8 @@ public class Zombie_1_Entity : Entity,IDamage
     public D_DeadState D_DeadState;
     public D_PatrolState D_PatrolState;
     public D_MoveState D_MoveState;
+
+    public bool disablePatrol;
 
     public bool customPatrolEnable;
     public Transform[] patrolPoint;
@@ -38,6 +41,8 @@ public class Zombie_1_Entity : Entity,IDamage
         Zombie_1_Shout = new Zombie_1_Shout(this, stateMachine, "Shout", this);
 
         stateMachine.Initialize(Zombie_1_Idle);
+
+       
 
     }
     private void OnControllerColliderHit(ControllerColliderHit hit)
@@ -64,6 +69,7 @@ public class Zombie_1_Entity : Entity,IDamage
     public override void Update()
     {
         base.Update();
+
     }
 
     public override void FixedUpdate()
@@ -238,6 +244,23 @@ public class Zombie_1_Entity : Entity,IDamage
     {
         Zombie_1_Shout.hasShout = false;
     }
+
+    public void EnableDetect() 
+    {
+        isReturning = false;
+        isActive = true;
+    }
+    public void DisableDetect() 
+    {
+        DisableDetection();
+        DetectionCheck = false;
+        CanSeePlayer = false;
+        stateMachine.ChangeState(Zombie_1_Idle);
+        if(!disablePatrol)
+            isReturning = true;
+        enemy = null;
+
+    }
 }
 
 public class Zombie_1_Idle : IdleState
@@ -257,11 +280,18 @@ public class Zombie_1_Idle : IdleState
     {
         base.Enter();
 
+        if (!character.DetectionCheck)
+        {
+            character.anim.SetFloat("Multiply", Random.Range(0.5f, 1.5f));
+        }
+
     }
 
     public override void Exit()
     {
         base.Exit();
+
+        character.anim.SetFloat("Multiply", 1f);
     }
 
     public override void LogicUpdate()
@@ -290,10 +320,15 @@ public class Zombie_1_Idle : IdleState
                     return;
                 }
             }
-            else
+            else if(!character.disablePatrol && character.isActive)
             {
                 character.Zombie_1_Patrol.PresetMPatrol();
                 stateMachine.ChangeState(character.Zombie_1_Patrol);
+            }
+            else
+            {
+                isIdleTimeOver = false;
+                SetRandomIdleTime();
             }
         }
     }
@@ -477,6 +512,11 @@ public class Zombie_1_Patrol : PatrolState
         character.transform.rotation = Quaternion.LookRotation(direction);
         character.transform.eulerAngles = new Vector3(0, character.transform.eulerAngles.y, 0);
         character.seeker.CancelCurrentPathRequest();
+
+        if (character.isReturning)
+            character.isActive = false;
+
+        character.isReturning = false;
     }
 
     public override void LogicUpdate()
@@ -508,7 +548,6 @@ public class Zombie_1_Attack : AttackState
         character.Zombie_1_Idle.PresetIdle();
         stateMachine.ChangeState(character.Zombie_1_Idle);
     }
-
     public void PresetAttack()
     {
 
@@ -627,6 +666,8 @@ public class Zombie_1_Shout : AI_State
         base.LogicUpdate();
 
         Vector3 dir = (target - character.transform.position).normalized;
+
+        dir.Set(dir.x, 0, dir.z);
 
         Quaternion rot = Quaternion.LookRotation(dir, Vector3.up);
 

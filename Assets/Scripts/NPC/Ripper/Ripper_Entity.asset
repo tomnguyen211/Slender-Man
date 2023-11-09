@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ac0a709367be0745bd93bfa3a18c9d4, type: 3}
   m_Name: Ripper_Entity
   m_EditorClassIdentifier: 
-  healthCount: 100
-  stunRes: 0.2
+  healthCount: 150
+  stunRes: 0.4
   wallCheckDistance: 0.5
   groundCheckDistance: 0.5
   characterCheckDistance: 0.5
@@ -26,9 +26,9 @@ MonoBehaviour:
   armor:
     serializedVersion: 2
     m_Bits: 512
-  miscellaneous:
+  block:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 2147541000
   radiusAfterDetection: 20
   radiusDetection: 12
   angleDetection: 180

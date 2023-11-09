@@ -4,6 +4,8 @@ using UnityEngine.Events;
 
 public class GameManager : MonoBehaviour
 {
+    public GameObject Player;
+
     private static GameManager _instance;
 
     public QuestItem[] questItems;
@@ -44,7 +46,7 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         DontDestroyOnLoad(gameObject);
-
+        Player = GameObject.Find("FPS Character Controller");
     }
 
     private void Start()

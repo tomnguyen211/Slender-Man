@@ -16,6 +16,8 @@ public class Entity : MonoBehaviour
     protected int currentWaypoint = 0;
     [ReadOnly]
     public bool reachedEndOfPath;
+    public bool isActive = true;
+    public bool isReturning = false;
 
     [Header("GENERAL SETUP")]
     public Rigidbody rb;
@@ -271,8 +273,9 @@ public class Entity : MonoBehaviour
                 if (Vector3.Angle(rayCenter.forward, directionToTarget) < entityData.angleDetection / 2)
                 {
                     float distanceToTarget = Vector3.Distance(rayCenter.position, target.position);
-                    if (!Physics.Raycast(rayCenter.position, directionToTarget, distanceToTarget, entityData.whatIsGround) && target.CompareTag("Player"))
+                    if (!Physics.Raycast(rayCenter.position, directionToTarget, distanceToTarget, entityData.block) && target.CompareTag("Player"))
                     {
+
                         NoTargetFound = false;
                         CanSeePlayer = true;
                         DetectionCheck = true;

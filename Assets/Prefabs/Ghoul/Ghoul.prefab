@@ -1294,8 +1294,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damaged_Object: []
   area_damaged_Object: []
-  damage_Enable: 0
-  weapon_Damage_MASTER: 0
+  damage_Enable: 1
+  weapon_Damage_MASTER: 8
   weapon_Damage: 0
   fireChance_MASTER: 0
   fireChance: 0
@@ -1315,8 +1315,8 @@ MonoBehaviour:
   poisonDam: 0
   armor:
     serializedVersion: 2
-    m_Bits: 0
-  parentObject: {fileID: 0}
+    m_Bits: 512
+  parentObject: {fileID: 617754919322265879}
   hasCollided: 0
   pierceThrough: 0
   pierceCount: 0
