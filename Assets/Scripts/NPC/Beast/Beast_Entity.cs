@@ -1,7 +1,7 @@
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
-public class Beast_Entity : Entity, IDamage
+public class Beast_Entity : Entity, IDamage, IDetect
 {
     public Beast_Idle Beast_Idle { get; private set; }
     public Beast_Move Beast_Move { get; private set; }
@@ -18,6 +18,8 @@ public class Beast_Entity : Entity, IDamage
     public D_DeadState D_DeadState;
     public D_PatrolState D_PatrolState;
     public D_MoveState D_MoveState;
+
+    public bool disablePatrol;
 
     public bool customPatrolEnable;
     public Transform[] patrolPoint;
@@ -240,6 +242,24 @@ public class Beast_Entity : Entity, IDamage
     {
         Beast_Shout.hasShout = false;
     }
+
+    public void EnableDetect()
+    {
+        isReturning = false;
+        isActive = true;
+    }
+    public void DisableDetect()
+    {
+        DisableDetection();
+        DetectionCheck = false;
+        CanSeePlayer = false;
+        Beast_Idle.PresetIdle();
+        stateMachine.ChangeState(Beast_Idle);
+        if (!disablePatrol)
+            isReturning = true;
+        enemy = null;
+
+    }
 }
 
 public class Beast_Idle : IdleState
@@ -294,10 +314,14 @@ public class Beast_Idle : IdleState
                     return;
                 }
             }
+            else if (!character.disablePatrol && character.isActive)
+            {
+                stateMachine.ChangeState(character.Beast_Patrol);
+            }
             else
             {
-                character.Beast_Patrol.PresetMPatrol();
-                stateMachine.ChangeState(character.Beast_Patrol);
+                isIdleTimeOver = false;
+                SetRandomIdleTime();
             }
         }
     }
@@ -448,8 +472,7 @@ public class Beast_Patrol : PatrolState
         {
             if (!character.CheckIfGround() || character.CheckIfTouchingWall() || !character.CheckIfTouchingLedge())
             {
-                var vector2 = Random.insideUnitCircle.normalized * character.radiusPatrol;
-                patrolNewDestination = new Vector3(vector2.x, 0, vector2.y);
+                patrolNewDestination = new Vector3(character.patrolPointRadius.position.x + Random.Range(Random.Range(0, character.radiusPatrol), Random.Range(0, -character.radiusPatrol)), character.patrolPointRadius.position.y, character.patrolPointRadius.position.z + Random.Range(Random.Range(0, character.radiusPatrol), Random.Range(0, -character.radiusPatrol)));
                 character.UpdatePath_Des(patrolNewDestination);
             }
             else

@@ -21,6 +21,13 @@ public class PickupItem_Highlight : MonoBehaviour
 
     public bool hasInteract;
 
+    [SerializeField]
+    private bool isSpawn;
+    [SerializeField]
+    GameObject[] spawnObject;
+    [SerializeField]
+    Transform spawnPos;
+
     private void Start()
     {
         if(mesh != null)
@@ -94,6 +101,14 @@ public class PickupItem_Highlight : MonoBehaviour
         {
             mat.SetFloat("_Emission_Strength", 0f);
             CourRunning = null;
+        }
+
+        if(isSpawn)
+        {
+            for(int n = 0; n < spawnObject.Length;n++)
+            {
+                Instantiate(spawnObject[n], spawnPos.position, Quaternion.identity);
+            }
         }
     }
 
