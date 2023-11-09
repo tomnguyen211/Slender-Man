@@ -241,9 +241,9 @@ CharacterController:
   m_Enabled: 1
   serializedVersion: 3
   m_Height: 2.25
-  m_Radius: 0.5
+  m_Radius: 0.2
   m_SlopeLimit: 45
-  m_StepOffset: 0.2
+  m_StepOffset: 0.1
   m_SkinWidth: 0.02
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 1.2, z: 0}
@@ -263,6 +263,8 @@ MonoBehaviour:
   seeker: {fileID: 0}
   nextWaypointDistance: 1
   reachedEndOfPath: 0
+  isActive: 1
+  isReturning: 0
   rb: {fileID: 5835282884053238690}
   anim: {fileID: 6950309448645892403}
   characterController: {fileID: 0}
@@ -286,11 +288,12 @@ MonoBehaviour:
   D_DeadState: {fileID: 11400000, guid: 89d7ccb240ce8f945b50e1f444c942e4, type: 2}
   D_PatrolState: {fileID: 11400000, guid: 15aa13ca8dfed8546aa8ba9134b95c68, type: 2}
   D_MoveState: {fileID: 11400000, guid: a699d14a3c0fce24d995a0dd5bbee2d7, type: 2}
+  disablePatrol: 1
   customPatrolEnable: 0
   patrolPoint: []
-  customPatrolEnableRadius: 0
+  customPatrolEnableRadius: 1
   patrolPointRadius: {fileID: 0}
-  radiusPatrol: 0
+  radiusPatrol: 15
 --- !u!54 &5835282884053238690
 Rigidbody:
   m_ObjectHideFlags: 0

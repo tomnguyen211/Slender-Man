@@ -107,7 +107,7 @@ public class PickupItem_Highlight : MonoBehaviour
         {
             for(int n = 0; n < spawnObject.Length;n++)
             {
-                Instantiate(spawnObject[n], spawnPos.position, Quaternion.identity);
+                Instantiate(spawnObject[n], spawnPos.position, spawnObject[n].transform.rotation);
             }
         }
     }
