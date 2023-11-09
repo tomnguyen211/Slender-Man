@@ -67,7 +67,7 @@ public class Ripper_Entity : Entity, IDamage, IDetect
     {
         base.Update();
 
-        Debug.Log(characterController.velocity.magnitude);
+        //Debug.Log(characterController.velocity.magnitude);
 
     
     }

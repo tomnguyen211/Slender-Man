@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Insectoid_Entity : Entity, IDamage
+public class Insectoid_Entity : Entity, IDamage, IDetect
 {
     public Insectoid_Idle Insectoid_Idle { get;private set; }
     public Insectoid_Move Insectoid_Move { get; private set; }
@@ -16,6 +16,8 @@ public class Insectoid_Entity : Entity, IDamage
     public D_AttackState D_AttackState;
     public D_DeadState D_DeadState;
     public D_PatrolState D_PatrolState;
+
+    public bool disablePatrol;
 
     public bool customPatrolEnable;
     public Transform[] patrolPoint;
@@ -217,6 +219,23 @@ public class Insectoid_Entity : Entity, IDamage
         SpawnDecal.SpawnDecals(ray);
     }
 
+    public void EnableDetect()
+    {
+        isReturning = false;
+        isActive = true;
+    }
+    public void DisableDetect()
+    {
+        DetectionCheck = false;
+        CanSeePlayer = false;
+        Insectoid_Idle.PresetIdle();
+        stateMachine.ChangeState(Insectoid_Idle);
+        if (!disablePatrol)
+            isReturning = true;
+        enemy = null;
+
+    }
+
 }
 public class Insectoid_Idle : IdleState
 {
@@ -269,9 +288,14 @@ public class Insectoid_Idle : IdleState
                     return;
                 }
             }
-            else
+            else if (!character.disablePatrol && character.isActive)
             {
                 stateMachine.ChangeState(character.Insectoid_Patrol);
+            }
+            else
+            {
+                isIdleTimeOver = false;
+                SetRandomIdleTime();
             }
         }
     }
@@ -416,8 +440,7 @@ public class Insectoid_Patrol : PatrolState
         {
             if (!character.CheckIfGround() || character.CheckIfTouchingWall() || !character.CheckIfTouchingLedge())
             {
-                var vector2 = Random.insideUnitCircle.normalized * character.radiusPatrol;
-                patrolNewDestination = new Vector3(vector2.x, 0, vector2.y);
+                patrolNewDestination = new Vector3(character.patrolPointRadius.position.x + Random.Range(Random.Range(0, character.radiusPatrol), Random.Range(0, -character.radiusPatrol)), character.patrolPointRadius.position.y, character.patrolPointRadius.position.z + Random.Range(Random.Range(0, character.radiusPatrol), Random.Range(0, -character.radiusPatrol)));
                 character.UpdatePath_Des(patrolNewDestination);
             }
             else

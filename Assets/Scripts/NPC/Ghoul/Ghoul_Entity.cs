@@ -292,9 +292,14 @@ public class Ghoul_Idle : IdleState
                     return;
                 }
             }
-            else
+            else if (!character.disablePatrol && character.isActive)
             {
                 stateMachine.ChangeState(character.Ghoul_Patrol);
+            }
+            else
+            {
+                isIdleTimeOver = false;
+                SetRandomIdleTime();
             }
         }
     }

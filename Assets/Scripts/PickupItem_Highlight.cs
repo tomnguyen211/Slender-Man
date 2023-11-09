@@ -19,7 +19,7 @@ public class PickupItem_Highlight : MonoBehaviour
 
     GameObject Player;
 
-    private bool hasInteract;
+    public bool hasInteract;
 
     private void Start()
     {
@@ -103,13 +103,13 @@ public class PickupItem_Highlight : MonoBehaviour
         {
             float timer = 0;
             float oldVal = mat.GetFloat("_StrongTintFade");
-            while (mat.GetFloat("_StrongTintFade") < 0.5f)
+            while (mat.GetFloat("_StrongTintFade") < 0.8f)
             {
                 timer += Time.deltaTime;
-                mat.SetFloat("_StrongTintFade", Mathf.Lerp(oldVal, 0.5f, timer / 2));
+                mat.SetFloat("_StrongTintFade", Mathf.Lerp(oldVal, 0.8f, timer / 2));
                 yield return null;
             }
-            mat.SetFloat("_StrongTintFade", 0.5f);
+            mat.SetFloat("_StrongTintFade", 0.8f);
             CourRunning = null;
         }
         else

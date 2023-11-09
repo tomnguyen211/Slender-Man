@@ -1066,8 +1066,11 @@ public class FPSHandsController : MonoBehaviour
             }
             else if (hit.collider.CompareTag("Quest"))
             {
-                EventManager.TriggerEvent("QuestItemCheck", hit.collider.name);
-                hit.collider.GetComponent<PickupItem_Highlight>().Interact();
+                if(!hit.collider.GetComponent<PickupItem_Highlight>().hasInteract)
+                {
+                    EventManager.TriggerEvent("QuestItemCheck", hit.collider.name);
+                    hit.collider.GetComponent<PickupItem_Highlight>().Interact();
+                }
             }
             else if (hit.collider.CompareTag("Ammo"))
             {
