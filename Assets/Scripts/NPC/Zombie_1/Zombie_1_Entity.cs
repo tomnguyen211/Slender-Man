@@ -186,8 +186,6 @@ public class Zombie_1_Entity : Entity,IDamage
 
 
         }
-        Debug.Log(angle);
-
 
         angle = Mathf.Abs(angle);
         if (angle > 90)

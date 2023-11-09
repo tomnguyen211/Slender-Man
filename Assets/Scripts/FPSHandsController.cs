@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -9,6 +8,7 @@ public class FPSHandsController : MonoBehaviour
     public bool IsAttacking => attackCoroutine != null;
     public bool IsReloading => reloadCoroutine != null;
     public bool IsHealing => healingCoroutine != null;
+    public bool isFlash => flashingCoroutine != null;
 
 
     private bool stopReload = false;
@@ -22,6 +22,8 @@ public class FPSHandsController : MonoBehaviour
     [SerializeField] private KeyCode reloadKey = KeyCode.R;
     [SerializeField] private KeyCode interact = KeyCode.E;
     [SerializeField] private KeyCode heal = KeyCode.H;
+    [SerializeField] private KeyCode flashLight = KeyCode.F;
+
 
     public bool IsAiming = false;
 
@@ -59,6 +61,7 @@ public class FPSHandsController : MonoBehaviour
     private Coroutine attackCoroutine = null;
     private Coroutine reloadCoroutine = null;
     private Coroutine healingCoroutine = null;
+    private Coroutine flashingCoroutine = null;
     private List<Transform> handsChildTransforms = new List<Transform>();
     private List<int> triggeredAnimationEvents = new List<int>();
 
@@ -89,8 +92,20 @@ public class FPSHandsController : MonoBehaviour
     #region HealthPack
     [Unity.Collections.ReadOnly]
     public int healthPack = 0;
-
     #endregion
+
+    #region Battery
+    [SerializeField]
+    GameObject FlashLight;
+    [Unity.Collections.ReadOnly]
+    public int battery = 0;
+    public float batteryMax = 100;
+    [Unity.Collections.ReadOnly]
+    public float currentBattery = 0;
+    #endregion
+
+
+
 
     private void Start()
     {
@@ -231,6 +246,8 @@ public class FPSHandsController : MonoBehaviour
             InteractManager();
         if (Input.GetKeyUp(heal) && !IsHealing && healthPack > 0 && fpsCharacterController.currentHealth < fpsCharacterController.GetMaxHealth)
             Heal();
+
+        FlashLightController();
     }
 
     private void StopActiveCoroutines()
@@ -924,7 +941,7 @@ public class FPSHandsController : MonoBehaviour
         Vector3 shootRayOrigin = handsParentTransform.GetComponent<Camera>().ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0f));
         RaycastHit hit;
 
-        if (Physics.Raycast(shootRayOrigin, handsParentTransform.forward, out hit, 15, interactLayer))
+        if (Physics.Raycast(shootRayOrigin, handsParentTransform.forward, out hit, 20, interactLayer))
         {
             if (hit.collider.CompareTag("Pickup"))
             {
@@ -1028,13 +1045,23 @@ public class FPSHandsController : MonoBehaviour
 
                     }
                 }
-                else if (hit.collider.name == "medicine")
+            }
+            else if (hit.collider.CompareTag("Medicine"))
+            {
+                if (healthPack < 3)
                 {
-                    if(healthPack < 3)
-                    {
-                        healthPack++;
-                        hit.collider.gameObject.SetActive(false);
-                    }
+                    healthPack++;
+                    hit.collider.gameObject.SetActive(false);
+                    GameManager.Instance.CharacterBar.UpdateUHealth(healthPack);
+                }
+            }
+            else if (hit.collider.CompareTag("Battery"))
+            {
+                if (battery < 3)
+                {
+                    battery++;
+                    hit.collider.gameObject.SetActive(false);
+                    GameManager.Instance.CharacterBar.UpdateUHealth(battery);
                 }
             }
             else if (hit.collider.CompareTag("Ammo"))
@@ -1115,6 +1142,55 @@ public class FPSHandsController : MonoBehaviour
         healingCoroutine = null;
     }
 
- 
+    public void FlashLightController()
+    {
+        if(currentBattery <= 0 && isFlash)
+        {
+            if(battery > 0)
+            {
+                currentBattery = batteryMax;
+                battery--;
+                GameManager.Instance.CharacterBar.UpdateUIBattery(battery);
+            }
+            else
+            {
+                FlashLight.SetActive(false);
+            }
+        }
+
+        if (Input.GetKeyDown(flashLight) && currentBattery > 0)
+        {
+            if(isFlash)
+            {
+                FlashLight.SetActive(false);
+                StopCoroutine(flashingCoroutine);
+                flashingCoroutine = null;
+            }
+            else
+            {
+                FlashLight.SetActive(true);
+                flashingCoroutine = StartCoroutine(Flashing_Coroutine());
+
+            }
+        }
+    }
+
+    IEnumerator Flashing_Coroutine()
+    {
+        float time = 1f;
+
+        while (currentBattery > 0)
+        {
+            time -= Time.smoothDeltaTime;
+            if (time < 0f)
+            {
+                currentBattery -= 1;
+                GameManager.Instance.CharacterBar.UseMana(1, 2);
+                time = 1f;
+            }
+            yield return null;
+        }
+        flashingCoroutine = null;
+    }
 }
 

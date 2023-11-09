@@ -420,7 +420,7 @@ GameObject:
   - component: {fileID: 8197160911979635374}
   - component: {fileID: 200327925301546563}
   - component: {fileID: 3080871287812859384}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Ripper
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -519,7 +519,7 @@ CharacterController:
   m_Enabled: 1
   serializedVersion: 3
   m_Height: 2
-  m_Radius: 0.5
+  m_Radius: 0.1
   m_SlopeLimit: 45
   m_StepOffset: 0.2
   m_SkinWidth: 0.02
@@ -564,6 +564,11 @@ MonoBehaviour:
   D_DeadState: {fileID: 11400000, guid: 21065fe5dc4139745869e9c491a69126, type: 2}
   D_PatrolState: {fileID: 11400000, guid: c76e268c761b35840be97e974ae916aa, type: 2}
   D_MoveState: {fileID: 11400000, guid: 77473ca53f98b5049b064df40717fed4, type: 2}
+  customPatrolEnable: 0
+  patrolPoint: []
+  customPatrolEnableRadius: 0
+  patrolPointRadius: {fileID: 0}
+  radiusPatrol: 0
 --- !u!54 &3080871287812859384
 Rigidbody:
   m_ObjectHideFlags: 0

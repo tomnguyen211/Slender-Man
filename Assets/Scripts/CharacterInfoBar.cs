@@ -24,9 +24,14 @@ public class CharacterInfoBar : MonoBehaviour
     private float currentMana_2;
 
     public Image bulletIcon;
-    public TextMeshProUGUI text;
+    public TextMeshProUGUI text_Ammo;
 
     public GameObject[] bulletGameobject;
+
+    public TextMeshProUGUI text_Health;
+
+    public TextMeshProUGUI text_Battery;
+
 
     /*private void Start()
     {
@@ -50,10 +55,11 @@ public class CharacterInfoBar : MonoBehaviour
         }
     }*/
 
-    public void Init(float maxH, float maxM)
+    public void Init(float maxH, float maxM1, float maxM2)
     {
         currentHealth = maxHealth = maxH;
-        currentMana_1 = maxMana_1 = maxM;
+        currentMana_1 = maxMana_1 = maxM1;
+        currentMana_2 = maxMana_2 = maxM2;
         UpdateHealthBar();
         UpdateManaBar();
     }
@@ -93,13 +99,13 @@ public class CharacterInfoBar : MonoBehaviour
             manaBar_1.fillAmount = 0f;
         }
 
-        /*float fillAmount_2 = currentMana_2 / maxMana_2;
+        float fillAmount_2 = currentMana_2 / maxMana_2;
         manaBar_2.fillAmount = fillAmount_2;
 
         if (manaBar_2.fillAmount <= 0f)
         {
             manaBar_2.fillAmount = 0f;
-        }*/
+        }
     }
 
     public void TakeDamage(float damage)
@@ -155,7 +161,16 @@ public class CharacterInfoBar : MonoBehaviour
 
     public void UpdateUIAmmo(int currentAmmo, int reserveAmmo)
     {
-        text.SetText(currentAmmo.ToString()+"/"+ reserveAmmo.ToString());
+        text_Ammo.SetText(currentAmmo.ToString()+"/"+ reserveAmmo.ToString());
+    }
+
+    public void UpdateUHealth(int currentHealth)
+    {
+        text_Health.SetText(currentHealth.ToString());
+    }
+    public void UpdateUIBattery(int current)
+    {
+        text_Battery.SetText(current.ToString());
     }
 
     public void EnableAmmo()

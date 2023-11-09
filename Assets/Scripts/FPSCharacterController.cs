@@ -36,6 +36,7 @@ public class FPSCharacterController : MonoBehaviour, IDamage
     private Vector2 inputMouseDelta = Vector2.zero;
 
     private CharacterController characterController = null;
+    private FPSHandsController handController = null;
 
     #region Health, Manar
     [SerializeField]
@@ -55,6 +56,7 @@ public class FPSCharacterController : MonoBehaviour, IDamage
     private void Awake()
     {
         TryGetComponent(out characterController);
+        TryGetComponent(out handController);
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -71,7 +73,8 @@ public class FPSCharacterController : MonoBehaviour, IDamage
     {
         ScreenDamage.maxHealth = ScreenDamage.CurrentHealth = currentHealth = maxHealth;
         currentMana = maxMana;
-        GameManager.Instance.CharacterBar.Init(maxHealth, maxMana);
+        handController.currentBattery = handController.batteryMax;
+        GameManager.Instance.CharacterBar.Init(maxHealth, maxMana, handController.batteryMax);
     }
 
     private void Update()

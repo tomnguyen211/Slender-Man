@@ -17,6 +17,8 @@ public class PickupItem_Highlight : MonoBehaviour
     [SerializeField]
     bool SpriteShaderEnable;
 
+    GameObject Player;
+
     private void Start()
     {
         if(mesh != null)
@@ -25,11 +27,32 @@ public class PickupItem_Highlight : MonoBehaviour
             mat = meshSkin.transform.GetComponent<SkinnedMeshRenderer>().material;
 
         glowUp = true;
+
+        Player = GameObject.FindGameObjectWithTag("Player");
     }
 
     private void Update()
     {
-        Collider[] rangeChecks = Physics.OverlapSphere(transform.position, 30, armor);
+        if(CourRunning == null)
+        {
+            if(Vector3.Distance(transform.position,Player.transform.position) <= 10)
+            {
+                if (glowUp)
+                {
+                    CourRunning = GlowUp();
+                    StartCoroutine(CourRunning);
+                    glowUp = false;
+                }
+                else
+                {
+
+                    CourRunning = GlowDown();
+                    StartCoroutine(CourRunning);
+                    glowUp = true;
+                }
+            }
+        }
+        /*Collider[] rangeChecks = Physics.OverlapSphere(transform.position, 10, armor);
         if (rangeChecks.Length != 0 && CourRunning == null)
         {
             for (int i = 0; i < rangeChecks.Length; i++)
@@ -43,8 +66,6 @@ public class PickupItem_Highlight : MonoBehaviour
                         CourRunning = GlowUp();
                         StartCoroutine(CourRunning);
                         glowUp = false;
-                        Debug.Log("Passed_1");
-
                     }
                     else
                     {
@@ -52,14 +73,11 @@ public class PickupItem_Highlight : MonoBehaviour
                         CourRunning = GlowDown();
                         StartCoroutine(CourRunning);
                         glowUp = true;
-                        Debug.Log("Passed_2");
-
-
                     }
                 }
                 
             }
-        }
+        }*/
     }
 
     IEnumerator GlowUp()

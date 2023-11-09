@@ -1369,6 +1369,11 @@ MonoBehaviour:
   D_AttackState: {fileID: 11400000, guid: 2be64e9ce7e20244e99896e19ed2e34c, type: 2}
   D_DeadState: {fileID: 11400000, guid: 677aa6e58a0ac03459c8f672a6df4f51, type: 2}
   D_PatrolState: {fileID: 11400000, guid: 4f3ab1bd6ed286d42b35d5508dc49480, type: 2}
+  customPatrolEnable: 0
+  patrolPoint: []
+  customPatrolEnableRadius: 0
+  patrolPointRadius: {fileID: 0}
+  radiusPatrol: 0
 --- !u!54 &1642742924936539001
 Rigidbody:
   m_ObjectHideFlags: 0
