@@ -91,12 +91,19 @@ public class FPSCharacterController : MonoBehaviour, IDamage
 
     private UnityAction<int> triggerEvent;
 
+    [SerializeField]
+    AudioClip[] jumpScareSound;
+    [SerializeField]
+    AudioSource jumpjumpScareSource;
+
     private void OnEnable()
     {
 
         EventManager.StartListening("PlayerTeleport", Teleport);
         EventManager.StartListening("HeartBeatSound", HeartBeatSound);
         EventManager.StartListening("TriggerWindSound", TriggerWindSound);
+        EventManager.StartListening("JumpScareSound", JumpScareSound);
+
 
         triggerEvent += UpdateStatic;
 
@@ -109,6 +116,8 @@ public class FPSCharacterController : MonoBehaviour, IDamage
         EventManager.StopListening("PlayerTeleport", Teleport);
         EventManager.StopListening("HeartBeatSound", HeartBeatSound);
         EventManager.StopListening("TriggerWindSound", TriggerWindSound);
+        EventManager.StopListening("JumpScareSound", JumpScareSound);
+
 
         triggerEvent -= UpdateStatic;
     }
@@ -377,6 +386,13 @@ public class FPSCharacterController : MonoBehaviour, IDamage
             heartBeat_Sound.Play();
         else
             heartBeat_Sound.Stop();
+    }
+
+    private void JumpScareSound()
+    {
+        jumpjumpScareSource.clip = jumpScareSound[Random.Range(0, jumpScareSound.Length)];
+        jumpjumpScareSource.Play();
+
     }
 
     private void TriggerWindSound(object isEnable)

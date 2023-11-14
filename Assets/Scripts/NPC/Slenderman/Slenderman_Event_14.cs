@@ -22,6 +22,9 @@ public class Slenderman_Event_14 : MonoBehaviour
     [SerializeField]
     LayerMask armor;
 
+    [SerializeField]
+    AudioSource scaryLoop;
+
     private void OnTriggerEnter(Collider other)
     {
         if (((1 << other.gameObject.layer) & armor) != 0 && other.CompareTag("Player") && !hasTrigger && hasActivate)
@@ -29,6 +32,7 @@ public class Slenderman_Event_14 : MonoBehaviour
             triggerEvent?.Invoke();
             hasTrigger = true;
             StartCoroutine(DelayEvent());
+            EventManager.TriggerEvent("JumpScareSound");
         }
     }
 
@@ -44,5 +48,19 @@ public class Slenderman_Event_14 : MonoBehaviour
         Slender_Entity.TriggerState("Scream");
     }
 
-    public void Activate() => hasActivate = true;
+    public void Activate()
+    {
+        if(!hasActivate)
+        {
+            scaryLoop.Play();
+            StartCoroutine(StopScaryLoop());
+            hasActivate = true;
+        }
+    }
+
+    IEnumerator StopScaryLoop()
+    {
+        yield return new WaitForSeconds(20);
+        scaryLoop.Stop();
+    }
 }
