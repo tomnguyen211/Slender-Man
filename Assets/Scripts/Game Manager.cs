@@ -76,6 +76,7 @@ public class GameManager : MonoBehaviour
         int count = 0;
 
         string prop = (string) item;
+        Debug.Log("Quest: " + prop);
         for(int n = 0; n < questItems.Length; n++)
         {
             if (questItems[n].hasUnlock)
@@ -88,6 +89,9 @@ public class GameManager : MonoBehaviour
             }
         }
 
+        Debug.Log("count: " + count);
+
+
         CharacterBar.UpdateUIQuest(count);
 
         if (count == 2)
@@ -98,7 +102,7 @@ public class GameManager : MonoBehaviour
         {
             UpdateGameState(GameState.Stage_2);
         }
-        else if(count == 7)
+        else if(count == 6)
         {
             UpdateGameState(GameState.Stage_3);
         }
@@ -116,6 +120,8 @@ public class GameManager : MonoBehaviour
             case GameState.Stage_2:
                 break;
             case GameState.Stage_3:
+                EventManager.TriggerEvent("Activate");
+                EventManager.TriggerEvent("FinalEvent");
                 break;
             case GameState.EndGame:
                 break;

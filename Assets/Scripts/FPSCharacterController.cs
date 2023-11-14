@@ -96,6 +96,8 @@ public class FPSCharacterController : MonoBehaviour, IDamage
     [SerializeField]
     AudioSource jumpjumpScareSource;
 
+    private bool finalEventActivate;
+
     private void OnEnable()
     {
 
@@ -103,6 +105,8 @@ public class FPSCharacterController : MonoBehaviour, IDamage
         EventManager.StartListening("HeartBeatSound", HeartBeatSound);
         EventManager.StartListening("TriggerWindSound", TriggerWindSound);
         EventManager.StartListening("JumpScareSound", JumpScareSound);
+        EventManager.StartListening("FinalEvent", FinalEvent);
+
 
 
         triggerEvent += UpdateStatic;
@@ -117,6 +121,7 @@ public class FPSCharacterController : MonoBehaviour, IDamage
         EventManager.StopListening("HeartBeatSound", HeartBeatSound);
         EventManager.StopListening("TriggerWindSound", TriggerWindSound);
         EventManager.StopListening("JumpScareSound", JumpScareSound);
+        EventManager.StopListening("FinalEvent", FinalEvent);
 
 
         triggerEvent -= UpdateStatic;
@@ -430,9 +435,16 @@ public class FPSCharacterController : MonoBehaviour, IDamage
             if (Glitch_Coroutine_Stop != null)
                 StopCoroutine(Glitch_Coroutine_Stop);
 
-
-            if(glitchStage < 5)
-                glitchStage++;
+            if(finalEventActivate)
+            {
+                if (glitchStage < 2)
+                    glitchStage++;
+            }
+            else
+            {
+                if (glitchStage < 5)
+                    glitchStage++;
+            }
 
 
             switch (glitchStage)
@@ -631,6 +643,13 @@ public class FPSCharacterController : MonoBehaviour, IDamage
         }
     }
 
-
-
+    private void FinalEvent()
+    {
+        if(glitchStage > 2)
+        {
+            glitchStage = 2;
+            triggerEvent.Invoke(3);
+        }
+        finalEventActivate = true;
+    }
 }

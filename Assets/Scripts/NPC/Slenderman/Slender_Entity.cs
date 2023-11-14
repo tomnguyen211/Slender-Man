@@ -42,6 +42,11 @@ public class Slender_Entity : Entity, IDamage
     [SerializeField]
     SlenderWeapon SlenderWeapon;
 
+    [SerializeField]
+    AudioSource LaughSound;
+    [SerializeField]
+    AudioClip[] laughClip;
+
     public override void Awake()
     {
         base.Awake();
@@ -111,6 +116,11 @@ public class Slender_Entity : Entity, IDamage
         seeker.pathCallback += OnPathComplete;
         //MovementManager.isMoving += IsMoving;
 
+        if(isAggresive)
+        {
+            LaughSound.clip = laughClip[Random.Range(0, laughClip.Length)];
+            LaughSound.Play();
+        }
 
     }
 
@@ -212,7 +222,10 @@ public class Slender_Entity : Entity, IDamage
     {
         yield return new WaitForSeconds(time);
         gameObject.SetActive(false);
+        SlenderWeapon.Disable_Damage();
     }
+
+    public
 
     #endregion
 
