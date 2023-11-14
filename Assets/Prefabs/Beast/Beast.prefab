@@ -269,6 +269,7 @@ GameObject:
   - component: {fileID: 8227619429911857833}
   - component: {fileID: 8045817942773139427}
   - component: {fileID: 4222297783131511750}
+  - component: {fileID: 1038082400540990234}
   m_Layer: 8
   m_Name: Beast
   m_TagString: Enemy
@@ -291,6 +292,7 @@ Transform:
   m_Children:
   - {fileID: 2159053151246887204}
   - {fileID: 8074666778586923349}
+  - {fileID: 7069932884924132118}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -76.83, z: 0}
 --- !u!95 &117013740348665206
@@ -331,8 +333,8 @@ MonoBehaviour:
   detailedGizmos: 0
   startEndModifier:
     addPoints: 0
-    exactStartPoint: 3
-    exactEndPoint: 3
+    exactStartPoint: 0
+    exactEndPoint: 0
     useRaycasting: 0
     mask:
       serializedVersion: 2
@@ -378,6 +380,8 @@ MonoBehaviour:
   CheckPoint: 0
   SpawnDecal: {fileID: 4771449087258151391}
   beingStun: 0
+  AudioManager: {fileID: 5191093985358038862}
+  MovementManager: {fileID: 1038082400540990234}
   D_AttackState: {fileID: 11400000, guid: ad94aa5bec9943a40afa4146e06fabf6, type: 2}
   D_IdleState: {fileID: 11400000, guid: c9e8e7de49dbd0c4999212e8413d5972, type: 2}
   D_DeadState: {fileID: 11400000, guid: 62e2e3bf75def294294b8f869d06da2f, type: 2}
@@ -399,17 +403,17 @@ CharacterController:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 512
+    m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8192
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
   m_Height: 2
-  m_Radius: 0.1
+  m_Radius: 0.01
   m_SlopeLimit: 45
   m_StepOffset: 0.05
   m_SkinWidth: 0.01
@@ -442,6 +446,29 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 96
   m_CollisionDetection: 1
+--- !u!114 &1038082400540990234
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1301274397660491080}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61b5d496fb6370149a867884410847c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  entityBodyTag: 0
+  volume: 0.9
+  Movement_VFX_SFX: {fileID: 11400000, guid: f730f65929cda23409e3898cca9d27f0, type: 2}
+  CustomSound: 0
+  customSurface_SFX: []
+  paceTimer: 0.5
+  paceTimerRandom: 0.1
+  groundCheck: {fileID: 4404713752035210361}
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!1 &1399260533538507312
 GameObject:
   m_ObjectHideFlags: 0
@@ -1697,6 +1724,261 @@ Transform:
   - {fileID: 933346862455476691}
   m_Father: {fileID: 2746580152371091036}
   m_LocalEulerAnglesHint: {x: -0.0000044466956, y: -0.000012895932, z: -42.338306}
+--- !u!1 &7427051651427997269
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7069932884924132118}
+  - component: {fileID: 5191093985358038862}
+  m_Layer: 8
+  m_Name: AudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7069932884924132118
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7427051651427997269}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4264676660836270716}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5191093985358038862
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7427051651427997269}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8eecbecc71e93b4489a446d77d0bc68d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sounds:
+  - name: Attack_V1
+    clip: {fileID: 8300000, guid: 9e2a2f7eb5ab2854c9619afd49af44dd, type: 3}
+    audioMixer: {fileID: 0}
+    volume: 0.7
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+    mute: 0
+    spatialBlend: 1
+    spread: 56.1
+    minDis: 1
+    maxDis: 10
+    rollOffModeLogarithmic: 1
+    rollOffModeLinear: 0
+    priority: 130
+    dopplerEffect: 1
+    delaySound: 0
+    delayTime: 0
+    fadingSound: 0
+    fadingTime: 0
+    fading_delayTime: 0
+  - name: Attack_V2
+    clip: {fileID: 8300000, guid: 72f6b64cfaa960e47b7afdc6566e4ce3, type: 3}
+    audioMixer: {fileID: 0}
+    volume: 0.7
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+    mute: 0
+    spatialBlend: 1
+    spread: 56.1
+    minDis: 1
+    maxDis: 10
+    rollOffModeLogarithmic: 1
+    rollOffModeLinear: 0
+    priority: 130
+    dopplerEffect: 1
+    delaySound: 0
+    delayTime: 0
+    fadingSound: 0
+    fadingTime: 0
+    fading_delayTime: 0
+  - name: Attack_V3
+    clip: {fileID: 8300000, guid: 5232c5cbccd181c4a955bc62c18f6b06, type: 3}
+    audioMixer: {fileID: 0}
+    volume: 0.7
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+    mute: 0
+    spatialBlend: 1
+    spread: 56.1
+    minDis: 1
+    maxDis: 10
+    rollOffModeLogarithmic: 1
+    rollOffModeLinear: 0
+    priority: 130
+    dopplerEffect: 1
+    delaySound: 0
+    delayTime: 0
+    fadingSound: 0
+    fadingTime: 0
+    fading_delayTime: 0
+  - name: Attack_V4
+    clip: {fileID: 8300000, guid: e4a2be51ef514d648b6b15566dc37e13, type: 3}
+    audioMixer: {fileID: 0}
+    volume: 0.7
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+    mute: 0
+    spatialBlend: 1
+    spread: 56.1
+    minDis: 1
+    maxDis: 10
+    rollOffModeLogarithmic: 1
+    rollOffModeLinear: 0
+    priority: 130
+    dopplerEffect: 1
+    delaySound: 0
+    delayTime: 0
+    fadingSound: 0
+    fadingTime: 0
+    fading_delayTime: 0
+  - name: Attack_V5
+    clip: {fileID: 8300000, guid: df00dd9c12e1a85408d4a0d9343f0fd8, type: 3}
+    audioMixer: {fileID: 0}
+    volume: 0.7
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+    mute: 0
+    spatialBlend: 1
+    spread: 56.1
+    minDis: 1
+    maxDis: 10
+    rollOffModeLogarithmic: 1
+    rollOffModeLinear: 0
+    priority: 130
+    dopplerEffect: 1
+    delaySound: 0
+    delayTime: 0
+    fadingSound: 0
+    fadingTime: 0
+    fading_delayTime: 0
+  - name: Dead_V1
+    clip: {fileID: 8300000, guid: 3e3cb6be94016b745bab7aebb13e548f, type: 3}
+    audioMixer: {fileID: 0}
+    volume: 0.7
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+    mute: 0
+    spatialBlend: 1
+    spread: 56.1
+    minDis: 1
+    maxDis: 10
+    rollOffModeLogarithmic: 1
+    rollOffModeLinear: 0
+    priority: 130
+    dopplerEffect: 1
+    delaySound: 0
+    delayTime: 0
+    fadingSound: 0
+    fadingTime: 0
+    fading_delayTime: 0
+  - name: Dead_V2
+    clip: {fileID: 8300000, guid: 6b3554f1ada979f4584761432d7dc922, type: 3}
+    audioMixer: {fileID: 0}
+    volume: 0.7
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+    mute: 0
+    spatialBlend: 1
+    spread: 56.1
+    minDis: 1
+    maxDis: 10
+    rollOffModeLogarithmic: 1
+    rollOffModeLinear: 0
+    priority: 130
+    dopplerEffect: 1
+    delaySound: 0
+    delayTime: 0
+    fadingSound: 0
+    fadingTime: 0
+    fading_delayTime: 0
+  - name: Growl_V1
+    clip: {fileID: 8300000, guid: c5afa414d3510184dadbba37b06b2cb8, type: 3}
+    audioMixer: {fileID: 0}
+    volume: 0.7
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+    mute: 0
+    spatialBlend: 1
+    spread: 56.1
+    minDis: 1
+    maxDis: 10
+    rollOffModeLogarithmic: 1
+    rollOffModeLinear: 0
+    priority: 130
+    dopplerEffect: 1
+    delaySound: 0
+    delayTime: 0
+    fadingSound: 0
+    fadingTime: 0
+    fading_delayTime: 0
+  - name: Growl_V2
+    clip: {fileID: 8300000, guid: 40bfc01bb7e72f24a91f6cee59f1d893, type: 3}
+    audioMixer: {fileID: 0}
+    volume: 0.7
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+    mute: 0
+    spatialBlend: 1
+    spread: 56.1
+    minDis: 1
+    maxDis: 10
+    rollOffModeLogarithmic: 1
+    rollOffModeLinear: 0
+    priority: 130
+    dopplerEffect: 1
+    delaySound: 0
+    delayTime: 0
+    fadingSound: 0
+    fadingTime: 0
+    fading_delayTime: 0
+  - name: Idle
+    clip: {fileID: 8300000, guid: cd660aa0ad18c0c4b985e9cdec525eaa, type: 3}
+    audioMixer: {fileID: 0}
+    volume: 0.7
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+    mute: 0
+    spatialBlend: 1
+    spread: 56.1
+    minDis: 1
+    maxDis: 10
+    rollOffModeLogarithmic: 1
+    rollOffModeLinear: 0
+    priority: 130
+    dopplerEffect: 1
+    delaySound: 0
+    delayTime: 0
+    fadingSound: 0
+    fadingTime: 0
+    fading_delayTime: 0
 --- !u!1 &7506156003850765788
 GameObject:
   m_ObjectHideFlags: 0

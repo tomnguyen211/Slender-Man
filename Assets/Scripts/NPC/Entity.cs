@@ -66,6 +66,8 @@ public class Entity : MonoBehaviour
     public bool beingStun;
     #endregion
 
+    public AudioManager AudioManager;
+    public MovementManager MovementManager;
 
     public virtual void Initialization()
     {
@@ -79,7 +81,8 @@ public class Entity : MonoBehaviour
     public virtual void Awake()
     {
         stateMachine = new FiniteStateMachine();
-
+        seeker = GetComponent<Seeker>();
+        characterController = GetComponent<CharacterController>();
         Initialization();
     }
 
@@ -87,13 +90,12 @@ public class Entity : MonoBehaviour
     public virtual void Start()
     {
         TriggerDetected += TriggerDetection;
-        seeker = GetComponent<Seeker>();
-        characterController = GetComponent<CharacterController>();
     }
 
     public virtual void Update()
     {
-        ResetFindTarget();
+        if(isActive)
+            ResetFindTarget();
         //ResetFindTarget();
         /* DetectionReset();
          Detection();*/
@@ -102,8 +104,11 @@ public class Entity : MonoBehaviour
 
     public virtual void FixedUpdate()
     {
-        DetectionReset();
-        Detection();
+        if(isActive)
+        {
+            DetectionReset();
+            Detection();
+        }
         stateMachine.CurrentState.PhysicUpdate();
     }
 

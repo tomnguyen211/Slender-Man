@@ -46,7 +46,6 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         DontDestroyOnLoad(gameObject);
-        Player = GameObject.Find("FPS Character Controller");
     }
 
     private void Start()
@@ -62,12 +61,14 @@ public class GameManager : MonoBehaviour
     private void OnEnable()
     {
         EventManager.StartListening("QuestItemCheck", QuestItemCheck);
+        EventManager.StartListening("Get_Player", Get_Player);
 
     }
 
     private void OnDisable()
     {
         EventManager.StopListening("QuestItemCheck", QuestItemCheck);
+        EventManager.StopListening("Get_Player", Get_Player);
     }
 
     private void QuestItemCheck(object item)
@@ -122,6 +123,11 @@ public class GameManager : MonoBehaviour
 
         OnGameStateChanged?.Invoke(newState);
     }
+
+    private void Get_Player(object p)
+    {
+        Player = (GameObject)p;
+    }
 }
 
 
@@ -141,3 +147,5 @@ public enum GameState
     Stage_3,
     EndGame
 }
+
+

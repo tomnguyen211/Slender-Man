@@ -37,8 +37,6 @@ public class Ghoul_Entity : Entity, IDamage, IDetect
         Ghoul_Dead = new Ghoul_Dead(this, stateMachine, "Dead", false, D_DeadState, this); ;
 
 
-        stateMachine.Initialize(Ghoul_Idle);
-
     }
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
@@ -49,13 +47,17 @@ public class Ghoul_Entity : Entity, IDamage, IDetect
     public override void Start()
     {
         base.Start();
+        stateMachine.Initialize(Ghoul_Idle);
+
         seeker.pathCallback += OnPathComplete;
+        MovementManager.isMoving += IsMoving;
 
     }
 
     private void OnDisable()
     {
         seeker.pathCallback -= OnPathComplete;
+        MovementManager.isMoving -= IsMoving;
     }
 
     public override void Update()
@@ -154,6 +156,8 @@ public class Ghoul_Entity : Entity, IDamage, IDetect
         // Multiply the direction by our desired speed to get a velocity
         Vector3 velocity = speed * speedFactor * dir;
 
+        dir.Set(dir.x, 0, dir.z);
+
         Quaternion rot = Quaternion.LookRotation(dir, Vector3.up);
 
         /* float newRotX = Mathf.Clamp(rot.x,)*/
@@ -235,10 +239,67 @@ public class Ghoul_Entity : Entity, IDamage, IDetect
         DetectionCheck = false;
         CanSeePlayer = false;
         stateMachine.ChangeState(Ghoul_Idle);
-        if (!disablePatrol)
-            isReturning = true;
+        /*if (!disablePatrol)
+            isReturning = true;*/
+        isActive = false;
         enemy = null;
 
+    }
+
+    public override void Audio(string sound)
+    {
+        switch (sound)
+        {
+            case "Attack":
+                switch (Random.Range(1, 5))
+                {
+                    case 1:
+                        AudioManager.Play("Attack_V1");
+                        break;
+                    case 2:
+                        AudioManager.Play("Attack_V2");
+                        break;
+                    case 3:
+                        AudioManager.Play("Attack_V3");
+                        break;
+                    case 4:
+                        AudioManager.Play("Attack_V4");
+                        break;
+                }
+                break;
+            case "Dead":
+                AudioManager.Play("Dead");
+                break;
+            case "Idle":
+                switch (Random.Range(1, 3))
+                {
+                    case 1:
+                        AudioManager.Play("Idle_V1");
+                        break;
+                    case 2:
+                        AudioManager.Play("Idle_V2");
+                        break;
+                }
+                break;
+            case "Roar":
+                switch (Random.Range(1, 3))
+                {
+                    case 1:
+                        AudioManager.Play("Roar_V1");
+                        break;
+                    case 2:
+                        AudioManager.Play("Roar_V2");
+                        break;
+                }
+                break;
+        }
+    }
+
+    private bool IsMoving()
+    {
+        if (stateMachine.CurrentState.animBoolName == Ghoul_Move.animBoolName || stateMachine.CurrentState.animBoolName == Ghoul_Patrol.animBoolName)
+            return true;
+        return false;
     }
 }
 
@@ -258,6 +319,11 @@ public class Ghoul_Idle : IdleState
     public override void Enter()
     {
         base.Enter();
+
+        if (!character.DetectionCheck)
+        {
+            character.Audio("Idle");
+        }
 
     }
 
@@ -310,6 +376,7 @@ public class Ghoul_Move : MoveState
     Ghoul_Entity character;
     private Vector3 direction;
     int moveType;
+    int soundCount = 0;
     public Ghoul_Move(Entity entity, FiniteStateMachine stateMachine, string animBoolName, D_MoveState stateData, Ghoul_Entity character) : base(entity, stateMachine, animBoolName, stateData)
     {
         this.character = character;
@@ -328,6 +395,7 @@ public class Ghoul_Move : MoveState
         character.transform.rotation = Quaternion.LookRotation(direction);
         character.transform.eulerAngles = new Vector3(0, character.transform.eulerAngles.y, 0);
         character.seeker.CancelCurrentPathRequest();
+        character.seeker.StopAllCoroutines();
     }
 
     public override void LogicUpdate()
@@ -340,6 +408,16 @@ public class Ghoul_Move : MoveState
                 character.UpdatePath_Enemy();
                 isMoveReset = false;
                 startTime = Time.time;
+
+                if (character.DetectionCheck)
+                {
+                    soundCount++;
+                    if (soundCount > 10)
+                    {
+                        soundCount = 0;
+                        character.Audio("Roar");
+                    }
+                }
             }
             if (moveType == 1)
                 character.Move(stateData.movingSpeed * 0.5f, out direction);
@@ -429,13 +507,14 @@ public class Ghoul_Patrol : PatrolState
         character.transform.rotation = Quaternion.LookRotation(direction);
         character.transform.eulerAngles = new Vector3(0, character.transform.eulerAngles.y, 0);
         character.seeker.CancelCurrentPathRequest();
+        character.seeker.StopAllCoroutines();
     }
 
     public override void LogicUpdate()
     {
         base.LogicUpdate();
         character.Move(character.D_MoveState.movingSpeed * character.D_PatrolState.patrolSpeedModifier, out direction);
-        if (Vector2.Distance(character.transform.position, patrolNewDestination) <= 1f || character.reachedEndOfPath)
+        if (Vector3.Distance(character.transform.position, patrolNewDestination) <= 1f || character.reachedEndOfPath)
         {
             stateMachine.ChangeState(character.Ghoul_Idle);
         }
@@ -457,6 +536,13 @@ public class Ghoul_Attack : AttackState
     {
         base.AnimationFinishTrigger();
         stateMachine.ChangeState(character.Ghoul_Idle);
+    }
+
+    public override void Enter()
+    {
+        base.Enter();
+        character.Audio("Attack");
+
     }
 
     public void PresetAttack()
@@ -489,6 +575,7 @@ public class Ghoul_Dead : DeadState
         character.anim.SetTrigger(animBoolName);
         deadTime = stateData.deadTime;
         character.seeker.CancelCurrentPathRequest();
+        character.Audio("Dead");
     }
 
     public override void Exit()

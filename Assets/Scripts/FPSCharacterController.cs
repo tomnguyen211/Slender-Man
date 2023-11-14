@@ -1,6 +1,11 @@
 using System.Collections;
+using System.Collections.Generic;
 using Unity.Collections;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.Rendering;
+using URPGlitch.Runtime.AnalogGlitch;
+using URPGlitch.Runtime.DigitalGlitch;
 
 [RequireComponent(typeof(CharacterController))]
 [DefaultExecutionOrder(-1)]
@@ -32,8 +37,8 @@ public class FPSCharacterController : MonoBehaviour, IDamage
     private float cameraPitch;
     private float cameraYaw;
 
-    private Vector2 movementInput = Vector2.zero;
-    private Vector2 inputMouseDelta = Vector2.zero;
+    private Vector3 movementInput = Vector3.zero;
+    private Vector3 inputMouseDelta = Vector3.zero;
 
     public CharacterController characterController = null;
     private FPSHandsController handController = null;
@@ -55,16 +60,57 @@ public class FPSCharacterController : MonoBehaviour, IDamage
 
     public bool isOutside = true;
 
+    [SerializeField]
+    MovementManager MovementManager;
+
+    [SerializeField]
+    AudioSource heartBeat_Sound;
+
+    [SerializeField]
+    AudioSource Wind_Sound;
+    [SerializeField]
+    AudioClip[] windSoundVariants;
+
+    Volume volume;
+
+    DigitalGlitchVolume digitalGlitchVolume;
+    AnalogGlitchVolume analogGlitchVolume;
+
+    [SerializeField]
+    private int glitchStage = 0;
+    public bool isGlitch;
+    Coroutine Glitch_Coroutine;
+    public bool stopGlitch;
+    Coroutine Glitch_Coroutine_Stop;
+    List<GameObject> SlenderObj;
+
+    [SerializeField]
+    AudioClip[] interferece;
+    [SerializeField]
+    AudioSource glitchSound;
+
+    private UnityAction<int> triggerEvent;
+
     private void OnEnable()
     {
-        EventManager.StartListening("PlayerTeleport", Teleport);
 
+        EventManager.StartListening("PlayerTeleport", Teleport);
+        EventManager.StartListening("HeartBeatSound", HeartBeatSound);
+        EventManager.StartListening("TriggerWindSound", TriggerWindSound);
+
+        triggerEvent += UpdateStatic;
+
+        MovementManager.isMoving += IsMoving;
     }
 
     private void OnDisable()
     {
-        EventManager.StopListening("PlayerTeleport", Teleport);
 
+        EventManager.StopListening("PlayerTeleport", Teleport);
+        EventManager.StopListening("HeartBeatSound", HeartBeatSound);
+        EventManager.StopListening("TriggerWindSound", TriggerWindSound);
+
+        triggerEvent -= UpdateStatic;
     }
 
     private void Awake()
@@ -80,7 +126,12 @@ public class FPSCharacterController : MonoBehaviour, IDamage
             Vector3 cameraEuler = cameraTransform.rotation.eulerAngles;
             cameraPitch = cameraEuler.x;
             cameraYaw = cameraEuler.y;
+            volume = cameraTransform.GetComponent<Volume>();
         }
+
+        SlenderObj = new List<GameObject>();
+
+        
     }
 
     private void Start()
@@ -89,6 +140,11 @@ public class FPSCharacterController : MonoBehaviour, IDamage
         currentMana = maxMana;
         handController.currentBattery = handController.batteryMax;
         GameManager.Instance.CharacterBar.Init(maxHealth, maxMana, handController.batteryMax);
+
+        volume.profile.TryGet(out digitalGlitchVolume);
+        volume.profile.TryGet(out analogGlitchVolume);
+
+        StartCoroutine(WindForest_Control());
     }
 
     private void Update()
@@ -142,6 +198,7 @@ public class FPSCharacterController : MonoBehaviour, IDamage
         if (cameraPitch > 180f) cameraPitch -= 360f;
 
         cameraTransform.rotation = Quaternion.Euler(cameraPitch, cameraYaw, 0f);
+
     }
 
     private void UpdateCameraPosition()
@@ -161,9 +218,17 @@ public class FPSCharacterController : MonoBehaviour, IDamage
         float moveSpeed = 0;
 
         if (currentMana > 0 && runInputHeld)
+        {
             moveSpeed = moveSpeed_Run;
+            MovementManager.SetPaceTimerRandom(0.01f);
+            MovementManager.SetPaceTimer(0.3f);
+        }
         else
+        {
             moveSpeed = moveSpeed_Walk;
+            MovementManager.SetPaceTimerRandom(0.05f);
+            MovementManager.SetPaceTimer(0.5f);
+        }
 
 
         //float moveSpeed = runInputHeld ? moveSpeed_Run : moveSpeed_Walk;
@@ -231,27 +296,6 @@ public class FPSCharacterController : MonoBehaviour, IDamage
 
     IEnumerator ManaChange_Add()
     {
-        /* float time = 1;
-         while (time > 0)
-         {
-             time -= Time.deltaTime;
-             if (manaIEnumeratorRunning)
-             {
-                 StopCoroutine(manaIEnumerator);
-                 yield break;
-             }
-             yield return null;
-         }
-
-         while (!manaIEnumeratorRunning && currentMana <= maxMana)
-         {
-             currentMana += Time.deltaTime * 2;
-             GameManager.Instance.CharacterBar.se
-             yield return null;
-         }
-         manaIEnumeratorRunning = false;
-         StopCoroutine(manaIEnumerator);*/
-
         float time = 1;
         while (time > 0)
         {
@@ -286,12 +330,6 @@ public class FPSCharacterController : MonoBehaviour, IDamage
 
     IEnumerator ManaChange_Deduct()
     {
-        /* while (manaIEnumeratorRunning && currentMana > 0)
-         {
-             currentMana -= Time.deltaTime;
-             yield return null;
-         }        
-         StopCoroutine(manaIEnumerator);*/
         float time = 0.1f;
 
         while (runInputHeld && currentMana > 0)
@@ -325,5 +363,258 @@ public class FPSCharacterController : MonoBehaviour, IDamage
         Vector3 newPos = (Vector3)pos;
         transform.position = new Vector3(newPos.x,newPos.y,newPos.z);
     }
-    
+
+    private bool IsMoving()
+    {
+        if (movementInput != Vector3.zero)
+            return true;
+        return false;
+    }
+
+    private void HeartBeatSound(object isEnable)
+    {
+        if((bool)isEnable)
+            heartBeat_Sound.Play();
+        else
+            heartBeat_Sound.Stop();
+    }
+
+    private void TriggerWindSound(object isEnable)
+    {
+        if ((bool)isEnable)
+        {
+            Wind_Sound.clip = windSoundVariants[Random.Range(0, windSoundVariants.Length)];
+            Wind_Sound.Play();
+        }
+        else
+        {
+            Wind_Sound.Stop();
+        }
+    }
+
+    IEnumerator WindForest_Control()
+    {
+        yield return new WaitForSeconds(Random.Range(30, 60));
+        if(isOutside && !Wind_Sound.isPlaying)
+        {
+            TriggerWindSound(true);
+        }
+        StartCoroutine(WindForest_Control());
+    }
+
+    public void Glitch_Damage_Enable(GameObject a, bool cont)
+    {
+        if (!isGlitch || cont)
+        {
+            isGlitch = true;
+            stopGlitch = false;
+
+            if(Glitch_Coroutine != null)
+                StopCoroutine(Glitch_Coroutine);
+            if (Glitch_Coroutine_Stop != null)
+                StopCoroutine(Glitch_Coroutine_Stop);
+
+
+            if(glitchStage < 5)
+                glitchStage++;
+
+
+            switch (glitchStage)
+            {
+                case 1:
+                    Glitch_Coroutine = StartCoroutine(GlitchCour_Increase(5));
+                    triggerEvent.Invoke(1);                 
+                    break;
+                case 2:
+                    Glitch_Coroutine = StartCoroutine(GlitchCour_Increase(7));
+                    triggerEvent.Invoke(2);
+                    Damage(2, a);
+                    break;
+                case 3:
+                    Glitch_Coroutine = StartCoroutine(GlitchCour_Increase(7));
+                    triggerEvent.Invoke(3);
+                    Damage(4, a);
+                    break;
+                case 4:
+                    Glitch_Coroutine = StartCoroutine(GlitchCour_Increase(8));
+                    triggerEvent.Invoke(4);
+                    Damage(6, a);
+                    break;
+                case 5:
+                    Glitch_Coroutine = StartCoroutine(GlitchCour_Increase(10));
+                    triggerEvent.Invoke(5);
+                    Damage(10, a);
+                    break;
+                default:
+                    break;
+
+            }
+        }
+
+        for(int i = 0; i < SlenderObj.Count; i++)
+        {
+            if (SlenderObj[i] == null)
+                SlenderObj.RemoveAt(i);
+        }
+
+        if(a != null && !SlenderObj.Contains(a))
+        {
+            SlenderObj.Add(a);
+        }
+    }
+
+    public void Glitch_Damage_Disable(GameObject a, bool cont)
+    {
+        for (int i = 0; i < SlenderObj.Count; i++)
+        {
+            if (SlenderObj[i] == null)
+                SlenderObj.RemoveAt(i);
+        }
+
+        if (a != null && SlenderObj.Contains(a))
+        {
+            SlenderObj.Remove(a);
+        }
+
+        if ((SlenderObj.Count <= 0 && !stopGlitch) || cont)
+        {
+            if (Glitch_Coroutine != null)
+                StopCoroutine(Glitch_Coroutine);
+            if (Glitch_Coroutine_Stop != null)
+                StopCoroutine(Glitch_Coroutine_Stop);
+
+            isGlitch = false;
+            stopGlitch = true;
+
+            if (glitchStage <= 0)
+            {
+                triggerEvent.Invoke(0);
+                stopGlitch = false;
+                return;
+            }
+
+            switch (glitchStage)
+            {
+                case 1:
+                    Glitch_Coroutine_Stop = StartCoroutine(GlitchCour_Decrease(4));
+                    triggerEvent.Invoke(1);
+                    break;
+                case 2:
+                    Glitch_Coroutine_Stop = StartCoroutine(GlitchCour_Decrease(3));
+                    triggerEvent.Invoke(2);
+                    break;
+                case 3:
+                    Glitch_Coroutine_Stop = StartCoroutine(GlitchCour_Decrease(3));
+                    triggerEvent.Invoke(3);
+                    break;
+                case 4:
+                    Glitch_Coroutine_Stop = StartCoroutine(GlitchCour_Decrease(3));
+                    triggerEvent.Invoke(4);
+                    break;
+                case 5:
+                    Glitch_Coroutine_Stop = StartCoroutine(GlitchCour_Decrease(3));
+                    triggerEvent.Invoke(5);
+                    break;
+                default:
+                    Glitch_Coroutine_Stop = StartCoroutine(GlitchCour_Decrease(2));
+                    break;
+            }
+            glitchStage--;
+        }
+    }
+
+    IEnumerator GlitchCour_Increase(float time)
+    {
+        while (isGlitch)
+        {
+            time -= Time.deltaTime;
+            if(time < 0)
+            {
+                Glitch_Damage_Enable(null, true);
+            }
+            
+            yield return null;
+        }
+    }
+
+    IEnumerator GlitchCour_Decrease(float time)
+    {
+        while (stopGlitch)
+        {
+            time -= Time.deltaTime;
+            if(time < 0)
+            {
+                Glitch_Damage_Disable(null, true);
+            }
+            yield return null;
+        }
+    }
+
+    public void UpdateStatic(int glitchStage)
+    {
+        switch (glitchStage)
+        {
+            case 0:
+                digitalGlitchVolume.intensity.value = 0f;
+                analogGlitchVolume.colorDrift.value = 0f;
+                analogGlitchVolume.horizontalShake.value = 0f;
+                analogGlitchVolume.verticalJump.value = 0f;
+                analogGlitchVolume.scanLineJitter.value = 0f;
+                glitchSound.Stop(); 
+                break;
+            case 1:
+                digitalGlitchVolume.intensity.value = 0.1f;
+                analogGlitchVolume.colorDrift.value = 0.1f;
+                analogGlitchVolume.horizontalShake.value = 0.1f;
+                analogGlitchVolume.verticalJump.value = 0.1f;
+                analogGlitchVolume.scanLineJitter.value = 0.1f;
+                glitchSound.clip = interferece[Random.Range(0,interferece.Length)];
+                glitchSound.volume = 0.4f;
+                glitchSound.Play();
+                break;
+            case 2:
+                digitalGlitchVolume.intensity.value = 0.2f;
+                analogGlitchVolume.colorDrift.value = 0.2f;
+                analogGlitchVolume.horizontalShake.value = 0.2f;
+                analogGlitchVolume.verticalJump.value = 0.1f;
+                analogGlitchVolume.scanLineJitter.value = 0.2f;
+                glitchSound.clip = interferece[Random.Range(0, interferece.Length)];
+                glitchSound.volume = 0.6f;
+                glitchSound.Play();
+                break;
+            case 3:
+                digitalGlitchVolume.intensity.value = 0.3f;
+                analogGlitchVolume.colorDrift.value = 0.3f;
+                analogGlitchVolume.horizontalShake.value = 0.3f;
+                analogGlitchVolume.verticalJump.value = 0.4f;
+                analogGlitchVolume.scanLineJitter.value = 0.3f;
+                glitchSound.clip = interferece[Random.Range(0, interferece.Length)];
+                glitchSound.volume = 0.8f;
+                glitchSound.Play();
+                break;
+            case 4:
+                digitalGlitchVolume.intensity.value = 0.4f;
+                analogGlitchVolume.colorDrift.value = 0.4f;
+                analogGlitchVolume.horizontalShake.value = 0.4f;
+                analogGlitchVolume.verticalJump.value = 0.2f;
+                analogGlitchVolume.scanLineJitter.value = 0.4f;
+                glitchSound.clip = interferece[Random.Range(0, interferece.Length)];
+                glitchSound.volume = 1f;
+                glitchSound.Play();
+                break;
+            case 5:
+                digitalGlitchVolume.intensity.value = 0.5f;
+                analogGlitchVolume.colorDrift.value = 0.5f;
+                analogGlitchVolume.horizontalShake.value = 0.5f;
+                analogGlitchVolume.verticalJump.value = 0.3f;
+                analogGlitchVolume.scanLineJitter.value = 0.5f;
+                glitchSound.clip = interferece[Random.Range(0, interferece.Length)];
+                glitchSound.volume = 1f;
+                glitchSound.Play();
+                break;
+        }
+    }
+
+
+
 }

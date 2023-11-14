@@ -18,4 +18,13 @@ public interface IDamage
     public float GetSecondAbilityBar => GetSecondAbilityBar;
     public float GetSeocondManaAbilityMax => GetSeocondManaAbilityMax;
 
+    public void Glitch_Damage_Enable(GameObject a, bool cont)
+    {
+
+    }
+
+    public void Glitch_Damage_Disable(GameObject b, bool cont)
+    {
+
+    }
 }

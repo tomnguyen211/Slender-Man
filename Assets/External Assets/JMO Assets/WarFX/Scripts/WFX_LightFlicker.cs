@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using Unity.VisualScripting;
 
 /**
  *	Rapidly sets a light on/off.
@@ -13,14 +14,22 @@ public class WFX_LightFlicker : MonoBehaviour
 	public float time = 0.05f;
 	
 	private float timer;
+
+	public bool isStart = true;
 	
 	void Start ()
 	{
 		timer = time;
-		StartCoroutine("Flicker");
+		if(isStart)	
+			StartCoroutine("Flicker");
 	}
-	
-	IEnumerator Flicker()
+
+	public void TriggerEvent()
+	{
+        StartCoroutine("Flicker");
+    }
+
+    IEnumerator Flicker()
 	{
 		while(true)
 		{
@@ -34,5 +43,10 @@ public class WFX_LightFlicker : MonoBehaviour
 			while(timer > 0);
 			timer = time;
 		}
+	}
+
+	public void StopFlicker()
+	{
+		StopAllCoroutines();
 	}
 }

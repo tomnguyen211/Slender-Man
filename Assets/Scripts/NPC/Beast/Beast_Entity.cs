@@ -40,9 +40,8 @@ public class Beast_Entity : Entity, IDamage, IDetect
         Beast_Damage = new Beast_Damage(this, stateMachine, "Damage", false ,this);
         Beast_Shout = new Beast_Shout(this, stateMachine, "Shout", this);
 
-        stateMachine.Initialize(Beast_Idle);
-
     }    
+
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
         if (hit.collider.CompareTag("Player"))
@@ -52,8 +51,12 @@ public class Beast_Entity : Entity, IDamage, IDetect
     public override void Start()
     {
         base.Start();
+
+        stateMachine.Initialize(Beast_Idle);
+
         seeker.pathCallback += OnPathComplete;
         DetectionTrigger += DisableDetection;
+        MovementManager.isMoving += IsMoving;
 
     }
 
@@ -61,6 +64,7 @@ public class Beast_Entity : Entity, IDamage, IDetect
     {
         seeker.pathCallback -= OnPathComplete;
         DetectionTrigger -= DisableDetection;
+        MovementManager.isMoving -= IsMoving;
 
     }
 
@@ -164,7 +168,7 @@ public class Beast_Entity : Entity, IDamage, IDetect
         dir = (path.vectorPath[currentWaypoint] - transform.position).normalized;
         // Multiply the direction by our desired speed to get a velocity
         Vector3 velocity = speed * speedFactor * dir;
-
+        dir.Set(dir.x, 0, dir.z);
         Quaternion rot = Quaternion.LookRotation(dir, Vector3.up);
 
         /* float newRotX = Mathf.Clamp(rot.x,)*/
@@ -176,14 +180,14 @@ public class Beast_Entity : Entity, IDamage, IDetect
             Vector3 enemyDir = enemy.transform.position - transform.position;
             angle = Vector3.Angle(enemyDir, transform.forward);
 
-            float leftRight = AngleDir(transform.forward, enemyDir, transform.up);
+            /*float leftRight = AngleDir(transform.forward, enemyDir, transform.up);
 
             if(leftRight == 1)
                 anim.SetFloat("xDir", angle);
             else if(leftRight == -1)
                 anim.SetFloat("xDir", -angle);
             else
-                anim.SetFloat("xDir", 0);
+                anim.SetFloat("xDir", 0);*/
 
 
 
@@ -260,6 +264,65 @@ public class Beast_Entity : Entity, IDamage, IDetect
         enemy = null;
 
     }
+
+    private bool IsMoving()
+    {
+     if (stateMachine.CurrentState.animBoolName == Beast_Move.animBoolName || stateMachine.CurrentState.animBoolName == Beast_Patrol.animBoolName)
+            return true;
+        return false;
+    }
+
+    public override void Audio(string sound)
+    {
+        switch (sound)
+        {
+            case "Attack":
+                switch (Random.Range(1, 6))
+                {
+                    case 1:
+                        AudioManager.Play("Attack_V1");
+                        break;
+                    case 2:
+                        AudioManager.Play("Attack_V2");
+                        break;
+                    case 3:
+                        AudioManager.Play("Attack_V3");
+                        break;
+                    case 4:
+                        AudioManager.Play("Attack_V4");
+                        break;
+                    case 5:
+                        AudioManager.Play("Attack_V5");
+                        break;
+                }
+                break;
+            case "Dead":
+                switch (Random.Range(1, 3))
+                {
+                    case 1:
+                        AudioManager.Play("Dead_V1");
+                        break;
+                    case 2:
+                        AudioManager.Play("Dead_V2");
+                        break;
+                }
+                break;
+            case "Idle":
+                AudioManager.Play("Idle");
+                break;
+            case "Roar":
+                switch (Random.Range(1, 3))
+                {
+                    case 1:
+                        AudioManager.Play("Growl_V1");
+                        break;
+                    case 2:
+                        AudioManager.Play("Growl_V2");
+                        break;
+                }
+                break;
+        }
+    }
 }
 
 public class Beast_Idle : IdleState
@@ -278,7 +341,10 @@ public class Beast_Idle : IdleState
     public override void Enter()
     {
         base.Enter();
-
+        if (!character.DetectionCheck)
+        {
+            character.Audio("Idle");
+        }
     }
 
     public override void Exit()
@@ -346,6 +412,7 @@ public class Beast_Move : MoveState
     Beast_Entity character;
     private Vector3 direction;
     int moveType;
+    int soundCount = 0;
     public Beast_Move(Entity entity, FiniteStateMachine stateMachine, string animBoolName, D_MoveState stateData, Beast_Entity character) : base(entity, stateMachine, animBoolName, stateData)
     {
         this.character = character;
@@ -366,6 +433,7 @@ public class Beast_Move : MoveState
         character.transform.rotation = Quaternion.LookRotation(direction);
         character.transform.eulerAngles = new Vector3(0, character.transform.eulerAngles.y, 0);
         character.seeker.CancelCurrentPathRequest();
+        character.seeker.StopAllCoroutines();
     }
 
     public override void LogicUpdate()
@@ -378,6 +446,16 @@ public class Beast_Move : MoveState
                 character.UpdatePath_Enemy();
                 isMoveReset = false;
                 startTime = Time.time;
+
+                if (character.DetectionCheck)
+                {
+                    soundCount++;
+                    if (soundCount > 10)
+                    {
+                        soundCount = 0;
+                        character.Audio("Roar");
+                    }
+                }
             }
             if(moveType == 1)
                 character.Move(stateData.movingSpeed * 0.5f,out direction);
@@ -506,13 +584,15 @@ public class Beast_Patrol : PatrolState
         character.transform.rotation = Quaternion.LookRotation(direction);
         character.transform.eulerAngles = new Vector3(0, character.transform.eulerAngles.y, 0);
         character.seeker.CancelCurrentPathRequest();
+        character.seeker.StopAllCoroutines();
+
     }
 
     public override void LogicUpdate()
     {
         base.LogicUpdate();
         character.Move(character.D_MoveState.movingSpeed * character.D_PatrolState.patrolSpeedModifier, out direction);
-        if (Vector2.Distance(character.transform.position, patrolNewDestination) <= 1f || character.reachedEndOfPath)
+        if (Vector3.Distance(character.transform.position, patrolNewDestination) <= 1f || character.reachedEndOfPath)
         {
             character.Beast_Idle.PresetIdle();
             stateMachine.ChangeState(character.Beast_Idle);
@@ -536,6 +616,14 @@ public class Beast_Attack : AttackState
         base.AnimationFinishTrigger();
         stateMachine.ChangeState(character.Beast_Idle);
     }
+
+    public override void Enter()
+    {
+        base.Enter();
+
+        character.Audio("Attack");
+
+    }
 }
 public class Beast_Dead : DeadState
 {
@@ -552,6 +640,8 @@ public class Beast_Dead : DeadState
         character.anim.SetTrigger(animBoolName);
         deadTime = stateData.deadTime;
         character.seeker.CancelCurrentPathRequest();
+
+        character.Audio("Dead");
     }
 
     public override void Exit()
@@ -622,6 +712,9 @@ public class Beast_Shout : AI_State
     {
         base.Enter();
         target = character.enemy.transform.position;
+
+        character.Audio("Roar");
+
     }
 
     public override void LogicUpdate()
@@ -629,6 +722,8 @@ public class Beast_Shout : AI_State
         base.LogicUpdate();
 
         Vector3 dir = (target - character.transform.position).normalized;
+
+        dir.Set(dir.x, 0, dir.z);
 
         Quaternion rot = Quaternion.LookRotation(dir, Vector3.up);
 

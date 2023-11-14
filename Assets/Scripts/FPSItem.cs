@@ -135,6 +135,6 @@ public class FPSItem : ScriptableObject
 
 
         public GameObject[] MuzzleFlash;
-        public GameObject ImpactMark;
+        public GameObject[] ImpactMark;
     }
 }

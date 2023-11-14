@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ac0a709367be0745bd93bfa3a18c9d4, type: 3}
+  m_Name: SlenderMan
+  m_EditorClassIdentifier: 
+  healthCount: 100
+  stunRes: 1
+  wallCheckDistance: 0.5
+  groundCheckDistance: 0.5
+  characterCheckDistance: 0.5
+  whatIsGround:
+    serializedVersion: 2
+    m_Bits: 64
+  character:
+    serializedVersion: 2
+    m_Bits: 256
+  armor:
+    serializedVersion: 2
+    m_Bits: 512
+  block:
+    serializedVersion: 2
+    m_Bits: 0
+  radiusAfterDetection: 30
+  radiusDetection: 30
+  angleDetection: 360
+  detectionTimer: 30

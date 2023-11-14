@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using Unity.Collections;
+using UnityEngine.Events;
 
 public class PickupItem_Highlight : MonoBehaviour
 {
@@ -27,6 +28,8 @@ public class PickupItem_Highlight : MonoBehaviour
     GameObject[] spawnObject;
     [SerializeField]
     Transform spawnPos;
+
+    public UnityEvent triggerEvent;
 
     private void Start()
     {
@@ -110,6 +113,8 @@ public class PickupItem_Highlight : MonoBehaviour
                 Instantiate(spawnObject[n], spawnPos.position, spawnObject[n].transform.rotation);
             }
         }
+
+        triggerEvent?.Invoke();
     }
 
     IEnumerator GlowUp()

@@ -4835,6 +4835,7 @@ GameObject:
   - component: {fileID: 9031260165488841577}
   - component: {fileID: 7870960603073420783}
   - component: {fileID: 3859810901893583376}
+  - component: {fileID: 5958441132493165995}
   m_Layer: 8
   m_Name: Zombie
   m_TagString: Enemy
@@ -4861,6 +4862,7 @@ Transform:
   - {fileID: 2603529330835422100}
   - {fileID: 7263631477099356371}
   - {fileID: 774557254731702355}
+  - {fileID: 1508291747489523623}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &6068706968290664470
@@ -4901,8 +4903,8 @@ MonoBehaviour:
   detailedGizmos: 0
   startEndModifier:
     addPoints: 0
-    exactStartPoint: 3
-    exactEndPoint: 3
+    exactStartPoint: 0
+    exactEndPoint: 0
     useRaycasting: 0
     mask:
       serializedVersion: 2
@@ -4932,7 +4934,7 @@ CharacterController:
   m_Enabled: 1
   serializedVersion: 3
   m_Height: 1.8
-  m_Radius: 0.1
+  m_Radius: 0.02
   m_SlopeLimit: 30
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
@@ -4954,6 +4956,8 @@ MonoBehaviour:
   seeker: {fileID: 0}
   nextWaypointDistance: 3
   reachedEndOfPath: 0
+  isActive: 1
+  isReturning: 0
   rb: {fileID: 3859810901893583376}
   anim: {fileID: 6068706968290664470}
   characterController: {fileID: 0}
@@ -4972,14 +4976,27 @@ MonoBehaviour:
   CheckPoint: 0
   SpawnDecal: {fileID: 2688849681923716867}
   beingStun: 0
+  AudioManager: {fileID: 8762396637012593156}
+  MovementManager: {fileID: 5958441132493165995}
   D_AttackState: {fileID: 11400000, guid: a91280b2d7011a749821854a2879eeb5, type: 2}
   D_IdleState: {fileID: 11400000, guid: cb89c254d81cda648831b1b67a6a5347, type: 2}
   D_DeadState: {fileID: 11400000, guid: 6ace202585860474a8aa965d7333cafc, type: 2}
   D_PatrolState: {fileID: 11400000, guid: f4de3d64d9fc77c418b289630b9887a9, type: 2}
   D_MoveState: {fileID: 11400000, guid: 5449c003f5d5eaf48975fd2bb4d6f0c4, type: 2}
   disablePatrol: 0
-  customPatrolEnable: 0
-  patrolPoint: []
+  customPatrolEnable: 1
+  patrolPoint:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   customPatrolEnableRadius: 0
   patrolPointRadius: {fileID: 0}
   radiusPatrol: 0
@@ -5010,6 +5027,29 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 96
   m_CollisionDetection: 0
+--- !u!114 &5958441132493165995
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7312525065717934871}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61b5d496fb6370149a867884410847c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  entityBodyTag: 0
+  volume: 0.5
+  Movement_VFX_SFX: {fileID: 11400000, guid: f730f65929cda23409e3898cca9d27f0, type: 2}
+  CustomSound: 0
+  customSurface_SFX: []
+  paceTimer: 0.5
+  paceTimerRandom: 0.2
+  groundCheck: {fileID: 774557254731702355}
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!1 &7336005124571287518
 GameObject:
   m_ObjectHideFlags: 0
@@ -5568,6 +5608,324 @@ Transform:
   - {fileID: 6614773180308738053}
   m_Father: {fileID: 5416402931416653509}
   m_LocalEulerAnglesHint: {x: -10.132881, y: 20.418953, z: 3.2293198}
+--- !u!1 &8430148103205526300
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1508291747489523623}
+  - component: {fileID: 8762396637012593156}
+  m_Layer: 0
+  m_Name: AudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1508291747489523623
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8430148103205526300}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6012962144705463903}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8762396637012593156
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8430148103205526300}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8eecbecc71e93b4489a446d77d0bc68d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sounds:
+  - name: Attack_V1
+    clip: {fileID: 8300000, guid: 1cecabbbec974f84b98ee7a62f195270, type: 3}
+    audioMixer: {fileID: 0}
+    volume: 0.6
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+    mute: 0
+    spatialBlend: 1
+    spread: 70
+    minDis: 1
+    maxDis: 10
+    rollOffModeLogarithmic: 1
+    rollOffModeLinear: 0
+    priority: 130
+    dopplerEffect: 0.6
+    delaySound: 0
+    delayTime: 0
+    fadingSound: 0
+    fadingTime: 0
+    fading_delayTime: 0
+  - name: Attack_V2
+    clip: {fileID: 8300000, guid: 6af29f69fa7302341ad581bdff1ca18a, type: 3}
+    audioMixer: {fileID: 0}
+    volume: 1
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+    mute: 0
+    spatialBlend: 1
+    spread: 40
+    minDis: 1
+    maxDis: 10
+    rollOffModeLogarithmic: 1
+    rollOffModeLinear: 0
+    priority: 130
+    dopplerEffect: 1.22
+    delaySound: 0
+    delayTime: 0
+    fadingSound: 0
+    fadingTime: 0
+    fading_delayTime: 0
+  - name: Attack_V3
+    clip: {fileID: 8300000, guid: 20bcb0e5e111e514f865a2d9cb8418a9, type: 3}
+    audioMixer: {fileID: 0}
+    volume: 0.7
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+    mute: 0
+    spatialBlend: 1
+    spread: 30
+    minDis: 1
+    maxDis: 10
+    rollOffModeLogarithmic: 1
+    rollOffModeLinear: 0
+    priority: 130
+    dopplerEffect: 0.5
+    delaySound: 1
+    delayTime: 0
+    fadingSound: 0
+    fadingTime: 0
+    fading_delayTime: 0
+  - name: Attack_V4
+    clip: {fileID: 8300000, guid: e61d5ff700e6f514d888b70c8025b82c, type: 3}
+    audioMixer: {fileID: 0}
+    volume: 1
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+    mute: 0
+    spatialBlend: 1
+    spread: 20
+    minDis: 1
+    maxDis: 20
+    rollOffModeLogarithmic: 1
+    rollOffModeLinear: 0
+    priority: 130
+    dopplerEffect: 1
+    delaySound: 0
+    delayTime: 0
+    fadingSound: 0
+    fadingTime: 0
+    fading_delayTime: 0
+  - name: Attack_V5
+    clip: {fileID: 8300000, guid: aaae3eee25755a34c83842261cb7edeb, type: 3}
+    audioMixer: {fileID: 0}
+    volume: 0.7
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+    mute: 0
+    spatialBlend: 1
+    spread: 39
+    minDis: 1
+    maxDis: 20
+    rollOffModeLogarithmic: 1
+    rollOffModeLinear: 0
+    priority: 130
+    dopplerEffect: 0.3
+    delaySound: 0
+    delayTime: 0
+    fadingSound: 0
+    fadingTime: 0
+    fading_delayTime: 0
+  - name: Dead_V1
+    clip: {fileID: 8300000, guid: c136c9e525b95ca4d8a77ab70bc6de55, type: 3}
+    audioMixer: {fileID: 0}
+    volume: 0.6
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+    mute: 0
+    spatialBlend: 1
+    spread: 113.2
+    minDis: 1
+    maxDis: 20
+    rollOffModeLogarithmic: 1
+    rollOffModeLinear: 0
+    priority: 130
+    dopplerEffect: 0.56
+    delaySound: 0
+    delayTime: 0
+    fadingSound: 0
+    fadingTime: 0
+    fading_delayTime: 0
+  - name: Dead_V2
+    clip: {fileID: 8300000, guid: fa1668966dabada44a1f89e062d2ff20, type: 3}
+    audioMixer: {fileID: 0}
+    volume: 0.7
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+    mute: 0
+    spatialBlend: 1
+    spread: 30
+    minDis: 1
+    maxDis: 20
+    rollOffModeLogarithmic: 1
+    rollOffModeLinear: 0
+    priority: 130
+    dopplerEffect: 1
+    delaySound: 0
+    delayTime: 0
+    fadingSound: 0
+    fadingTime: 0
+    fading_delayTime: 0
+  - name: Idle_V1
+    clip: {fileID: 8300000, guid: 0212a105655eb6941922c966688984e7, type: 3}
+    audioMixer: {fileID: 0}
+    volume: 0.8
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+    mute: 0
+    spatialBlend: 1
+    spread: 30
+    minDis: 1
+    maxDis: 20
+    rollOffModeLogarithmic: 1
+    rollOffModeLinear: 0
+    priority: 130
+    dopplerEffect: 0.5
+    delaySound: 0
+    delayTime: 0
+    fadingSound: 0
+    fadingTime: 0
+    fading_delayTime: 0
+  - name: Idle_V2
+    clip: {fileID: 8300000, guid: b6767c8d33816de47ad529b2719d5a98, type: 3}
+    audioMixer: {fileID: 0}
+    volume: 1
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+    mute: 0
+    spatialBlend: 1
+    spread: 30
+    minDis: 0
+    maxDis: 0
+    rollOffModeLogarithmic: 1
+    rollOffModeLinear: 0
+    priority: 130
+    dopplerEffect: 0.5
+    delaySound: 0
+    delayTime: 0
+    fadingSound: 0
+    fadingTime: 0
+    fading_delayTime: 0
+  - name: Idle_V3
+    clip: {fileID: 8300000, guid: fda98f81af647664eac4c6d8f63612f8, type: 3}
+    audioMixer: {fileID: 0}
+    volume: 0.8
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+    mute: 0
+    spatialBlend: 1
+    spread: 20
+    minDis: 1
+    maxDis: 10
+    rollOffModeLogarithmic: 0
+    rollOffModeLinear: 0
+    priority: 130
+    dopplerEffect: 0.5
+    delaySound: 0
+    delayTime: 0
+    fadingSound: 0
+    fadingTime: 0
+    fading_delayTime: 0
+  - name: Roar_V1
+    clip: {fileID: 8300000, guid: e13f0ac1ea24d794b81083cf9a27da2f, type: 3}
+    audioMixer: {fileID: 0}
+    volume: 1
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+    mute: 0
+    spatialBlend: 1
+    spread: 30
+    minDis: 1
+    maxDis: 20
+    rollOffModeLogarithmic: 1
+    rollOffModeLinear: 0
+    priority: 130
+    dopplerEffect: 0.5
+    delaySound: 0
+    delayTime: 0
+    fadingSound: 0
+    fadingTime: 0
+    fading_delayTime: 0
+  - name: Roar_V2
+    clip: {fileID: 8300000, guid: b3f82dd6d0b5d7542b3fe5970e7d548a, type: 3}
+    audioMixer: {fileID: 0}
+    volume: 1
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+    mute: 0
+    spatialBlend: 1
+    spread: 0.65
+    minDis: 1
+    maxDis: 20
+    rollOffModeLogarithmic: 1
+    rollOffModeLinear: 0
+    priority: 130
+    dopplerEffect: 0.5
+    delaySound: 0
+    delayTime: 0
+    fadingSound: 0
+    fadingTime: 0
+    fading_delayTime: 0
+  - name: Roar_V3
+    clip: {fileID: 8300000, guid: 79814accb47805b41b36db38072818ee, type: 3}
+    audioMixer: {fileID: 0}
+    volume: 1
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+    mute: 0
+    spatialBlend: 1
+    spread: 74.5
+    minDis: 1
+    maxDis: 20
+    rollOffModeLogarithmic: 1
+    rollOffModeLinear: 0
+    priority: 129
+    dopplerEffect: 0.86
+    delaySound: 0
+    delayTime: 0
+    fadingSound: 0
+    fadingTime: 0
+    fading_delayTime: 0
 --- !u!1 &8447525614067721861
 GameObject:
   m_ObjectHideFlags: 0

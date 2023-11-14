@@ -1,0 +1,206 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 207be6980370181429beaae0a4b79f55, type: 3}
+  m_Name: MoveSound_Manager
+  m_EditorClassIdentifier: 
+  SFX_Normal_Ground:
+    clip:
+    - {fileID: 8300000, guid: 6aef841e0825da44183e10de803b110a, type: 3}
+    - {fileID: 8300000, guid: 02277d26c8bd3504eb1e89ff269f0f00, type: 3}
+    - {fileID: 8300000, guid: 4485d1177d92abb48a14ca920bd4fdfd, type: 3}
+    - {fileID: 8300000, guid: 7f7f083c84b910745a0507d2d6bbec04, type: 3}
+    - {fileID: 8300000, guid: 603c2b648b7ada74abe9189139592ca8, type: 3}
+    - {fileID: 8300000, guid: c85ed65394132024aba3a4ca654402c9, type: 3}
+    - {fileID: 8300000, guid: a2b958d9e647d1e42bdc03deda0aad85, type: 3}
+    - {fileID: 8300000, guid: dee1a88727f62dd4cab68c0330bba04c, type: 3}
+    - {fileID: 8300000, guid: 1b6cc7f96b88abb429da65c2809c3e07, type: 3}
+    - {fileID: 8300000, guid: c3d0ed10c63eb2040b7682826f646e40, type: 3}
+    - {fileID: 8300000, guid: aec851a44500f2b4fb085e1c198914d4, type: 3}
+    - {fileID: 8300000, guid: 76e28d5b3ccf90c46aa9fa84e122171c, type: 3}
+    - {fileID: 8300000, guid: a44f7f9be6de8094eb9b1d895f322494, type: 3}
+    - {fileID: 8300000, guid: e2b18b8689f5b904f80c7c928116b560, type: 3}
+    - {fileID: 8300000, guid: 2f6bc2584bce6de4ba118c6c68cfce57, type: 3}
+    - {fileID: 8300000, guid: 0c9defd6c813d1b4baed5f4aa3ae4072, type: 3}
+    - {fileID: 8300000, guid: 00d1c219077e27e4895fab54959c8ab8, type: 3}
+    - {fileID: 8300000, guid: 8e081977289a1b04d87b4ca11db10fda, type: 3}
+    - {fileID: 8300000, guid: 8e981eb7aff62034590b3f2e2130f053, type: 3}
+    - {fileID: 8300000, guid: 203cf68c67e66f14e86de720213fdcb8, type: 3}
+    - {fileID: 8300000, guid: 1ea633b39ca88c847a9a1d1ee82b630e, type: 3}
+    - {fileID: 8300000, guid: 8d5f5adcab510b746aafa0b660252fe4, type: 3}
+    - {fileID: 8300000, guid: 3f26a52cc6ddd4249af602ca8e02b151, type: 3}
+    - {fileID: 8300000, guid: 872f2ce20be84bb4cbe7086811c437bd, type: 3}
+    - {fileID: 8300000, guid: 874cc9110bacdb74582fa090be195ba0, type: 3}
+    - {fileID: 8300000, guid: 5c3275490262e084988bde6cd43ea5bc, type: 3}
+    - {fileID: 8300000, guid: 7bc05f8a05c7ba943ba2119a60aa2b4e, type: 3}
+    - {fileID: 8300000, guid: 820dd661c5ba78f41835e56895326b3a, type: 3}
+    - {fileID: 8300000, guid: 9461567db82c5a845869c6c0b1aa9dd3, type: 3}
+    - {fileID: 8300000, guid: 4522c3e59d7568d459a6998078de8194, type: 3}
+    - {fileID: 8300000, guid: e98deccbd013f4c4586f5b2da26b8548, type: 3}
+    - {fileID: 8300000, guid: 62d48cee27bd503448a8a5f02b9fd249, type: 3}
+    - {fileID: 8300000, guid: 36fa1a81ed16a1c4abac3bf5fc1f8add, type: 3}
+    - {fileID: 8300000, guid: 333a4c3ab48606e4ea664558707449b2, type: 3}
+    - {fileID: 8300000, guid: 6d6420cf3dde7af45b247b5bbd543f75, type: 3}
+    - {fileID: 8300000, guid: 5ad9e7b7a87477f468cb0044461a6aca, type: 3}
+    - {fileID: 8300000, guid: 50bde637bcbd7a44f9e27cde40ae44ea, type: 3}
+    - {fileID: 8300000, guid: a7c3665f1044bbc43bf72dfc9319471a, type: 3}
+    - {fileID: 8300000, guid: 8422b3b425809a143a654b7a2d45ca24, type: 3}
+    - {fileID: 8300000, guid: daf07d1e88a6d4a4a87ff403618e052b, type: 3}
+    name: 
+    audioMixer: {fileID: 0}
+    volume: 1
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+    mute: 0
+    spatialBlend: 1
+    spread: 15
+    minDis: 1
+    maxDis: 20
+    rollOffModeLogarithmic: 1
+    rollOffModeLinear: 0
+    priority: 128
+    dopplerEffect: 0.4
+  SFX_Normal_Wood:
+    clip:
+    - {fileID: 8300000, guid: 177cd7a328e4ff54288c041ddf047e7a, type: 3}
+    - {fileID: 8300000, guid: 1cf67128e64b01149a56948fbb6c51cf, type: 3}
+    - {fileID: 8300000, guid: fa3a942277e47f24f957b966fc1db10c, type: 3}
+    - {fileID: 8300000, guid: 212b96b2371b35747830e6c0bee519f5, type: 3}
+    - {fileID: 8300000, guid: 5a4af476b44dce743adc1e468e73a523, type: 3}
+    - {fileID: 8300000, guid: 1d9c4feebec4b774898fbd34afe525be, type: 3}
+    - {fileID: 8300000, guid: c954ce2cea3f4144080aef92df510cb1, type: 3}
+    - {fileID: 8300000, guid: 5faabd145fd95dc42b7aa0cb38f748a8, type: 3}
+    - {fileID: 8300000, guid: 2e2016fa738721e4d99dba214d926e71, type: 3}
+    - {fileID: 8300000, guid: 619b863da15ce1c4ab571269f65c31dd, type: 3}
+    - {fileID: 8300000, guid: 05990cc534e876c4a8470e2c5c5a23bd, type: 3}
+    - {fileID: 8300000, guid: cc0cb8bf2d1096349a1f460a8896e8e7, type: 3}
+    - {fileID: 8300000, guid: 17d6d24a51562ef4db66f9316580e3ac, type: 3}
+    - {fileID: 8300000, guid: 0fd1f52313f4d7246bff12c6c7332143, type: 3}
+    - {fileID: 8300000, guid: 4dd9d4faa4393ad4aa0960c8e10a633b, type: 3}
+    - {fileID: 8300000, guid: 5dadab0fd254875448c1dd674d7501be, type: 3}
+    - {fileID: 8300000, guid: 25e6da49c080f8c44b636dba88f0b068, type: 3}
+    - {fileID: 8300000, guid: 888aa73c302e3b14497d88c7c786d1c5, type: 3}
+    - {fileID: 8300000, guid: 90293babe41964943b4e333ebd79f83c, type: 3}
+    - {fileID: 8300000, guid: f00a066b2073a9b4d91e31b732958ee0, type: 3}
+    - {fileID: 8300000, guid: f889b65655fb85847b62a55e878efdf2, type: 3}
+    - {fileID: 8300000, guid: 15248ddd6ddd0e44881ba929a193af2a, type: 3}
+    - {fileID: 8300000, guid: b3cbb1ec8588dc548a4e804908898d06, type: 3}
+    - {fileID: 8300000, guid: cd0c557c19223a14e804fb8b2c8ed67b, type: 3}
+    - {fileID: 8300000, guid: 4ad581ccf2f6b3e4392fbf62f54f856a, type: 3}
+    - {fileID: 8300000, guid: 3cfc73faa02096146830022d23c1d97b, type: 3}
+    - {fileID: 8300000, guid: 10d7bbe9faaf71743a7fb065c92c6e5e, type: 3}
+    name: 
+    audioMixer: {fileID: 0}
+    volume: 1
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+    mute: 0
+    spatialBlend: 1
+    spread: 48.7
+    minDis: 1
+    maxDis: 20
+    rollOffModeLogarithmic: 1
+    rollOffModeLinear: 0
+    priority: 128
+    dopplerEffect: 0.5
+  SFX_Normal_Concrete:
+    clip:
+    - {fileID: 8300000, guid: 9307938ce1e2bc34281babcfd708b46b, type: 3}
+    - {fileID: 8300000, guid: 2667da23b91bcf34b9028a18b1f6240f, type: 3}
+    - {fileID: 8300000, guid: 0ef4f490110caf44ba2020bb6efc33a4, type: 3}
+    - {fileID: 8300000, guid: 1daa1b41e726bb24d9983510044c1981, type: 3}
+    - {fileID: 8300000, guid: f929e9f1e3a98dc489c25e0e26f97726, type: 3}
+    - {fileID: 8300000, guid: fe06e113da4855b488864f7c8951e5f6, type: 3}
+    - {fileID: 8300000, guid: 7d771f231562b8d43843723d918dade5, type: 3}
+    - {fileID: 8300000, guid: 204967259b44dbf449623b3e55bd03fd, type: 3}
+    - {fileID: 8300000, guid: dd984f51d23ffb644a4f440a565e411a, type: 3}
+    - {fileID: 8300000, guid: b093982d0a3aeb246b4822e59c867bfd, type: 3}
+    - {fileID: 8300000, guid: 1e897d9576a36e34485ea175f58d48f6, type: 3}
+    - {fileID: 8300000, guid: 75b476e5cbc1e214ea3aee1a7281e6ab, type: 3}
+    - {fileID: 8300000, guid: 28da0cae3d129f34eac415e440f27d4f, type: 3}
+    - {fileID: 8300000, guid: 9affb64bacf05f8489a6dbd0dba5397c, type: 3}
+    - {fileID: 8300000, guid: 3b8cd12e5ed9f044098c7f3eb8b124a3, type: 3}
+    - {fileID: 8300000, guid: 53e430beec7efca4ea3ef939fd769ba9, type: 3}
+    - {fileID: 8300000, guid: def00e2f99f646741a128693d93051b6, type: 3}
+    - {fileID: 8300000, guid: 702fa6e86d0e2ac4682387cba172eff9, type: 3}
+    - {fileID: 8300000, guid: 9281f7a189fb9014ca7b621f46a9aa86, type: 3}
+    - {fileID: 8300000, guid: a5b3466cee52bde4094eb40bcab9ca65, type: 3}
+    - {fileID: 8300000, guid: 527e69b7fe1c80041a7964486cbe2812, type: 3}
+    - {fileID: 8300000, guid: d45c3f843333b754899e8a2c72b5f47d, type: 3}
+    - {fileID: 8300000, guid: 99769f129ecbbae488f4f0d69514bc3d, type: 3}
+    name: 
+    audioMixer: {fileID: 0}
+    volume: 1
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+    mute: 0
+    spatialBlend: 1
+    spread: 20
+    minDis: 1
+    maxDis: 20
+    rollOffModeLogarithmic: 0
+    rollOffModeLinear: 0
+    priority: 128
+    dopplerEffect: 0.95
+  SFX_Large_Ground:
+    clip: []
+    name: 
+    audioMixer: {fileID: 0}
+    volume: 0
+    pitch: 0
+    source: {fileID: 0}
+    loop: 0
+    mute: 0
+    spatialBlend: 0
+    spread: 0
+    minDis: 0
+    maxDis: 0
+    rollOffModeLogarithmic: 0
+    rollOffModeLinear: 0
+    priority: 0
+    dopplerEffect: 0
+  SFX_Large_Wood:
+    clip: []
+    name: 
+    audioMixer: {fileID: 0}
+    volume: 0
+    pitch: 0
+    source: {fileID: 0}
+    loop: 0
+    mute: 0
+    spatialBlend: 0
+    spread: 0
+    minDis: 0
+    maxDis: 0
+    rollOffModeLogarithmic: 0
+    rollOffModeLinear: 0
+    priority: 0
+    dopplerEffect: 0
+  SFX_Large_Concrete:
+    clip: []
+    name: 
+    audioMixer: {fileID: 0}
+    volume: 0
+    pitch: 0
+    source: {fileID: 0}
+    loop: 0
+    mute: 0
+    spatialBlend: 0
+    spread: 0
+    minDis: 0
+    maxDis: 0
+    rollOffModeLogarithmic: 0
+    rollOffModeLinear: 0
+    priority: 0
+    dopplerEffect: 0

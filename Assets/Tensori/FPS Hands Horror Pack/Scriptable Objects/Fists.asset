@@ -13,11 +13,18 @@ MonoBehaviour:
   m_Name: Fists
   m_EditorClassIdentifier: 
   Stats:
+    bulletUI: {fileID: 0}
     bulletCase: {fileID: 0}
     damage: 2
     range: 1
-    MuzzleFlash: {fileID: 0}
-    ImpactMark: {fileID: 0}
+    currentBullet: 0
+    maxBullet: 0
+    totalBullet: 0
+    maxTotalBullet: 0
+    MuzzleFlash:
+    - {fileID: 0}
+    ImpactMark:
+    - {fileID: 0}
   ItemPrefab: {fileID: 0}
   HandsPivotBoneTransformName: WeaponPivot
   ItemAnimatorTimeParameter: AnimationTime
@@ -29,6 +36,8 @@ MonoBehaviour:
     AnimationEvents:
     - EventMessage: Shoot
       EventPosition: 0.5
+    - EventMessage: ShootSound
+      EventPosition: 0.05
   - HandsAnimatorAttackStateName: Fists_Hit_Secondary
     ItemAnimatorAttackStateName: Fists_Hit_Secondary
     AttackAnimationLength: 0.7
@@ -36,6 +45,8 @@ MonoBehaviour:
     AnimationEvents:
     - EventMessage: Shoot
       EventPosition: 0.4
+    - EventMessage: ShootSound
+      EventPosition: 0.05
   MovementBounceVelocityLimit: 2
   MovementBounceSpringStiffness: 10
   MovementBounceSpringDamping: 15

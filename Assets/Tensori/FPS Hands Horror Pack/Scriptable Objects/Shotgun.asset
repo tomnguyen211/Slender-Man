@@ -28,8 +28,14 @@ MonoBehaviour:
     - {fileID: 141106, guid: c69a6f3b834888c468f57ec885c39db3, type: 3}
     - {fileID: 136518, guid: 35277ee4b65d54d4199c4e0e48053745, type: 3}
     - {fileID: 161002, guid: 489aba68c9dfe9342accb1f3a0be4e5b, type: 3}
-    ImpactMark: {fileID: 4300086816366312831, guid: 3698fcc89068d4e4dbc426132521e30f,
-      type: 3}
+    ImpactMark:
+    - {fileID: 151174, guid: e3c9439885f011549a6460a1f4da82dc, type: 3}
+    - {fileID: 108086, guid: 547c2e12da8d4214098216299e70a3ba, type: 3}
+    - {fileID: 186004, guid: df6885b13dec8be4582be8c2c2219da2, type: 3}
+    - {fileID: 168394, guid: 93983eaa39ee5d4408c0b10200e234b4, type: 3}
+    - {fileID: 180772, guid: 697d9a1e52bb99d468a5d727e5a4b435, type: 3}
+    - {fileID: 142740, guid: ce4fb833f44504e48b46c3474bc747fc, type: 3}
+    - {fileID: 138412, guid: c75e5a4fa5c842546a553399e24eb22d, type: 3}
   ItemPrefab: {fileID: 9016199863953354979, guid: 7d1eacc19d031a84b8421112d860841c,
     type: 3}
   HandsPivotBoneTransformName: shotgun
@@ -44,6 +50,10 @@ MonoBehaviour:
       EventPosition: 0.043
     - EventMessage: Bullet
       EventPosition: 0.7
+    - EventMessage: shotgun_pump
+      EventPosition: 0.5
+    - EventMessage: ShootSound
+      EventPosition: 0.045
   MovementBounceVelocityLimit: 3
   MovementBounceSpringStiffness: 10
   MovementBounceSpringDamping: 15
@@ -107,3 +117,5 @@ MonoBehaviour:
       EventPosition: 0.607
     - EventMessage: ReloadShotgun
       EventPosition: 0.746
+    - EventMessage: ReloadShotgunFinish
+      EventPosition: 0.9

@@ -1,7 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Entities.UniversalDelegates;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Rendering;
+using URPGlitch.Runtime.AnalogGlitch;
+using URPGlitch.Runtime.DigitalGlitch;
 
 public class FPSHandsController : MonoBehaviour
 {
@@ -73,6 +77,7 @@ public class FPSHandsController : MonoBehaviour
     public LayerMask armorLayer;
     public LayerMask groundLayer;
     public LayerMask interactLayer;
+    public LayerMask invisibleLayer;
 
     #region Shooting
     [SerializeField] Transform bulletPoint;
@@ -105,11 +110,14 @@ public class FPSHandsController : MonoBehaviour
     #endregion
 
 
+    [SerializeField]
+    AudioManager AudioManager;
 
 
     private void Start()
     {
         _crosshair = _crosshairGameObject.GetComponent<CrosshairController>();
+        EventManager.TriggerEvent("Get_Player", DetectReference);      
     }
 
 
@@ -203,6 +211,16 @@ public class FPSHandsController : MonoBehaviour
         {
             if (!CheckAmmo())
             {
+                // Sound //
+                if (heldItemPreviousFrame.HandsPivotBoneTransformName == "handgun")
+                {
+                    Audio("pistol_empty");
+                }
+                else if (heldItemPreviousFrame.HandsPivotBoneTransformName == "shotgun")
+                {
+                    Audio("shotgun_empty");
+                }
+
                 if (CheckTotalAmmoIfThereAny())
                 {
                     StopActiveCoroutines();
@@ -554,6 +572,8 @@ public class FPSHandsController : MonoBehaviour
         }
     }
 
+    #region Events
+
     public void DebugLogAnimationEvent(string animationEvent)
     {
         switch (animationEvent)
@@ -570,11 +590,27 @@ public class FPSHandsController : MonoBehaviour
             case "ReloadShotgun":
                 ReloadShotgun();
                 break;
+            case "ShootSound":
+                TriggerAttackSound();
+                break;
+            case "shotgun_pump":
+                Audio("shotgun_pump");
+                break;
+            case "ReloadShotgunFinish":
+                Audio("shotgun_pump");
+                break;
+            case "pistol_handling":
+                Audio("pistol_handling");
+                break;
             default: break;
+            case "pistol_reload":
+                Audio("pistol_reload");
+                break;
+
         }
 
     }
-
+    #endregion
     public void ReloadHandgun()
     {
         int requestAmmo = heldItem.Stats.maxBullet - heldItem.Stats.currentBullet;
@@ -612,12 +648,22 @@ public class FPSHandsController : MonoBehaviour
         {
             stopReload = true;
         }
+
+        Audio("shotgun_reload");
     }
 
 
     public void TriggerBulletCasingAnimation()
     {
         GameObject cartridge = Instantiate(heldItemPreviousFrame.Stats.bulletCase, bulletCasing.transform.position, bulletCasing.rotation);
+        if (heldItemPreviousFrame.HandsPivotBoneTransformName == "handgun")
+        {
+            Audio("shotgun_casing");
+        }
+        else if (heldItemPreviousFrame.HandsPivotBoneTransformName == "shotgun")
+        {
+            Audio("pistol_casing");
+        }
     }
 
     public void TriggerAttackAnimation()
@@ -664,7 +710,7 @@ public class FPSHandsController : MonoBehaviour
 
             Debug.DrawRay(shootRayOrigin, DirectionRay * heldItemPreviousFrame.Stats.range, Color.red);
 
-            if (Physics.Raycast(shootRayOrigin, DirectionRay, out hit, heldItemPreviousFrame.Stats.range))
+            if (Physics.Raycast(shootRayOrigin, DirectionRay, out hit, heldItemPreviousFrame.Stats.range,~invisibleLayer))
             {
 
                 if (hit.collider.CompareTag("Enemy"))
@@ -682,17 +728,47 @@ public class FPSHandsController : MonoBehaviour
 
                     }
                 }
-                else if (hit.collider.CompareTag("Tree"))
+                else if (hit.collider.CompareTag("Tree") || hit.collider.CompareTag("Wood"))
                 {
                     float angle = Vector3.Angle(hit.normal, transform.up);
                     Quaternion startRot = Quaternion.LookRotation(hit.normal);
-                    GameObject bulletHole = Instantiate(heldItemPreviousFrame.Stats.ImpactMark, hit.point, startRot);
+                    GameObject bulletHole = Instantiate(heldItemPreviousFrame.Stats.ImpactMark[6], hit.point, startRot);
                 }
                 else if (hit.collider.CompareTag("Ground"))
                 {
-                    /*float angle = Vector3.Angle(hit.normal, transform.up);
+                    float angle = Vector3.Angle(hit.normal, transform.up);
                     Quaternion startRot = Quaternion.LookRotation(hit.normal);
-                    GameObject bulletHole = Instantiate(heldItemPreviousFrame.Stats.ImpactMark, hit.point, startRot);*/
+                    GameObject bulletHole = Instantiate(heldItemPreviousFrame.Stats.ImpactMark[2], hit.point, startRot);
+                }
+                else if (hit.collider.CompareTag("Brick"))
+                {
+                    float angle = Vector3.Angle(hit.normal, transform.up);
+                    Quaternion startRot = Quaternion.LookRotation(hit.normal);
+                    GameObject bulletHole = Instantiate(heldItemPreviousFrame.Stats.ImpactMark[0], hit.point, startRot);
+                }
+                else if (hit.collider.CompareTag("Glass"))
+                {
+                    float angle = Vector3.Angle(hit.normal, transform.up);
+                    Quaternion startRot = Quaternion.LookRotation(hit.normal);
+                    GameObject bulletHole = Instantiate(heldItemPreviousFrame.Stats.ImpactMark[3], hit.point, startRot);
+                }
+                else if (hit.collider.CompareTag("Concrete"))
+                {
+                    float angle = Vector3.Angle(hit.normal, transform.up);
+                    Quaternion startRot = Quaternion.LookRotation(hit.normal);
+                    GameObject bulletHole = Instantiate(heldItemPreviousFrame.Stats.ImpactMark[1], hit.point, startRot);
+                }
+                else if (hit.collider.CompareTag("Rock"))
+                {
+                    float angle = Vector3.Angle(hit.normal, transform.up);
+                    Quaternion startRot = Quaternion.LookRotation(hit.normal);
+                    GameObject bulletHole = Instantiate(heldItemPreviousFrame.Stats.ImpactMark[5], hit.point, startRot);
+                }
+                else // Metal
+                {
+                    float angle = Vector3.Angle(hit.normal, transform.up);
+                    Quaternion startRot = Quaternion.LookRotation(hit.normal);
+                    GameObject bulletHole = Instantiate(heldItemPreviousFrame.Stats.ImpactMark[4], hit.point, startRot);
                 }
             }
 
@@ -746,7 +822,7 @@ public class FPSHandsController : MonoBehaviour
                 var DirectionRay = handsParentTransform.TransformDirection(randX + Random.Range(-0.1f, 0.1f), randY + Random.Range(-0.1f, 0.1f), 1);
                 Debug.DrawRay(shootRayOrigin, DirectionRay * heldItemPreviousFrame.Stats.range, Color.red);
 
-                if (Physics.Raycast(shootRayOrigin, DirectionRay, out hit, heldItemPreviousFrame.Stats.range))
+                if (Physics.Raycast(shootRayOrigin, DirectionRay, out hit, heldItemPreviousFrame.Stats.range, ~invisibleLayer))
                 {
                     if (hit.collider.CompareTag("Enemy"))
                     {
@@ -764,17 +840,47 @@ public class FPSHandsController : MonoBehaviour
 
                         }
                     }
-                    else if (hit.collider.CompareTag("Tree"))
+                    else if (hit.collider.CompareTag("Tree") || hit.collider.CompareTag("Wood"))
                     {
                         float angle = Vector3.Angle(hit.normal, transform.up);
                         Quaternion startRot = Quaternion.LookRotation(hit.normal);
-                        GameObject bulletHole = Instantiate(heldItemPreviousFrame.Stats.ImpactMark, hit.point, startRot);
+                        GameObject bulletHole = Instantiate(heldItemPreviousFrame.Stats.ImpactMark[6], hit.point, startRot);
                     }
                     else if (hit.collider.CompareTag("Ground"))
                     {
-                        /*float angle = Vector3.Angle(hit.normal, transform.up);
+                        float angle = Vector3.Angle(hit.normal, transform.up);
                         Quaternion startRot = Quaternion.LookRotation(hit.normal);
-                        GameObject bulletHole = Instantiate(heldItemPreviousFrame.Stats.ImpactMark, hit.point, startRot);*/
+                        GameObject bulletHole = Instantiate(heldItemPreviousFrame.Stats.ImpactMark[2], hit.point, startRot);
+                    }
+                    else if (hit.collider.CompareTag("Brick"))
+                    {
+                        float angle = Vector3.Angle(hit.normal, transform.up);
+                        Quaternion startRot = Quaternion.LookRotation(hit.normal);
+                        GameObject bulletHole = Instantiate(heldItemPreviousFrame.Stats.ImpactMark[0], hit.point, startRot);
+                    }
+                    else if (hit.collider.CompareTag("Glass"))
+                    {
+                        float angle = Vector3.Angle(hit.normal, transform.up);
+                        Quaternion startRot = Quaternion.LookRotation(hit.normal);
+                        GameObject bulletHole = Instantiate(heldItemPreviousFrame.Stats.ImpactMark[3], hit.point, startRot);
+                    }
+                    else if (hit.collider.CompareTag("Concrete"))
+                    {
+                        float angle = Vector3.Angle(hit.normal, transform.up);
+                        Quaternion startRot = Quaternion.LookRotation(hit.normal);
+                        GameObject bulletHole = Instantiate(heldItemPreviousFrame.Stats.ImpactMark[1], hit.point, startRot);
+                    }
+                    else if (hit.collider.CompareTag("Rock"))
+                    {
+                        float angle = Vector3.Angle(hit.normal, transform.up);
+                        Quaternion startRot = Quaternion.LookRotation(hit.normal);
+                        GameObject bulletHole = Instantiate(heldItemPreviousFrame.Stats.ImpactMark[5], hit.point, startRot);
+                    }
+                    else // Metal
+                    {
+                        float angle = Vector3.Angle(hit.normal, transform.up);
+                        Quaternion startRot = Quaternion.LookRotation(hit.normal);
+                        GameObject bulletHole = Instantiate(heldItemPreviousFrame.Stats.ImpactMark[4], hit.point, startRot);
                     }
                 }
             }
@@ -821,7 +927,7 @@ public class FPSHandsController : MonoBehaviour
                 }
             }
 
-            if (Physics.Raycast(shootRayOrigin, handsParentTransform.forward, out hit, heldItemPreviousFrame.Stats.range))
+            if (Physics.Raycast(shootRayOrigin, handsParentTransform.forward, out hit, heldItemPreviousFrame.Stats.range, ~invisibleLayer))
             {
                 /*if (hit.collider.CompareTag("Ground"))
                 {
@@ -842,7 +948,7 @@ public class FPSHandsController : MonoBehaviour
             shootMaxCount = 0;
 
 
-            if (Physics.Raycast(shootRayOrigin, handsParentTransform.forward, out hit, heldItemPreviousFrame.Stats.range))
+            if (Physics.Raycast(shootRayOrigin, handsParentTransform.forward, out hit, heldItemPreviousFrame.Stats.range, ~invisibleLayer))
             {
 
                 if (hit.collider.CompareTag("Enemy"))
@@ -879,7 +985,7 @@ public class FPSHandsController : MonoBehaviour
             shootMaxCount = 0;
 
 
-            if (Physics.Raycast(shootRayOrigin, handsParentTransform.forward, out hit, heldItemPreviousFrame.Stats.range))
+            if (Physics.Raycast(shootRayOrigin, handsParentTransform.forward, out hit, heldItemPreviousFrame.Stats.range, ~invisibleLayer))
             {
 
                 if (hit.collider.CompareTag("Enemy"))
@@ -905,9 +1011,33 @@ public class FPSHandsController : MonoBehaviour
             }
 
             _crosshair.SetScale(CrossHairScale.Shoot, 1f);
-
         }
     }
+
+    public void TriggerAttackSound()
+    {
+        if (heldItemPreviousFrame.HandsPivotBoneTransformName == "handgun")
+        {
+            Audio("pistol_shoot");
+        }
+        else if (heldItemPreviousFrame.HandsPivotBoneTransformName == "shotgun")
+        {
+            Audio("shotgun_shoot");
+        }
+        else if (heldItemPreviousFrame.HandsPivotBoneTransformName == "fireaxe")
+        {          
+            Audio("axe_whoop");
+        }
+        else if (heldItemPreviousFrame.HandsPivotBoneTransformName == "kombat knife")
+        {          
+            Audio("knife_whoop");
+        }
+        else if (heldItemPreviousFrame.HandsPivotBoneTransformName == "WeaponPivot")
+        {          
+            Audio("punch_whoops");
+        }
+    }
+
 
 
     private void UpdateAmmoUI()
@@ -962,6 +1092,7 @@ public class FPSHandsController : MonoBehaviour
 
                                 UpdateAmmoUI();
                                 hit.collider.gameObject.SetActive(false);
+
                             }
                             else
                             {
@@ -969,6 +1100,12 @@ public class FPSHandsController : MonoBehaviour
                                 SetHeldItem(FPSItemSelector.SelectionOptions[i].ItemAsset);
                                 hit.collider.gameObject.SetActive(false);
                             }
+
+                            if (hit.transform.TryGetComponent<TriggerEvent>(out TriggerEvent trigger))
+                            {
+                                trigger.eventTrigger?.Invoke();
+                            }
+
                             break;
                         }
 
@@ -998,6 +1135,12 @@ public class FPSHandsController : MonoBehaviour
                                 SetHeldItem(FPSItemSelector.SelectionOptions[i].ItemAsset);
                                 hit.collider.gameObject.SetActive(false);
                             }
+
+                            if (hit.transform.TryGetComponent<TriggerEvent>(out TriggerEvent trigger))
+                            {
+                                trigger.eventTrigger?.Invoke();
+                            }
+
                             break;
                         }
 
@@ -1019,6 +1162,12 @@ public class FPSHandsController : MonoBehaviour
                                 SetHeldItem(FPSItemSelector.SelectionOptions[i].ItemAsset);
                                 hit.collider.gameObject.SetActive(false);
                             }
+
+                            if (hit.transform.TryGetComponent<TriggerEvent>(out TriggerEvent trigger))
+                            {
+                                trigger.eventTrigger?.Invoke();
+                            }
+
                             break;
                         }
 
@@ -1040,11 +1189,20 @@ public class FPSHandsController : MonoBehaviour
                                 SetHeldItem(FPSItemSelector.SelectionOptions[i].ItemAsset);
                                 hit.collider.gameObject.SetActive(false);
                             }
+
+                            if (hit.transform.TryGetComponent<TriggerEvent>(out TriggerEvent trigger))
+                            {
+                                trigger.eventTrigger?.Invoke();
+                            }
+
                             break;
                         }
 
                     }
                 }
+
+                Audio("pickup");
+
             }
             else if (hit.collider.CompareTag("Medicine"))
             {
@@ -1054,6 +1212,14 @@ public class FPSHandsController : MonoBehaviour
                     hit.collider.gameObject.SetActive(false);
                     GameManager.Instance.CharacterBar.UpdateUHealth(healthPack);
                 }
+
+                if (hit.transform.TryGetComponent<TriggerEvent>(out TriggerEvent trigger))
+                {
+                    trigger.eventTrigger?.Invoke();
+                }
+
+                Audio("pickup");
+
             }
             else if (hit.collider.CompareTag("Battery"))
             {
@@ -1062,7 +1228,15 @@ public class FPSHandsController : MonoBehaviour
                     battery++;
                     hit.collider.gameObject.SetActive(false);
                     GameManager.Instance.CharacterBar.UpdateUHealth(battery);
+
+                    if (hit.transform.TryGetComponent<TriggerEvent>(out TriggerEvent trigger))
+                    {
+                        trigger.eventTrigger?.Invoke();
+                    }
                 }
+
+                Audio("pickup");
+
             }
             else if (hit.collider.CompareTag("Quest"))
             {
@@ -1070,7 +1244,15 @@ public class FPSHandsController : MonoBehaviour
                 {
                     EventManager.TriggerEvent("QuestItemCheck", hit.collider.name);
                     hit.collider.GetComponent<PickupItem_Highlight>().Interact();
+
+                    if (hit.transform.TryGetComponent<TriggerEvent>(out TriggerEvent trigger))
+                    {
+                        trigger.eventTrigger?.Invoke();
+                    }
                 }
+
+                Audio("pickup");
+
             }
             else if (hit.collider.CompareTag("Ammo"))
             {
@@ -1089,10 +1271,19 @@ public class FPSHandsController : MonoBehaviour
 
                             UpdateAmmoUI();
                             hit.collider.gameObject.SetActive(false);
+
+                            if (hit.transform.TryGetComponent<TriggerEvent>(out TriggerEvent trigger))
+                            {
+                                trigger.eventTrigger?.Invoke();
+                            }
+
                             break;
                         }
 
                     }
+
+                    Audio("pickup");
+
                 }
                 else if (hit.collider.name == "ShotgunBullet")
                 {
@@ -1109,10 +1300,18 @@ public class FPSHandsController : MonoBehaviour
 
                             UpdateAmmoUI();
                             hit.collider.gameObject.SetActive(false);
+
+                            if (hit.transform.TryGetComponent<TriggerEvent>(out TriggerEvent trigger))
+                            {
+                                trigger.eventTrigger?.Invoke();
+                            }
+
                             break;
                         }
-
                     }
+
+                    Audio("pickup");
+
                 }
             }
             /*else if (hit.collider.CompareTag("Ground"))
@@ -1122,11 +1321,12 @@ public class FPSHandsController : MonoBehaviour
                 GameObject bulletHole = Instantiate(heldItemPreviousFrame.Stats.ImpactMark, hit.point, startRot);
             }*/
         }
+
     }
 
     public void Heal()
     {
-        Debug.Log("Passed");
+        Audio("heal");
         healingCoroutine = StartCoroutine(Healing_Coroutine());
         healthPack--;
         GameManager.Instance.CharacterBar.UpdateUHealth(healthPack);
@@ -1166,6 +1366,7 @@ public class FPSHandsController : MonoBehaviour
             else
             {
                 FlashLight.SetActive(false);
+                Audio("flash_turnOff");
             }
         }
 
@@ -1173,16 +1374,35 @@ public class FPSHandsController : MonoBehaviour
         {
             if(isFlash)
             {
+                Audio("flash_turnOff");
                 FlashLight.SetActive(false);
                 StopCoroutine(flashingCoroutine);
                 flashingCoroutine = null;
             }
             else
             {
+                Audio("flash_turnOn");
                 FlashLight.SetActive(true);
                 flashingCoroutine = StartCoroutine(Flashing_Coroutine());
-
             }
+        }
+
+        if(isFlash)
+        {
+            Vector3 shootRayOrigin = handsParentTransform.GetComponent<Camera>().ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0f));
+            RaycastHit hit;
+
+            if (Physics.Raycast(shootRayOrigin, handsParentTransform.forward, out hit, 1000, armorLayer))
+            {
+                if (hit.collider.CompareTag("Slender"))
+                {
+                    if (hit.transform.TryGetComponent<IDamage>(out IDamage damage))
+                    {
+                        damage.Damage(8,DetectReference);
+                    }
+                }
+            }
+
         }
     }
 
@@ -1203,5 +1423,209 @@ public class FPSHandsController : MonoBehaviour
         }
         flashingCoroutine = null;
     }
+
+    public void Audio(string sound)
+    {
+        switch (sound)
+        {
+            case "shotgun_shoot":
+                switch (Random.Range(1, 5))
+                {
+                    case 1:
+                        AudioManager.Play("shotgun_shoot_V1");
+                        break;
+                    case 2:
+                        AudioManager.Play("shotgun_shoot_V2");
+                        break;
+                    case 3:
+                        AudioManager.Play("shotgun_shoot_V3");
+                        break;
+                    case 4:
+                        AudioManager.Play("shotgun_shoot_V4");
+                        break;
+                }
+                break;
+            case "shotgun_pump":
+                AudioManager.Play("shotgun_pump");
+                break;
+            case "shotgun_empty":
+                AudioManager.Play("shotgun_empty");
+                break;
+            case "shotgun_reload":
+                switch (Random.Range(1, 9))
+                {
+                    case 1:
+                        AudioManager.Play("shotgun_reload_V1");
+                        break;
+                    case 2:
+                        AudioManager.Play("shotgun_reload_V2");
+                        break;
+                    case 3:
+                        AudioManager.Play("shotgun_reload_V3");
+                        break;
+                    case 4:
+                        AudioManager.Play("shotgun_reload_V4");
+                        break;
+                    case 5:
+                        AudioManager.Play("shotgun_reload_V5");
+                        break;
+                    case 6:
+                        AudioManager.Play("shotgun_reload_V6");
+                        break;
+                    case 7:
+                        AudioManager.Play("shotgun_reload_V7");
+                        break;
+                    case 8:
+                        AudioManager.Play("shotgun_reload_V8");
+                        break;
+                }
+                break;
+            case "shotgun_casing":
+                switch (Random.Range(1, 5))
+                {
+                    case 1:
+                        AudioManager.Play("shotgun_casing_V1");
+                        break;
+                    case 2:
+                        AudioManager.Play("shotgun_casing_V2");
+                        break;
+                    case 3:
+                        AudioManager.Play("shotgun_casing_V3");
+                        break;
+                    case 4:
+                        AudioManager.Play("shotgun_casing_V4");
+                        break;
+                }
+                break;
+            case "pistol_shoot":
+                switch (Random.Range(1, 5))
+                {
+                    case 1:
+                        AudioManager.Play("pistol_shoot_V1");
+                        break;
+                    case 2:
+                        AudioManager.Play("pistol_shoot_V2");
+                        break;
+                    case 3:
+                        AudioManager.Play("pistol_shoot_V3");
+                        break;
+                    case 4:
+                        AudioManager.Play("pistol_shoot_V4");
+                        break;
+                }
+                break;
+            case "pistol_empty":
+                AudioManager.Play("pistol_empty");
+                break;
+            case "pistol_reload":
+                AudioManager.Play("pistol_reload");
+                break;
+            case "pistol_handling":
+                AudioManager.Play("pistol_handling");
+                break;
+            case "pistol_casing":
+                switch (Random.Range(1, 5))
+                {
+                    case 1:
+                        AudioManager.Play("pistol_casing_V1");
+                        break;
+                    case 2:
+                        AudioManager.Play("pistol_casing_V2");
+                        break;
+                    case 3:
+                        AudioManager.Play("pistol_casing_V3");
+                        break;
+                    case 4:
+                        AudioManager.Play("pistol_casing_V4");
+                        break;
+                }
+                break;
+            case "punch_whoops":
+                switch (Random.Range(1, 4))
+                {
+                    case 1:
+                        AudioManager.Play("punch_whoops_V1");
+                        break;
+                    case 2:
+                        AudioManager.Play("punch_whoops_V2");
+                        break;
+                    case 3:
+                        AudioManager.Play("punch_whoops_V3");
+                        break;
+                }
+                break;
+            case "pickup":
+                switch (Random.Range(1, 3))
+                {
+                    case 1:
+                        AudioManager.Play("pickup_V1");
+                        break;
+                    case 2:
+                        AudioManager.Play("pickup_V2");
+                        break;
+                }
+                break;
+            case "knife_whoop":
+                switch (Random.Range(1, 6))
+                {
+                    case 1:
+                        AudioManager.Play("knife_whoop_V1");
+                        break;
+                    case 2:
+                        AudioManager.Play("knife_whoop_V2");
+                        break;
+                    case 3:
+                        AudioManager.Play("knife_whoop_V3");
+                        break;
+                    case 4:
+                        AudioManager.Play("knife_whoop_V4");
+                        break;
+                    case 5:
+                        AudioManager.Play("knife_whoop_V5");
+                        break;
+                }
+                break;
+            case "heal":
+                switch (Random.Range(1, 4))
+                {
+                    case 1:
+                        AudioManager.Play("heal_V1");
+                        break;
+                    case 2:
+                        AudioManager.Play("heal_V2");
+                        break;
+                    case 3:
+                        AudioManager.Play("heal_V3");
+                        break;
+                }
+                break;
+            case "flash_turnOn":
+                AudioManager.Play("flash_turnOn");
+                break;
+            case "flash_turnOff":
+                AudioManager.Play("flash_turnOff");
+                break;
+            case "axe_whoop":
+                switch (Random.Range(1, 5))
+                {
+                    case 1:
+                        AudioManager.Play("axe_whoop_V1");
+                        break;
+                    case 2:
+                        AudioManager.Play("axe_whoop_V2");
+                        break;
+                    case 3:
+                        AudioManager.Play("axe_whoop_V3");
+                        break;
+                    case 4:
+                        AudioManager.Play("axe_whoop_V4");
+                        break;
+                }
+                break;
+        }
+    }
+
+
+
 }
 

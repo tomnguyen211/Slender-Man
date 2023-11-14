@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1138486601779226225}
   - component: {fileID: 5302610471287329024}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Reception_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24,15 +24,16 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 326342905849969867}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3555318069491458532}
   - {fileID: 9088136553418701062}
   - {fileID: 9181507627883994231}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!205 &5302610471287329024
 LODGroup:
@@ -79,7 +80,7 @@ GameObject:
   - component: {fileID: 4890607047167471842}
   - component: {fileID: 3603692957098911141}
   - component: {fileID: 9149575841700041608}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Reception_Door_LOD0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -93,14 +94,15 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 520480077900396665}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.0009176731, y: 0, z: 1.9156724}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5162974100868099560}
   - {fileID: 7334111127473139962}
   m_Father: {fileID: 1138486601779226225}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &3269535408449037597
 MeshFilter:
@@ -121,6 +123,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -160,9 +163,17 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 520480077900396665}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 1
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 2
+  serializedVersion: 3
   m_Size: {x: 2.1815343, y: 2.1024349, z: 1.6965889}
   m_Center: {x: 0.12316823, y: 1.0512174, z: -0.5052696}
 --- !u!114 &4890607047167471842
@@ -177,8 +188,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4162366dd8f897d4da8955cfc0504b1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Teleport_Building: {fileID: 0}
+  teleportDoor: 0
+  Teleport_Outside: {fileID: 0}
+  Teleport_Inside: {fileID: 0}
+  trig: 0
+  open: 0
   smooth: 2
   DoorOpenAngle: 90
+  isOpen: 0
   txt: {fileID: 0}
 --- !u!65 &3603692957098911141
 BoxCollider:
@@ -188,9 +206,17 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 520480077900396665}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 2
+  serializedVersion: 3
   m_Size: {x: 0.12293601, y: 2.1024349, z: 1.1160074}
   m_Center: {x: 0.046967387, y: 1.0512174, z: -0.5419963}
 --- !u!114 &9149575841700041608
@@ -205,8 +231,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4162366dd8f897d4da8955cfc0504b1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Teleport_Building: {fileID: 0}
+  teleportDoor: 0
+  Teleport_Outside: {fileID: 0}
+  Teleport_Inside: {fileID: 0}
+  trig: 0
+  open: 0
   smooth: 2
   DoorOpenAngle: 90
+  isOpen: 0
   txt: {fileID: 8057050384760974268, guid: c129f1f930e536e4980cc7ddc2937399, type: 3}
 --- !u!1 &1086514340768499050
 GameObject:
@@ -219,7 +252,7 @@ GameObject:
   - component: {fileID: 9181507627883994231}
   - component: {fileID: 4838612078529035565}
   - component: {fileID: 5017214599054364799}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Reception_LOD1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -233,12 +266,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1086514340768499050}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1138486601779226225}
-  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &4838612078529035565
 MeshFilter:
@@ -259,6 +293,7 @@ MeshRenderer:
   m_CastShadows: 2
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -305,7 +340,7 @@ GameObject:
   - component: {fileID: 596180447011717520}
   - component: {fileID: 596180447011717535}
   - component: {fileID: 4879636462110004107}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Reception_LOD0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -319,12 +354,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1670270642023128627}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1138486601779226225}
-  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &7665825794347225361
 MeshFilter:
@@ -345,6 +381,7 @@ MeshRenderer:
   m_CastShadows: 2
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -385,9 +422,17 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1670270642023128627}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 2
+  serializedVersion: 3
   m_Size: {x: 0.28754747, y: 3.710228, z: 2.8302236}
   m_Center: {x: 0.1122486, y: 1.8538752, z: -0.5848887}
 --- !u!65 &596180447011717535
@@ -398,9 +443,17 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1670270642023128627}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 2
+  serializedVersion: 3
   m_Size: {x: 0.27067745, y: 1.5226669, z: 1.2017288}
   m_Center: {x: 0.12068361, y: 2.9476557, z: 1.3991356}
 --- !u!65 &4879636462110004107
@@ -411,9 +464,17 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1670270642023128627}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 2
+  serializedVersion: 3
   m_Size: {x: 1.0733771, y: 0.89991605, z: 2.7832341}
   m_Center: {x: -0.28066623, y: 0.4487192, z: -0.6083834}
 --- !u!1 &3412748292278066676
@@ -427,7 +488,7 @@ GameObject:
   - component: {fileID: 7334111127473139962}
   - component: {fileID: 2010572541305602480}
   - component: {fileID: 6291821231986399729}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Reception_Door_LOD2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -441,12 +502,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3412748292278066676}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.002052784, y: 0.0022785002, z: -0.010107117}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3555318069491458532}
-  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &2010572541305602480
 MeshFilter:
@@ -467,6 +529,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -509,7 +572,7 @@ GameObject:
   - component: {fileID: 5162974100868099560}
   - component: {fileID: 2654280950705598946}
   - component: {fileID: 8300838403897683951}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Reception_Door_LOD1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -523,12 +586,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7919262808493097688}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 7.4505804e-11, y: 0, z: 0.00000015258789}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3555318069491458532}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &2654280950705598946
 MeshFilter:
@@ -549,6 +613,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1

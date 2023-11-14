@@ -28,8 +28,14 @@ MonoBehaviour:
     - {fileID: 153266, guid: 39b2a3d1ecfa5614b97e75a9b5561f21, type: 3}
     - {fileID: 160582, guid: 8ff371e17619a504b9822fc6a2facdb2, type: 3}
     - {fileID: 183908, guid: fa6d29df930056640bf15fb9b6a54e4a, type: 3}
-    ImpactMark: {fileID: 4300086816366312831, guid: 3698fcc89068d4e4dbc426132521e30f,
-      type: 3}
+    ImpactMark:
+    - {fileID: 151174, guid: e3c9439885f011549a6460a1f4da82dc, type: 3}
+    - {fileID: 108086, guid: 547c2e12da8d4214098216299e70a3ba, type: 3}
+    - {fileID: 186004, guid: df6885b13dec8be4582be8c2c2219da2, type: 3}
+    - {fileID: 168394, guid: 93983eaa39ee5d4408c0b10200e234b4, type: 3}
+    - {fileID: 180772, guid: 697d9a1e52bb99d468a5d727e5a4b435, type: 3}
+    - {fileID: 142740, guid: ce4fb833f44504e48b46c3474bc747fc, type: 3}
+    - {fileID: 138412, guid: c75e5a4fa5c842546a553399e24eb22d, type: 3}
   ItemPrefab: {fileID: 4259820314644530675, guid: b8fc9818562b00146b2b1cd0c52b2560,
     type: 3}
   HandsPivotBoneTransformName: handgun
@@ -44,6 +50,10 @@ MonoBehaviour:
       EventPosition: 0.064
     - EventMessage: Bullet
       EventPosition: 0.08
+    - EventMessage: ShootSound
+      EventPosition: 0.064
+    - EventMessage: pistol_handling
+      EventPosition: 0.07
   MovementBounceVelocityLimit: 4
   MovementBounceSpringStiffness: 10
   MovementBounceSpringDamping: 10
@@ -98,4 +108,6 @@ MonoBehaviour:
     AnimationLength: 1.8
     AnimationEvents:
     - EventMessage: ReloadHandgun
+      EventPosition: 0.95
+    - EventMessage: pistol_reload
       EventPosition: 0.95

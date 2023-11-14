@@ -143,6 +143,7 @@ GameObject:
   - component: {fileID: 5603801458181809910}
   - component: {fileID: 5269116916781947691}
   - component: {fileID: 5835282884053238690}
+  - component: {fileID: 6451111448650105774}
   m_Layer: 8
   m_Name: Vendigo
   m_TagString: Enemy
@@ -170,6 +171,7 @@ Transform:
   - {fileID: 2781342335825253512}
   - {fileID: 4567454362152844176}
   - {fileID: 8354291892620025482}
+  - {fileID: 2591206114222048521}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &6950309448645892403
@@ -210,8 +212,8 @@ MonoBehaviour:
   detailedGizmos: 0
   startEndModifier:
     addPoints: 0
-    exactStartPoint: 3
-    exactEndPoint: 3
+    exactStartPoint: 0
+    exactEndPoint: 0
     useRaycasting: 0
     mask:
       serializedVersion: 2
@@ -234,14 +236,14 @@ CharacterController:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8192
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
   m_Height: 2.25
-  m_Radius: 0.2
+  m_Radius: 0.02
   m_SlopeLimit: 45
   m_StepOffset: 0.1
   m_SkinWidth: 0.02
@@ -283,6 +285,8 @@ MonoBehaviour:
   CheckPoint: 0
   SpawnDecal: {fileID: 8074018239102449137}
   beingStun: 0
+  AudioManager: {fileID: 2824627402009233046}
+  MovementManager: {fileID: 6451111448650105774}
   D_AttackState: {fileID: 11400000, guid: 0cce76c4e73d4a643a638cb454acda4c, type: 2}
   D_IdleState: {fileID: 11400000, guid: 53161f0b1825d6b4aa9539831fc80cef, type: 2}
   D_DeadState: {fileID: 11400000, guid: 89d7ccb240ce8f945b50e1f444c942e4, type: 2}
@@ -321,6 +325,29 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 96
   m_CollisionDetection: 0
+--- !u!114 &6451111448650105774
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 776604162647196950}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61b5d496fb6370149a867884410847c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  entityBodyTag: 0
+  volume: 0.6
+  Movement_VFX_SFX: {fileID: 11400000, guid: f730f65929cda23409e3898cca9d27f0, type: 2}
+  CustomSound: 0
+  customSurface_SFX: []
+  paceTimer: 0.4
+  paceTimerRandom: 0.1
+  groundCheck: {fileID: 8354291892620025482}
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!1 &813451597199529445
 GameObject:
   m_ObjectHideFlags: 0
@@ -424,7 +451,7 @@ MonoBehaviour:
   damaged_Object: []
   area_damaged_Object: []
   damage_Enable: 1
-  weapon_Damage_MASTER: 20
+  weapon_Damage_MASTER: 35
   weapon_Damage: 0
   fireChance_MASTER: 0
   fireChance: 0
@@ -1253,6 +1280,240 @@ Transform:
   - {fileID: 2450479292365306388}
   m_Father: {fileID: 3164874479186229816}
   m_LocalEulerAnglesHint: {x: 1.2262554, y: -164.34804, z: -27.638985}
+--- !u!1 &4502413575741395526
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2591206114222048521}
+  - component: {fileID: 2824627402009233046}
+  m_Layer: 8
+  m_Name: AudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2591206114222048521
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4502413575741395526}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8421337415270741865}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2824627402009233046
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4502413575741395526}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8eecbecc71e93b4489a446d77d0bc68d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sounds:
+  - name: Attack_V1
+    clip: {fileID: 8300000, guid: 11b26c6cc05ea174684831758e197a7f, type: 3}
+    audioMixer: {fileID: 0}
+    volume: 1
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+    mute: 0
+    spatialBlend: 1
+    spread: 0
+    minDis: 0
+    maxDis: 0
+    rollOffModeLogarithmic: 1
+    rollOffModeLinear: 0
+    priority: 0
+    dopplerEffect: 0
+    delaySound: 0
+    delayTime: 0
+    fadingSound: 0
+    fadingTime: 0
+    fading_delayTime: 0
+  - name: Attack_V2
+    clip: {fileID: 8300000, guid: eb77335ef7808fa4f96ec06f2d4ecd2e, type: 3}
+    audioMixer: {fileID: 0}
+    volume: 1
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+    mute: 0
+    spatialBlend: 1
+    spread: 0
+    minDis: 0
+    maxDis: 0
+    rollOffModeLogarithmic: 1
+    rollOffModeLinear: 0
+    priority: 0
+    dopplerEffect: 0
+    delaySound: 0
+    delayTime: 0
+    fadingSound: 0
+    fadingTime: 0
+    fading_delayTime: 0
+  - name: Attack_V3
+    clip: {fileID: 8300000, guid: 410e37cfc46035240b10c1ee5601b800, type: 3}
+    audioMixer: {fileID: 0}
+    volume: 1
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+    mute: 0
+    spatialBlend: 1
+    spread: 0
+    minDis: 0
+    maxDis: 0
+    rollOffModeLogarithmic: 1
+    rollOffModeLinear: 0
+    priority: 0
+    dopplerEffect: 0
+    delaySound: 0
+    delayTime: 0
+    fadingSound: 0
+    fadingTime: 0
+    fading_delayTime: 0
+  - name: Attack_V4
+    clip: {fileID: 8300000, guid: e6d61cd9989bc4b418849a7f9dfa0c81, type: 3}
+    audioMixer: {fileID: 0}
+    volume: 1
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+    mute: 0
+    spatialBlend: 1
+    spread: 0
+    minDis: 0
+    maxDis: 0
+    rollOffModeLogarithmic: 1
+    rollOffModeLinear: 0
+    priority: 0
+    dopplerEffect: 0
+    delaySound: 0
+    delayTime: 0
+    fadingSound: 0
+    fadingTime: 0
+    fading_delayTime: 0
+  - name: Attack_V5
+    clip: {fileID: 8300000, guid: e6d61cd9989bc4b418849a7f9dfa0c81, type: 3}
+    audioMixer: {fileID: 0}
+    volume: 1
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+    mute: 0
+    spatialBlend: 1
+    spread: 0
+    minDis: 0
+    maxDis: 0
+    rollOffModeLogarithmic: 1
+    rollOffModeLinear: 0
+    priority: 0
+    dopplerEffect: 0
+    delaySound: 0
+    delayTime: 0
+    fadingSound: 0
+    fadingTime: 0
+    fading_delayTime: 0
+  - name: Dead
+    clip: {fileID: 8300000, guid: 161cebe6a47535e43b0351253520e096, type: 3}
+    audioMixer: {fileID: 0}
+    volume: 0.8
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+    mute: 0
+    spatialBlend: 1
+    spread: 0
+    minDis: 0
+    maxDis: 0
+    rollOffModeLogarithmic: 1
+    rollOffModeLinear: 0
+    priority: 0
+    dopplerEffect: 0
+    delaySound: 0
+    delayTime: 0
+    fadingSound: 0
+    fadingTime: 0
+    fading_delayTime: 0
+  - name: Roar
+    clip: {fileID: 8300000, guid: 05b96792bc44b4c4bb75c2333732405a, type: 3}
+    audioMixer: {fileID: 0}
+    volume: 0.8
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+    mute: 0
+    spatialBlend: 1
+    spread: 0
+    minDis: 0
+    maxDis: 0
+    rollOffModeLogarithmic: 1
+    rollOffModeLinear: 0
+    priority: 0
+    dopplerEffect: 0
+    delaySound: 0
+    delayTime: 0
+    fadingSound: 0
+    fadingTime: 0
+    fading_delayTime: 0
+  - name: Idle_V1
+    clip: {fileID: 8300000, guid: b1b65ce6589e8364db177af4e9f7dabd, type: 3}
+    audioMixer: {fileID: 0}
+    volume: 0.8
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+    mute: 0
+    spatialBlend: 1
+    spread: 0
+    minDis: 0
+    maxDis: 0
+    rollOffModeLogarithmic: 1
+    rollOffModeLinear: 0
+    priority: 0
+    dopplerEffect: 0
+    delaySound: 0
+    delayTime: 0
+    fadingSound: 0
+    fadingTime: 0
+    fading_delayTime: 0
+  - name: Idle_V2
+    clip: {fileID: 8300000, guid: 94d994ec8f36f3a4ea34ceede0e5babe, type: 3}
+    audioMixer: {fileID: 0}
+    volume: 0.8
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+    mute: 0
+    spatialBlend: 1
+    spread: 0
+    minDis: 0
+    maxDis: 0
+    rollOffModeLogarithmic: 1
+    rollOffModeLinear: 0
+    priority: 0
+    dopplerEffect: 0
+    delaySound: 0
+    delayTime: 0
+    fadingSound: 0
+    fadingTime: 0
+    fading_delayTime: 0
 --- !u!1 &4699155094938269176
 GameObject:
   m_ObjectHideFlags: 0

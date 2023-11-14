@@ -39,11 +39,7 @@ public class Zombie_1_Entity : Entity,IDamage,IDetect
         Zombie_1_Dead = new Zombie_1_Dead(this, stateMachine, "Dead", false, D_DeadState, this); ;
         Zombie_1_Damage = new Zombie_1_Damage(this, stateMachine, "Damage", false, this);
         Zombie_1_Shout = new Zombie_1_Shout(this, stateMachine, "Shout", this);
-
-        stateMachine.Initialize(Zombie_1_Idle);
-
-       
-
+   
     }
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
@@ -54,8 +50,12 @@ public class Zombie_1_Entity : Entity,IDamage,IDetect
     public override void Start()
     {
         base.Start();
+
+        stateMachine.Initialize(Zombie_1_Idle);
+
         seeker.pathCallback += OnPathComplete;
         DetectionTrigger += DisableDetection;
+        MovementManager.isMoving += IsMoving;
 
     }
 
@@ -63,6 +63,7 @@ public class Zombie_1_Entity : Entity,IDamage,IDetect
     {
         seeker.pathCallback -= OnPathComplete;
         DetectionTrigger -= DisableDetection;
+        MovementManager.isMoving -= IsMoving;
 
     }
 
@@ -166,9 +167,11 @@ public class Zombie_1_Entity : Entity,IDamage,IDetect
         // Direction to the next waypoint
         // Normalize it so that it has a length of 1 world unit
         dir = (path.vectorPath[currentWaypoint] - transform.position).normalized;
+
         // Multiply the direction by our desired speed to get a velocity
         Vector3 velocity = speed * speedFactor * dir;
 
+        dir.Set(dir.x, 0, dir.z);
         Quaternion rot = Quaternion.LookRotation(dir, Vector3.up);
 
         /* float newRotX = Mathf.Clamp(rot.x,)*/
@@ -182,12 +185,12 @@ public class Zombie_1_Entity : Entity,IDamage,IDetect
 
             float leftRight = AngleDir(transform.forward, enemyDir, transform.up);
 
-            if (leftRight == 1)
+            /*if (leftRight == 1)
                 anim.SetFloat("xDir", angle);
             else if (leftRight == -1)
                 anim.SetFloat("xDir", -angle);
             else
-                anim.SetFloat("xDir", 0);
+                anim.SetFloat("xDir", 0);*/
 
 
 
@@ -256,10 +259,94 @@ public class Zombie_1_Entity : Entity,IDamage,IDetect
         DetectionCheck = false;
         CanSeePlayer = false;
         stateMachine.ChangeState(Zombie_1_Idle);
-        if(!disablePatrol)
-            isReturning = true;
+       /* if(!disablePatrol)
+            isReturning = true;*/
+        isActive = false;
         enemy = null;
 
+    }
+
+    public void TriggerDetectionEvent()
+    {
+        enemy = GameManager.Instance.Player;
+        DetectionTimer = entityData.detectionTimer;
+        DetectionCheck = true;
+        stateMachine.ChangeState(Zombie_1_Shout);
+        Zombie_1_Idle.isIdleTimeOver = true;
+    }
+
+    private bool IsMoving()
+    {
+        if (stateMachine.CurrentState.animBoolName == Zombie_1_Move.animBoolName || stateMachine.CurrentState.animBoolName == Zombie_1_Patrol.animBoolName)
+            return true;
+        return false;
+    }
+
+    public override void Audio(string sound)
+    {
+        switch (sound)
+        {
+            case "Attack":
+                switch (Random.Range(1, 6))
+                {
+                    case 1:
+                        AudioManager.Play("Attack_V1");
+                        break;
+                    case 2:
+                        AudioManager.Play("Attack_V2");
+                        break;
+                    case 3:
+                        AudioManager.Play("Attack_V3");
+                        break;
+                    case 4:
+                        AudioManager.Play("Attack_V4");
+                        break;
+                    case 5:
+                        AudioManager.Play("Attack_V5");
+                        break;
+                }
+                break;
+            case "Dead":
+                switch (Random.Range(1, 3))
+                {
+                    case 1:
+                        AudioManager.Play("Dead_V1");
+                        break;
+                    case 2:
+                        AudioManager.Play("Dead_V2");
+                        break;
+                }
+                break;
+            case "Idle":
+                switch (Random.Range(1, 4))
+                {                
+                    case 1:
+                        AudioManager.Play("Idle_V1");
+                        break;
+                    case 2:
+                        AudioManager.Play("Idle_V2");
+                        break;
+                    case 3:
+                        AudioManager.Play("Idle_V3");
+                        break;
+ 
+                }
+                break;
+            case "Roar":
+                switch (Random.Range(1, 4))
+                {
+                    case 1:
+                        AudioManager.Play("Roar_V1");
+                        break;
+                    case 2:
+                        AudioManager.Play("Roar_V2");
+                        break;
+                    case 3:
+                        AudioManager.Play("Roar_V3");
+                        break;
+                }
+                break;         
+        }
     }
 }
 
@@ -283,6 +370,11 @@ public class Zombie_1_Idle : IdleState
         if (!character.DetectionCheck)
         {
             character.anim.SetFloat("Multiply", Random.Range(0.5f, 1.5f));
+        }
+
+        if (!character.DetectionCheck)
+        {
+            character.Audio("Idle");
         }
 
     }
@@ -353,6 +445,8 @@ public class Zombie_1_Move : MoveState
     Zombie_1_Entity character;
     private Vector3 direction;
     int moveType;
+
+    int soundCount = 0;
     public Zombie_1_Move(Entity entity, FiniteStateMachine stateMachine, string animBoolName, D_MoveState stateData, Zombie_1_Entity character) : base(entity, stateMachine, animBoolName, stateData)
     {
         this.character = character;
@@ -363,6 +457,10 @@ public class Zombie_1_Move : MoveState
         base.Enter();
         character.UpdatePath_Enemy();
 
+        if(character.DetectionCheck)
+            character.Audio("Idle");
+
+        character.MovementManager.SetPaceTimer(0.3f);
     }
 
     public override void Exit()
@@ -371,6 +469,9 @@ public class Zombie_1_Move : MoveState
         character.transform.rotation = Quaternion.LookRotation(direction);
         character.transform.eulerAngles = new Vector3(0, character.transform.eulerAngles.y, 0);
         character.seeker.CancelCurrentPathRequest();
+        character.seeker.StopAllCoroutines();
+        character.MovementManager.SetPaceTimer(0.5f);
+
     }
 
     public override void LogicUpdate()
@@ -383,6 +484,16 @@ public class Zombie_1_Move : MoveState
                 character.UpdatePath_Enemy();
                 isMoveReset = false;
                 startTime = Time.time;
+
+                if(character.DetectionCheck)
+                {
+                    soundCount++;
+                    if(soundCount > 10)
+                    {
+                        soundCount = 0;
+                        character.Audio("Idle");
+                    }
+                }
             }
             if (moveType == 1)
                 character.Move(stateData.movingSpeed * 0.5f, out direction);
@@ -511,6 +622,7 @@ public class Zombie_1_Patrol : PatrolState
         character.transform.rotation = Quaternion.LookRotation(direction);
         character.transform.eulerAngles = new Vector3(0, character.transform.eulerAngles.y, 0);
         character.seeker.CancelCurrentPathRequest();
+        character.seeker.StopAllCoroutines();
 
         if (character.isReturning)
             character.isActive = false;
@@ -522,7 +634,7 @@ public class Zombie_1_Patrol : PatrolState
     {
         base.LogicUpdate();
         character.Move(character.D_MoveState.movingSpeed * character.D_PatrolState.patrolSpeedModifier, out direction);
-        if (Vector2.Distance(character.transform.position, patrolNewDestination) <= 1f || character.reachedEndOfPath)
+        if (Vector3.Distance(character.transform.position, patrolNewDestination) <= 1f || character.reachedEndOfPath)
         {
             character.Zombie_1_Idle.PresetIdle();
             stateMachine.ChangeState(character.Zombie_1_Idle);
@@ -547,6 +659,26 @@ public class Zombie_1_Attack : AttackState
         character.Zombie_1_Idle.PresetIdle();
         stateMachine.ChangeState(character.Zombie_1_Idle);
     }
+
+    public override void Enter()
+    {
+        base.Enter();
+
+        character.Audio("Attack");
+    }
+
+    public override void Exit()
+    {
+        base.Exit();
+    }
+
+    public override void LogicUpdate()
+    {
+        base.LogicUpdate();
+        //Debug.Log(character.characterController.velocity.magnitude);
+
+    }
+
     public void PresetAttack()
     {
 
@@ -577,6 +709,9 @@ public class Zombie_1_Dead : DeadState
         character.anim.SetTrigger(animBoolName);
         deadTime = stateData.deadTime;
         character.seeker.CancelCurrentPathRequest();
+
+        character.Audio("Dead");
+
     }
 
     public override void Exit()
@@ -658,6 +793,8 @@ public class Zombie_1_Shout : AI_State
     {
         base.Enter();
         target = character.enemy.transform.position;
+        character.Audio("Roar");
+
     }
 
     public override void LogicUpdate()

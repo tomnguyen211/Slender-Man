@@ -39,8 +39,6 @@ public class Vendigo_Entity : Entity, IDamage, IDetect
         Vendigo_Damage = new Vendigo_Damage(this, stateMachine, "Damage", false, this);
         Vendigo_Shout = new Vendigo_Shout(this, stateMachine, "Shout", this);
 
-        stateMachine.Initialize(Vendigo_Entity_Idle);
-
     }
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
@@ -51,8 +49,12 @@ public class Vendigo_Entity : Entity, IDamage, IDetect
     public override void Start()
     {
         base.Start();
+
+        stateMachine.Initialize(Vendigo_Entity_Idle);
+
         seeker.pathCallback += OnPathComplete;
         DetectionTrigger += DisableDetection;
+        MovementManager.isMoving += IsMoving;
 
     }
 
@@ -60,6 +62,7 @@ public class Vendigo_Entity : Entity, IDamage, IDetect
     {
         seeker.pathCallback -= OnPathComplete;
         DetectionTrigger -= DisableDetection;
+        MovementManager.isMoving -= IsMoving;
 
     }
 
@@ -163,6 +166,7 @@ public class Vendigo_Entity : Entity, IDamage, IDetect
         dir = (path.vectorPath[currentWaypoint] - transform.position).normalized;
         // Multiply the direction by our desired speed to get a velocity
         Vector3 velocity = speed * speedFactor * dir;
+        dir.Set(dir.x, 0, dir.z);
 
         Quaternion rot = Quaternion.LookRotation(dir, Vector3.up);
 
@@ -259,7 +263,56 @@ public class Vendigo_Entity : Entity, IDamage, IDetect
 
     }
 
+    private bool IsMoving()
+    {
+        if (stateMachine.CurrentState.animBoolName == Vendigo_Move.animBoolName || stateMachine.CurrentState.animBoolName == Vendigo_Patrol.animBoolName)
+            return true;
+        return false;
+    }
 
+    public override void Audio(string sound)
+    {
+        switch (sound)
+        {
+            case "Attack":
+                switch (Random.Range(1, 6))
+                {
+                    case 1:
+                        AudioManager.Play("Attack_V1");
+                        break;
+                    case 2:
+                        AudioManager.Play("Attack_V2");
+                        break;
+                    case 3:
+                        AudioManager.Play("Attack_V3");
+                        break;
+                    case 4:
+                        AudioManager.Play("Attack_V4");
+                        break;
+                    case 5:
+                        AudioManager.Play("Attack_V5");
+                        break;
+                }
+                break;
+            case "Dead":
+                AudioManager.Play("Dead");
+                break;
+            case "Idle":
+                switch (Random.Range(1, 3))
+                {
+                    case 1:
+                        AudioManager.Play("Idle_V1");
+                        break;
+                    case 2:
+                        AudioManager.Play("Idle_V2");
+                        break;
+                }
+                break;
+            case "Roar":
+                AudioManager.Play("Roar");
+                break;
+        }
+    }
 }
 public class Vendigo_Entity_Idle : IdleState
 {
@@ -277,6 +330,10 @@ public class Vendigo_Entity_Idle : IdleState
     public override void Enter()
     {
         base.Enter();
+        if (!character.DetectionCheck)
+        {
+            character.Audio("Idle");
+        }
 
     }
 
@@ -344,6 +401,7 @@ public class Vendigo_Move : MoveState
     Vendigo_Entity character;
     private Vector3 direction;
     int moveType;
+    int soundCount = 0;
     public Vendigo_Move(Entity entity, FiniteStateMachine stateMachine, string animBoolName, D_MoveState stateData, Vendigo_Entity character) : base(entity, stateMachine, animBoolName, stateData)
     {
         this.character = character;
@@ -353,6 +411,8 @@ public class Vendigo_Move : MoveState
     {
         base.Enter();
         character.UpdatePath_Enemy();
+        if (character.DetectionCheck)
+            character.Audio("Idle");
 
     }
 
@@ -364,6 +424,7 @@ public class Vendigo_Move : MoveState
         character.transform.rotation = Quaternion.LookRotation(direction);
         character.transform.eulerAngles = new Vector3(0, character.transform.eulerAngles.y, 0);
         character.seeker.CancelCurrentPathRequest();
+        character.seeker.StopAllCoroutines();
     }
 
     public override void LogicUpdate()
@@ -376,6 +437,11 @@ public class Vendigo_Move : MoveState
                 character.UpdatePath_Enemy();
                 isMoveReset = false;
                 startTime = Time.time;
+                if (soundCount > 10)
+                {
+                    soundCount = 0;
+                    character.Audio("Idle");
+                }
             }
             if (moveType == 1)
                 character.Move(stateData.movingSpeed * 0.5f, out direction);
@@ -473,13 +539,14 @@ public class Vendigo_Patrol : PatrolState
         character.transform.rotation = Quaternion.LookRotation(direction);
         character.transform.eulerAngles = new Vector3(0, character.transform.eulerAngles.y, 0);
         character.seeker.CancelCurrentPathRequest();
+        character.seeker.StopAllCoroutines();
     }
 
     public override void LogicUpdate()
     {
         base.LogicUpdate();
         character.Move(character.D_MoveState.movingSpeed * character.D_PatrolState.patrolSpeedModifier, out direction);
-        if (Vector2.Distance(character.transform.position, patrolNewDestination) <= 1f || character.reachedEndOfPath)
+        if (Vector3.Distance(character.transform.position, patrolNewDestination) <= 1f || character.reachedEndOfPath)
         {
             character.Vendigo_Entity_Idle.PresetIdle();
             stateMachine.ChangeState(character.Vendigo_Entity_Idle);
@@ -514,6 +581,12 @@ public class Vendigo_Attack : AttackState
         base.AnimationFinishTrigger();
         character.Vendigo_Entity_Idle.PresetIdle();
         stateMachine.ChangeState(character.Vendigo_Entity_Idle);
+    }
+
+    public override void Enter()
+    {
+        base.Enter();
+        character.Audio("Attack");
     }
 
     public void PresetAttack()
@@ -552,6 +625,7 @@ public class Vendigo_Dead : DeadState
         character.anim.SetTrigger(animBoolName);
         deadTime = stateData.deadTime;
         character.seeker.CancelCurrentPathRequest();
+        character.Audio("Dead");
     }
 
     public override void Exit()
@@ -614,6 +688,7 @@ public class Vendigo_Shout : AI_State
         hasShout = true;
         character.Vendigo_Entity_Idle.PresetIdle();
         stateMachine.ChangeState(character.Vendigo_Entity_Idle);
+        character.Audio("Roar");
     }
 
     public override void Enter()
@@ -627,6 +702,7 @@ public class Vendigo_Shout : AI_State
         base.LogicUpdate();
 
         Vector3 dir = (target - character.transform.position).normalized;
+        dir.Set(dir.x, 0, dir.z);
 
         Quaternion rot = Quaternion.LookRotation(dir, Vector3.up);
 

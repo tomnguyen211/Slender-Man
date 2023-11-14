@@ -13,11 +13,18 @@ MonoBehaviour:
   m_Name: Fireaxe
   m_EditorClassIdentifier: 
   Stats:
+    bulletUI: {fileID: 0}
     bulletCase: {fileID: 0}
     damage: 15
     range: 1.4
-    MuzzleFlash: {fileID: 0}
-    ImpactMark: {fileID: 0}
+    currentBullet: 0
+    maxBullet: 0
+    totalBullet: 0
+    maxTotalBullet: 0
+    MuzzleFlash:
+    - {fileID: 0}
+    ImpactMark:
+    - {fileID: 0}
   ItemPrefab: {fileID: 2685722253168256307, guid: 3e4fef31c9ec46b499db2e1fd2f944ed,
     type: 3}
   HandsPivotBoneTransformName: fireaxe
@@ -30,6 +37,8 @@ MonoBehaviour:
     AnimationEvents:
     - EventMessage: Shoot
       EventPosition: 0.4
+    - EventMessage: ShootSound
+      EventPosition: 0.05
   - HandsAnimatorAttackStateName: Axe_Hit_Secondary
     ItemAnimatorAttackStateName: Axe_Hit_Secondary
     AttackAnimationLength: 1
@@ -37,6 +46,8 @@ MonoBehaviour:
     AnimationEvents:
     - EventMessage: Shoot
       EventPosition: 0.45
+    - EventMessage: ShootSound
+      EventPosition: 0.05
   MovementBounceVelocityLimit: 5
   MovementBounceSpringStiffness: 10
   MovementBounceSpringDamping: 10

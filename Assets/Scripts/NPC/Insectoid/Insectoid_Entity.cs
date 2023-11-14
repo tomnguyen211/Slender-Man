@@ -36,8 +36,6 @@ public class Insectoid_Entity : Entity, IDamage, IDetect
         Insectoid_Attack = new Insectoid_Attack(this, stateMachine, "Attack", D_AttackState, this);
         Insectoid_Dead = new Insectoid_Dead(this, stateMachine, "Dead", false, D_DeadState, this); ;
         Insectoid_Damage = new Insectoid_Damage(this, stateMachine, "Damage", false, this);
-
-        stateMachine.Initialize(Insectoid_Idle);
     }
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
@@ -48,12 +46,16 @@ public class Insectoid_Entity : Entity, IDamage, IDetect
     public override void Start()
     {
         base.Start();
+        stateMachine.Initialize(Insectoid_Idle);
+
         seeker.pathCallback += OnPathComplete;
+        MovementManager.isMoving += IsMoving;
     }
 
     private void OnDisable()
     {
         seeker.pathCallback -= OnPathComplete;
+        MovementManager.isMoving -= IsMoving;
     }
 
     public override void Update()
@@ -152,6 +154,7 @@ public class Insectoid_Entity : Entity, IDamage, IDetect
         dir = (path.vectorPath[currentWaypoint] - transform.position).normalized;
         // Multiply the direction by our desired speed to get a velocity
         Vector3 velocity = speed * speedFactor * dir;
+        dir.Set(dir.x, 0, dir.z);
 
         Quaternion rot = Quaternion.LookRotation(dir, Vector3.up);
 
@@ -230,10 +233,79 @@ public class Insectoid_Entity : Entity, IDamage, IDetect
         CanSeePlayer = false;
         Insectoid_Idle.PresetIdle();
         stateMachine.ChangeState(Insectoid_Idle);
-        if (!disablePatrol)
-            isReturning = true;
+        isActive = false;
         enemy = null;
 
+    }
+
+    private bool IsMoving()
+    {
+        if (stateMachine.CurrentState.animBoolName == Insectoid_Move.animBoolName || stateMachine.CurrentState.animBoolName == Insectoid_Patrol.animBoolName)
+            return true;
+        return false;
+    }
+
+    public override void Audio(string sound)
+    {
+        switch (sound)
+        {
+            case "Attack":
+                switch (Random.Range(1, 6))
+                {
+                    case 1:
+                        AudioManager.Play("Attack_V1");
+                        break;
+                    case 2:
+                        AudioManager.Play("Attack_V2");
+                        break;
+                    case 3:
+                        AudioManager.Play("Attack_V3");
+                        break;
+                    case 4:
+                        AudioManager.Play("Attack_V4");
+                        break;
+                    case 5:
+                        AudioManager.Play("Attack_V5");
+                        break;
+                }
+                break;
+            case "Dead":
+                switch (Random.Range(1, 3))
+                {
+                    case 1:
+                        AudioManager.Play("Dead_V1");
+                        break;
+                    case 2:
+                        AudioManager.Play("Dead_V2");
+                        break;
+                }
+                break;
+            case "Idle":
+                switch (Random.Range(1, 4))
+                {
+                    case 1:
+                        AudioManager.Play("Idle_V1");
+                        break;
+                    case 2:
+                        AudioManager.Play("Idle_V2");
+                        break;
+                }
+                break;
+            case "Roar":
+                switch (Random.Range(1, 4))
+                {
+                    case 1:
+                        AudioManager.Play("Roar_V1");
+                        break;
+                    case 2:
+                        AudioManager.Play("Roar_V2");
+                        break;
+                    case 3:
+                        AudioManager.Play("Roar_V3");
+                        break;
+                }
+                break;
+        }
     }
 
 }
@@ -253,6 +325,9 @@ public class Insectoid_Idle : IdleState
     public override void Enter()
     {
         base.Enter();
+        if (character.DetectionCheck)
+            character.Audio("Idle");
+
 
     }
 
@@ -316,6 +391,7 @@ public class Insectoid_Move : MoveState
     Insectoid_Entity character;
     private Vector3 direction;
     int moveType;
+    int soundCount = 0;
     public Insectoid_Move(Entity entity, FiniteStateMachine stateMachine, string animBoolName, D_MoveState stateData, Insectoid_Entity character) : base(entity, stateMachine, animBoolName, stateData)
     {
         this.character = character;
@@ -336,6 +412,7 @@ public class Insectoid_Move : MoveState
         character.transform.rotation = Quaternion.LookRotation(direction);
         character.transform.eulerAngles = new Vector3(0, character.transform.eulerAngles.y, 0);
         character.seeker.CancelCurrentPathRequest();
+        character.seeker.StopAllCoroutines();
     }
 
     public override void LogicUpdate()
@@ -348,6 +425,12 @@ public class Insectoid_Move : MoveState
                 character.UpdatePath_Enemy();
                 isMoveReset = false;
                 startTime = Time.time;
+                soundCount++;
+                if (soundCount > 10)
+                {
+                    soundCount = 0;
+                    character.Audio("Roar");
+                }
             }
             if (moveType == 1)
                 character.Move(stateData.movingSpeed * 0.5f, out direction);
@@ -480,7 +563,7 @@ public class Insectoid_Patrol : PatrolState
     {
         base.LogicUpdate();
         character.Move(character.D_MoveState.movingSpeed * character.D_PatrolState.patrolSpeedModifier, out direction);
-        if (Vector2.Distance(character.transform.position, patrolNewDestination) <= 1f || character.reachedEndOfPath)
+        if (Vector3.Distance(character.transform.position, patrolNewDestination) <= 1f || character.reachedEndOfPath)
         {
             character.Insectoid_Idle.PresetIdle();
             stateMachine.ChangeState(character.Insectoid_Idle);
@@ -494,7 +577,12 @@ public class Insectoid_Attack : AttackState
     {
         this.character = character;
     }
+    public override void Enter()
+    {
+        base.Enter();
 
+        character.Audio("Attack");
+    }
     public override void AnimationFinishTrigger()
     {
         base.AnimationFinishTrigger();
@@ -517,6 +605,7 @@ public class Insectoid_Dead : DeadState
         character.anim.SetTrigger(animBoolName);
         deadTime = stateData.deadTime;
         character.seeker.CancelCurrentPathRequest();
+        character.Audio("Dead");
     }
 
     public override void Exit()

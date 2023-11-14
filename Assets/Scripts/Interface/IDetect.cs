@@ -6,4 +6,5 @@ public interface IDetect
 {
     public void EnableDetect() { }
     public void DisableDetect() { }
+    public void TriggerDetectionEvent() { }
 }

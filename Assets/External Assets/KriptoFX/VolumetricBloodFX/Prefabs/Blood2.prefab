@@ -191,7 +191,7 @@ MonoBehaviour:
   m_EndAngleFade: 180
   m_UVScale: {x: 1, y: 1}
   m_UVBias: {x: 0, y: 0}
-  m_DecalLayerMask: 1
+  m_DecalLayerMask: 4294967295
   m_ScaleMode: 0
   m_Offset: {x: 0, y: 0, z: 0}
   m_Size: {x: 1, y: 1, z: 1}
@@ -330,6 +330,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5865290276592450839}
   - component: {fileID: 5865290276592450836}
+  - component: {fileID: 8859291619094725616}
   m_Layer: 0
   m_Name: Blood2
   m_TagString: Untagged
@@ -373,3 +374,272 @@ MonoBehaviour:
   DecalLifeTimeSeconds: 30
   DecalRenderingMode: 0
   DebugAnimationTime: 0.25
+--- !u!114 &8859291619094725616
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5865290276592450837}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8dde0717f35c984394720d460c964e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sounds:
+  - name: 
+    clip: {fileID: 8300000, guid: 775ed3b6a4a986347b5e0d1a776a295b, type: 3}
+    audioMixer: {fileID: 0}
+    volume: 0.4
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+    mute: 0
+    spatialBlend: 1
+    spread: 20
+    minDis: 1
+    maxDis: 10
+    rollOffModeLogarithmic: 1
+    rollOffModeLinear: 0
+    priority: 132
+    dopplerEffect: 0.5
+    delaySound: 0
+    delayTime: 0
+    fadingSound: 0
+    fadingTime: 0
+    fading_delayTime: 0
+  - name: 
+    clip: {fileID: 8300000, guid: 6625fba8ce811de46a4735a744818929, type: 3}
+    audioMixer: {fileID: 0}
+    volume: 0.4
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+    mute: 0
+    spatialBlend: 1
+    spread: 20
+    minDis: 1
+    maxDis: 10
+    rollOffModeLogarithmic: 1
+    rollOffModeLinear: 0
+    priority: 132
+    dopplerEffect: 0.5
+    delaySound: 0
+    delayTime: 0
+    fadingSound: 0
+    fadingTime: 0
+    fading_delayTime: 0
+  - name: 
+    clip: {fileID: 8300000, guid: b0df349614a92af4fb0b9a456904b5ba, type: 3}
+    audioMixer: {fileID: 0}
+    volume: 0.4
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+    mute: 0
+    spatialBlend: 1
+    spread: 20
+    minDis: 1
+    maxDis: 10
+    rollOffModeLogarithmic: 1
+    rollOffModeLinear: 0
+    priority: 132
+    dopplerEffect: 0.5
+    delaySound: 0
+    delayTime: 0
+    fadingSound: 0
+    fadingTime: 0
+    fading_delayTime: 0
+  - name: 
+    clip: {fileID: 8300000, guid: 4aa0cf2f41fe00445ab78fb7885fd19d, type: 3}
+    audioMixer: {fileID: 0}
+    volume: 0.4
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+    mute: 0
+    spatialBlend: 1
+    spread: 20
+    minDis: 1
+    maxDis: 10
+    rollOffModeLogarithmic: 1
+    rollOffModeLinear: 0
+    priority: 132
+    dopplerEffect: 0.5
+    delaySound: 0
+    delayTime: 0
+    fadingSound: 0
+    fadingTime: 0
+    fading_delayTime: 0
+  - name: 
+    clip: {fileID: 8300000, guid: a6034086c38d37d4ca53f8bfcdd3cd4f, type: 3}
+    audioMixer: {fileID: 0}
+    volume: 0.4
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+    mute: 0
+    spatialBlend: 1
+    spread: 20
+    minDis: 1
+    maxDis: 10
+    rollOffModeLogarithmic: 1
+    rollOffModeLinear: 0
+    priority: 132
+    dopplerEffect: 0.5
+    delaySound: 0
+    delayTime: 0
+    fadingSound: 0
+    fadingTime: 0
+    fading_delayTime: 0
+  - name: 
+    clip: {fileID: 8300000, guid: f127f224b6082e84e8eda995e99e17b4, type: 3}
+    audioMixer: {fileID: 0}
+    volume: 0.4
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+    mute: 0
+    spatialBlend: 1
+    spread: 20
+    minDis: 1
+    maxDis: 10
+    rollOffModeLogarithmic: 1
+    rollOffModeLinear: 0
+    priority: 132
+    dopplerEffect: 0.5
+    delaySound: 0
+    delayTime: 0
+    fadingSound: 0
+    fadingTime: 0
+    fading_delayTime: 0
+  - name: 
+    clip: {fileID: 8300000, guid: 540a1160eae49874097ea8a4a46a272f, type: 3}
+    audioMixer: {fileID: 0}
+    volume: 0.4
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+    mute: 0
+    spatialBlend: 1
+    spread: 20
+    minDis: 1
+    maxDis: 10
+    rollOffModeLogarithmic: 1
+    rollOffModeLinear: 0
+    priority: 132
+    dopplerEffect: 0.5
+    delaySound: 0
+    delayTime: 0
+    fadingSound: 0
+    fadingTime: 0
+    fading_delayTime: 0
+  - name: 
+    clip: {fileID: 8300000, guid: 40381cefab3377846898a3c3b340d4e7, type: 3}
+    audioMixer: {fileID: 0}
+    volume: 0.4
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+    mute: 0
+    spatialBlend: 1
+    spread: 20
+    minDis: 1
+    maxDis: 10
+    rollOffModeLogarithmic: 1
+    rollOffModeLinear: 0
+    priority: 132
+    dopplerEffect: 0.5
+    delaySound: 0
+    delayTime: 0
+    fadingSound: 0
+    fadingTime: 0
+    fading_delayTime: 0
+  - name: 
+    clip: {fileID: 8300000, guid: af5cf5e36465ada4688fc7fcfc85a90d, type: 3}
+    audioMixer: {fileID: 0}
+    volume: 0.4
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+    mute: 0
+    spatialBlend: 1
+    spread: 20
+    minDis: 1
+    maxDis: 10
+    rollOffModeLogarithmic: 1
+    rollOffModeLinear: 0
+    priority: 132
+    dopplerEffect: 0.5
+    delaySound: 0
+    delayTime: 0
+    fadingSound: 0
+    fadingTime: 0
+    fading_delayTime: 0
+  - name: 
+    clip: {fileID: 8300000, guid: 296699775b307bd46b19ff8fda121aab, type: 3}
+    audioMixer: {fileID: 0}
+    volume: 0.4
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+    mute: 0
+    spatialBlend: 1
+    spread: 20
+    minDis: 1
+    maxDis: 10
+    rollOffModeLogarithmic: 1
+    rollOffModeLinear: 0
+    priority: 132
+    dopplerEffect: 0.5
+    delaySound: 0
+    delayTime: 0
+    fadingSound: 0
+    fadingTime: 0
+    fading_delayTime: 0
+  - name: 
+    clip: {fileID: 8300000, guid: a7080a03be4a7c04289fb7961a6ed919, type: 3}
+    audioMixer: {fileID: 0}
+    volume: 0.4
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+    mute: 0
+    spatialBlend: 1
+    spread: 20
+    minDis: 1
+    maxDis: 10
+    rollOffModeLogarithmic: 1
+    rollOffModeLinear: 0
+    priority: 132
+    dopplerEffect: 0.5
+    delaySound: 0
+    delayTime: 0
+    fadingSound: 0
+    fadingTime: 0
+    fading_delayTime: 0
+  - name: 
+    clip: {fileID: 8300000, guid: 519a0dcf467855d459ee0a4afbe0e8b5, type: 3}
+    audioMixer: {fileID: 0}
+    volume: 0.4
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+    mute: 0
+    spatialBlend: 1
+    spread: 20
+    minDis: 1
+    maxDis: 10
+    rollOffModeLogarithmic: 1
+    rollOffModeLinear: 0
+    priority: 132
+    dopplerEffect: 0.5
+    delaySound: 0
+    delayTime: 0
+    fadingSound: 0
+    fadingTime: 0
+    fading_delayTime: 0
+  delayEnable: 0
+  delayTime: 0
+  fadeSound: 0
+  fadeTime: 0

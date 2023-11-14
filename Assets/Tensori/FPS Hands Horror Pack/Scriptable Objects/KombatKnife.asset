@@ -21,8 +21,10 @@ MonoBehaviour:
     maxBullet: 0
     totalBullet: 0
     maxTotalBullet: 0
-    MuzzleFlash: {fileID: 0}
-    ImpactMark: {fileID: 0}
+    MuzzleFlash:
+    - {fileID: 0}
+    ImpactMark:
+    - {fileID: 0}
   ItemPrefab: {fileID: 4678895676951015249, guid: ec62e62492da7974a844d1dfb07bd78d,
     type: 3}
   HandsPivotBoneTransformName: kombat knife
@@ -35,6 +37,8 @@ MonoBehaviour:
     AnimationEvents:
     - EventMessage: Shoot
       EventPosition: 0.04
+    - EventMessage: ShootSound
+      EventPosition: 0.012
   - HandsAnimatorAttackStateName: KombatKnife_Hit_Secondary
     ItemAnimatorAttackStateName: KombatKnife_Hit_Secondary
     AttackAnimationLength: 0.4
@@ -42,6 +46,8 @@ MonoBehaviour:
     AnimationEvents:
     - EventMessage: Shoot
       EventPosition: 0.04
+    - EventMessage: ShootSound
+      EventPosition: 0.012
   MovementBounceVelocityLimit: 3
   MovementBounceSpringStiffness: 10
   MovementBounceSpringDamping: 15

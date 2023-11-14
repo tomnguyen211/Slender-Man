@@ -38,7 +38,6 @@ public class MutantZombie_Entity : Entity, IDamage, IDetect
         MutantZombie_Dead = new MutantZombie_Dead(this, stateMachine, "Dead", false, D_DeadState, this); ;
         MutantZombie_Damage = new MutantZombie_Damage(this, stateMachine, "Damage", false, this);
 
-        stateMachine.Initialize(MutantZombie_Idle);
     }
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
@@ -49,12 +48,18 @@ public class MutantZombie_Entity : Entity, IDamage, IDetect
     public override void Start()
     {
         base.Start();
+
+        stateMachine.Initialize(MutantZombie_Idle);
+
         seeker.pathCallback += OnPathComplete;
+        MovementManager.isMoving += IsMoving;
     }
 
     private void OnDisable()
     {
         seeker.pathCallback -= OnPathComplete;
+        MovementManager.isMoving -= IsMoving;
+
     }
 
     public override void Update()
@@ -153,6 +158,7 @@ public class MutantZombie_Entity : Entity, IDamage, IDetect
         dir = (path.vectorPath[currentWaypoint] - transform.position).normalized;
         // Multiply the direction by our desired speed to get a velocity
         Vector3 velocity = speed * speedFactor * dir;
+        dir.Set(dir.x, 0, dir.z);
 
         Quaternion rot = Quaternion.LookRotation(dir, Vector3.up);
 
@@ -237,6 +243,80 @@ public class MutantZombie_Entity : Entity, IDamage, IDetect
             isReturning = true; 
         enemy = null;
     }
+
+    private bool IsMoving()
+    {
+        if (stateMachine.CurrentState.animBoolName == MutantZombie_Move.animBoolName || stateMachine.CurrentState.animBoolName == MutantZombie_Patrol.animBoolName)
+            return true;
+        return false;
+    }
+
+    public override void Audio(string sound)
+    {
+        switch (sound)
+        {
+            case "Attack":
+                switch (Random.Range(1, 5))
+                {
+                    case 1:
+                        AudioManager.Play("Attack_V1");
+                        break;
+                    case 2:
+                        AudioManager.Play("Attack_V2");
+                        break;
+                    case 3:
+                        AudioManager.Play("Attack_V3");
+                        break;
+                    case 4:
+                        AudioManager.Play("Attack_V4");
+                        break;
+                }
+                break;
+            case "Dead":
+                switch (Random.Range(1, 3))
+                {
+                    case 1:
+                        AudioManager.Play("Dead_V1");
+                        break;
+                    case 2:
+                        AudioManager.Play("Dead_V2");
+                        break;
+                    case 3:
+                        AudioManager.Play("Dead_V3");
+                        break;
+                }
+                break;
+            case "Idle":
+                switch (Random.Range(1, 9))
+                {
+                    case 1:
+                        AudioManager.Play("Idle_V1");
+                        break;
+                    case 2:
+                        AudioManager.Play("Idle_V2");
+                        break;
+                    case 3:
+                        AudioManager.Play("Idle_V3");
+                        break;
+                    case 4:
+                        AudioManager.Play("Idle_V4");
+                        break;
+                    case 5:
+                        AudioManager.Play("Idle_V5");
+                        break;
+                    case 6:
+                        AudioManager.Play("Idle_V6");
+                        break;
+                    case 7:
+                        AudioManager.Play("Idle_V7");
+                        break;
+                    case 8:
+                        AudioManager.Play("Idle_V8");
+                        break;
+                }
+                break;
+        }
+    }
 }
 
 public class MutantZombie_Idle : IdleState
@@ -259,6 +339,11 @@ public class MutantZombie_Idle : IdleState
         if(!character.DetectionCheck)
         {
             character.anim.SetFloat("Multiply", Random.Range(0.5f, 1.5f));
+        }
+
+        if (!character.DetectionCheck)
+        {
+            character.Audio("Idle");
         }
 
     }
@@ -315,6 +400,7 @@ public class MutantZombie_Move : MoveState
     MutantZombie_Entity character;
     private Vector3 direction;
     int moveType;
+    int soundCount = 0;
     public MutantZombie_Move(Entity entity, FiniteStateMachine stateMachine, string animBoolName, D_MoveState stateData, MutantZombie_Entity character) : base(entity, stateMachine, animBoolName, stateData)
     {
         this.character = character;
@@ -324,6 +410,9 @@ public class MutantZombie_Move : MoveState
     {
         base.Enter();
         character.UpdatePath_Enemy();
+
+        if (character.DetectionCheck)
+            character.Audio("Idle");
 
     }
 
@@ -335,6 +424,7 @@ public class MutantZombie_Move : MoveState
         character.transform.rotation = Quaternion.LookRotation(direction);
         character.transform.eulerAngles = new Vector3(0, character.transform.eulerAngles.y, 0);
         character.seeker.CancelCurrentPathRequest();
+        character.seeker.StopAllCoroutines();
     }
 
     public override void LogicUpdate()
@@ -347,6 +437,16 @@ public class MutantZombie_Move : MoveState
                 character.UpdatePath_Enemy();
                 isMoveReset = false;
                 startTime = Time.time;
+
+                if (character.DetectionCheck)
+                {
+                    soundCount++;
+                    if (soundCount > 10)
+                    {
+                        soundCount = 0;
+                        character.Audio("Idle");
+                    }
+                }
             }
             if (moveType == 1)
                 character.Move(stateData.movingSpeed * 0.5f, out direction);
@@ -469,8 +569,9 @@ public class MutantZombie_Patrol : PatrolState
         character.transform.rotation = Quaternion.LookRotation(direction);
         character.transform.eulerAngles = new Vector3(0, character.transform.eulerAngles.y, 0);
         character.seeker.CancelCurrentPathRequest();
+        character.seeker.StopAllCoroutines();
 
-        if(character.isReturning)
+        if (character.isReturning)
             character.isActive = false;
 
         character.isReturning = false;
@@ -480,7 +581,7 @@ public class MutantZombie_Patrol : PatrolState
     {
         base.LogicUpdate();
         character.Move(character.D_MoveState.movingSpeed * character.D_PatrolState.patrolSpeedModifier, out direction);
-        if (Vector2.Distance(character.transform.position, patrolNewDestination) <= 1f || character.reachedEndOfPath)
+        if (Vector3.Distance(character.transform.position, patrolNewDestination) <= 1f || character.reachedEndOfPath)
         {
             stateMachine.ChangeState(character.MutantZombie_Idle);
         }
@@ -501,7 +602,11 @@ public class MutantZombie_Attack : AttackState
         stateMachine.ChangeState(character.MutantZombie_Idle);
     }
 
-   
+    public override void Enter()
+    {
+        base.Enter();
+        character.Audio("Attack");
+    }
 }
 public class MutantZombie_Dead : DeadState
 {
@@ -518,6 +623,7 @@ public class MutantZombie_Dead : DeadState
         character.anim.SetTrigger(animBoolName);
         deadTime = stateData.deadTime;
         character.seeker.CancelCurrentPathRequest();
+        character.Audio("Dead");
     }
 
     public override void Exit()
