@@ -18,7 +18,8 @@ public class Slenderman_Event_11 : MonoBehaviour
     {
         if (!hasTrigger && hasActivate)
         {
-            Slender_Entity.gameObject.SetActive(false);
+            Slender_Entity.Fading();
+            Slender_Entity.DisaleObject(10);
             hasTrigger = true;
 
         }

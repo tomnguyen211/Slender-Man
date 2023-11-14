@@ -169,6 +169,11 @@ public class Slender_Entity : Entity, IDamage
     }
 
     #region Events
+
+    public void SetRadius(float radius)
+    {
+        sphereCol.radius = radius;
+    }
     public void Fading()
     {
         //StopAllCoroutines();
