@@ -33,22 +33,14 @@ public class MainMenu : MonoBehaviour
         source.Play();
         laughSound.Play();
         staticSound.Play();
-        EventManager.TriggerEvent("StartFadeIn", 0.1f);
-        SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex + 1);
-
+        EventManager.TriggerEvent("StartFadeIn", 0.2f);
+        StartCoroutine(LoadGame());
     }
 
-    IEnumerator Wait()
+    IEnumerator LoadGame()
     {
-        yield return new WaitForSeconds(2);
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-
-        // The Application loads the Scene in the background as the current Scene runs.
-        // This is particularly good for creating loading screens.
-        // You could also load the Scene by using sceneBuildIndex. In this case Scene2 has
-        // a sceneBuildIndex of 1 as shown in Build Settings.
-
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("Scene2");
+        yield return new WaitForSeconds(5);
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex + 1);
 
         // Wait until the asynchronous scene fully loads
         while (!asyncLoad.isDone)

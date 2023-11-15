@@ -27,14 +27,14 @@ public class CameraFade : MonoBehaviour
 
     private void OnEnable()
     {
-        EventManager.StartListening("StartFadein", StartFadein);
+        EventManager.StartListening("StartFadeIn", StartFadein);
         EventManager.StartListening("StartFadeOut", StartFadeOut);
 
     }
 
     private void OnDisable()
     {
-        EventManager.StopListening("StartFadein", StartFadein);
+        EventManager.StopListening("StartFadeIn", StartFadein);
         EventManager.StopListening("StartFadeOut", StartFadeOut);
 
 
@@ -91,7 +91,7 @@ public class CameraFade : MonoBehaviour
                     isFading = false;
                 }
             }
-        }
+        }     
     }
 
     public void StartFadein(object amount)
