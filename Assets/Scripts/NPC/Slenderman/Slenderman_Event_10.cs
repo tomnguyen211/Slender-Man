@@ -27,6 +27,7 @@ public class Slenderman_Event_10 : MonoBehaviour
             Slender_Entity.gameObject.SetActive(false);
             hasTrigger = true;
             StartCoroutine(ResetEmpty());
+            EventManager.TriggerEvent("JumpScareSound");
         }
     }
 
