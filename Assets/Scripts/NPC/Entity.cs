@@ -302,6 +302,7 @@ public class Entity : MonoBehaviour
         if (enemy == null)
         {
             CanSeePlayer = false;
+            DetectionCheck = false;
             return;
         }
 

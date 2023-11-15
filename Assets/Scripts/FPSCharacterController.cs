@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Collections;
+using UnityEditor.Search;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Rendering;
@@ -306,7 +307,11 @@ public class FPSCharacterController : MonoBehaviour, IDamage
             Attacker = attacker;
             GameManager.Instance.CharacterBar.TakeDamage(damage);
             if (currentHealth <= 0f)
-                Debug.Log("You're Dead");
+            {
+                immueDamage = true;
+                EventManager.TriggerEvent("PlayerSpawn");
+                Destroy(gameObject);
+            }
         }
     }
 
@@ -689,6 +694,5 @@ public class FPSCharacterController : MonoBehaviour, IDamage
         immobilized = true;
         EventManager.TriggerEvent("StartFadein",0.1f); ;
         // Text //
-
     }
 }

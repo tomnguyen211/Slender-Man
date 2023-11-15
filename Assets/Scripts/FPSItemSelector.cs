@@ -22,16 +22,18 @@ public class FPSItemSelector : MonoBehaviour
     [SerializeField] private FPSHandsController handsController = null;
     public event Action<InputItemOption> OnItemSelected = null;
 
-    private void Start()
+    private void Awake()
     {
-        for(int i = 0; i < SelectionOptions.Count;i++)
+        for (int i = 0; i < SelectionOptions.Count; i++)
         {
             SelectionOptions[i].ItemAsset = Instantiate(SelectionOptions[i].ItemAsset);
         }
+    }
 
+    private void Start()
+    {
 
-
-        if (SelectionOptions.Count > 0)
+       if (SelectionOptions.Count > 0)
         {
             //var defaultOption = SelectionOptions[0];
 
@@ -58,6 +60,35 @@ public class FPSItemSelector : MonoBehaviour
                 OnItemSelected?.Invoke(option);
             }
         }
+    }
+
+    public int GetBullet(string item)
+    {
+        for (int i = 0; i < SelectionOptions.Count; i++)
+        {
+            if(SelectionOptions[i].ItemAsset.HandsPivotBoneTransformName == item)
+            {
+                if (SelectionOptions[i].hasUnlock)
+                {
+                    return SelectionOptions[i].ItemAsset.Stats.currentBullet + SelectionOptions[i].ItemAsset.Stats.totalBullet;
+                }
+                else
+                    return 0;
+            }
+        }
+        return 0;
+    }
+
+    public int GetIndex(string item)
+    {
+        for (int i = 0; i < SelectionOptions.Count; i++)
+        {
+            if (SelectionOptions[i].ItemAsset.HandsPivotBoneTransformName == item)
+            {
+                return i;
+            }
+        }
+        return -1;
     }
 
     [System.Serializable]

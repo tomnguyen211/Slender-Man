@@ -179,6 +179,8 @@ public class ScreenDamage : MonoBehaviour
 
     private void Awake()
     {
+        bloodyFrame = GameObject.Find("BloodyFrame").GetComponent<Image>();
+        blurImage  = GameObject.Find("BlurEffect").GetComponent<Image>();
         animator = bloodyFrame.transform.GetComponent<Animator>();
 
     }

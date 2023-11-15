@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using Unity.Collections;
 using UnityEngine.Events;
+using TMPro.EditorUtilities;
 
 public class PickupItem_Highlight : MonoBehaviour
 {
@@ -18,7 +19,9 @@ public class PickupItem_Highlight : MonoBehaviour
     [SerializeField]
     bool SpriteShaderEnable;
 
+
     GameObject Player;
+
 
     public bool hasInteract;
 
@@ -40,12 +43,19 @@ public class PickupItem_Highlight : MonoBehaviour
 
         glowUp = true;
 
-        Player = GameObject.FindGameObjectWithTag("Player");
+        //Player = GameObject.FindGameObjectWithTag("Player");
+        Player = GameManager.Instance.Player;
+
+    }
+
+    public void GetPlayer()
+    {
+
     }
 
     private void Update()
     {
-        if(CourRunning == null && !hasInteract)
+        /*if(CourRunning == null && !hasInteract && Player != null)
         {
             if(Vector3.Distance(transform.position,Player.transform.position) <= 10)
             {
@@ -63,17 +73,16 @@ public class PickupItem_Highlight : MonoBehaviour
                     glowUp = true;
                 }
             }
-        }
-        /*Collider[] rangeChecks = Physics.OverlapSphere(transform.position, 10, armor);
-        if (rangeChecks.Length != 0 && CourRunning == null)
+        }*/
+        Collider[] rangeChecks = Physics.OverlapSphere(transform.position, 10, armor);
+        if (rangeChecks.Length != 0 && CourRunning == null && !hasInteract)
         {
             for (int i = 0; i < rangeChecks.Length; i++)
             {
                 Transform target = rangeChecks[i].transform;
-                Debug.Log(target.tag);
-                if(target.CompareTag("Player"))
+                if (target.CompareTag("Player"))
                 {
-                    if(glowUp)
+                    if (glowUp)
                     {
                         CourRunning = GlowUp();
                         StartCoroutine(CourRunning);
@@ -87,9 +96,9 @@ public class PickupItem_Highlight : MonoBehaviour
                         glowUp = true;
                     }
                 }
-                
+
             }
-        }*/
+        }
     }
 
     public void Interact()

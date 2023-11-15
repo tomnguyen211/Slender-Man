@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Entities.UniversalDelegates;
+using UnityEditor.Search;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Rendering;
 using URPGlitch.Runtime.AnalogGlitch;
 using URPGlitch.Runtime.DigitalGlitch;
+using static UnityEditor.Progress;
 
 public class FPSHandsController : MonoBehaviour
 {
@@ -113,11 +115,16 @@ public class FPSHandsController : MonoBehaviour
     [SerializeField]
     AudioManager AudioManager;
 
+    private void Awake()
+    {
+        EventManager.TriggerEvent("Get_Player", DetectReference);
+
+    }
 
     private void Start()
     {
         _crosshair = _crosshairGameObject.GetComponent<CrosshairController>();
-        EventManager.TriggerEvent("Get_Player", DetectReference);
+        //EventManager.TriggerEvent("Get_Player", DetectReference);
 
     }
 
@@ -1263,6 +1270,23 @@ public class FPSHandsController : MonoBehaviour
                     {
                         trigger.eventTrigger?.Invoke();
                     }
+
+
+
+                    EventManager.TriggerEvent("PistolBullet", FPSItemSelector.GetBullet("handgun"));
+                    EventManager.TriggerEvent("ShotgunBullet", FPSItemSelector.GetBullet("shotgun"));
+                    EventManager.TriggerEvent("HeathPack", healthPack);
+                    EventManager.TriggerEvent("Batttery", battery);
+                    for (int i = 0; i < FPSItemSelector.SelectionOptions.Count; i++)
+                    {
+                        if (FPSItemSelector.SelectionOptions[i].hasUnlock)
+                        {
+                            EventManager.TriggerEvent("WhatUnlock", FPSItemSelector.SelectionOptions[i].ItemAsset.HandsPivotBoneTransformName);
+                        }
+                    }
+
+                    EventManager.TriggerEvent("LatestLocation", hit.transform);
+
                 }
 
                 Audio("pickup");
@@ -1641,7 +1665,54 @@ public class FPSHandsController : MonoBehaviour
         }
     }
 
+    public void SpawnRefillInventory(int pistolBullet, int shotgunBullet, int med, int battery, bool knife, bool handgun, bool shotgun, bool axe)
+    {
+        if (handgun)
+        {
+            int n = FPSItemSelector.GetIndex("handgun");
+            FPSItemSelector.SelectionOptions[n].hasUnlock = true;
+            if(pistolBullet > 7)
+            {
+                FPSItemSelector.SelectionOptions[n].ItemAsset.Stats.currentBullet = 7;
+                FPSItemSelector.SelectionOptions[n].ItemAsset.Stats.totalBullet = pistolBullet - 7;
+            }
+            else
+                FPSItemSelector.SelectionOptions[n].ItemAsset.Stats.currentBullet = pistolBullet;
 
 
+        }
+
+        if (shotgun)
+        {
+            int n = FPSItemSelector.GetIndex("shotgun");
+            FPSItemSelector.SelectionOptions[n].hasUnlock = true;
+            if (shotgunBullet > 5)
+            {
+                FPSItemSelector.SelectionOptions[n].ItemAsset.Stats.currentBullet = 5;
+                FPSItemSelector.SelectionOptions[n].ItemAsset.Stats.totalBullet = shotgunBullet - 5;
+            }
+            else
+                FPSItemSelector.SelectionOptions[n].ItemAsset.Stats.currentBullet = shotgunBullet;
+
+
+        }
+
+        healthPack = med;
+        this.battery = battery;
+
+        if (knife)
+        {
+            int n = FPSItemSelector.GetIndex("kombat knife");
+            FPSItemSelector.SelectionOptions[n].hasUnlock = true;
+            int i = FPSItemSelector.GetIndex("WeaponPivot");
+            FPSItemSelector.SelectionOptions[i].hasUnlock = false;
+        }
+
+        if (axe)
+        {
+            int n = FPSItemSelector.GetIndex("fireaxe");
+            FPSItemSelector.SelectionOptions[n].hasUnlock = true;
+        }
+    }
 }
 
