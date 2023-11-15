@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4297611112345015096}
   - component: {fileID: 3735648063555012092}
+  - component: {fileID: 1717614205217767582}
   m_Layer: 3
   m_Name: prefab_beech_tree_08
   m_TagString: Tree
@@ -67,6 +68,29 @@ LODGroup:
     renderers:
     - renderer: {fileID: 5299494229147412573}
   m_Enabled: 1
+--- !u!136 &1717614205217767582
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1008656033906581803}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.2
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: -0.07, y: 0.86, z: 0}
 --- !u!1 &1205567791571564243
 GameObject:
   m_ObjectHideFlags: 0
@@ -85,7 +109,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 81
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8481103157198156164
 Transform:
   m_ObjectHideFlags: 0
@@ -192,7 +216,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 81
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6707375239886971484
 Transform:
   m_ObjectHideFlags: 0
@@ -299,7 +323,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 81
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7332817094815248180
 Transform:
   m_ObjectHideFlags: 0
@@ -406,7 +430,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 81
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4186719548080240463
 Transform:
   m_ObjectHideFlags: 0

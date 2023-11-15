@@ -21,7 +21,7 @@ public class Slenderman_EndEvent : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (((1 << other.gameObject.layer) & armor) != 0 && other.CompareTag("Player") && !hasTrigger)
+        if (((1 << other.gameObject.layer) & armor) != 0 && other.CompareTag("Player") && !hasTrigger && isActivate)
         {
             hasTrigger = true;
             GameManager.Instance.UpdateGameState(GameState.EndGame);

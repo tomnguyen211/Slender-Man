@@ -1272,7 +1272,7 @@ public class FPSHandsController : MonoBehaviour
                 {
                     battery++;
                     hit.collider.gameObject.SetActive(false);
-                    GameManager.Instance.CharacterBar.UpdateUHealth(battery);
+                    GameManager.Instance.CharacterBar.UpdateUIBattery(battery);
 
                     if (hit.transform.TryGetComponent<TriggerEvent>(out TriggerEvent trigger))
                     {

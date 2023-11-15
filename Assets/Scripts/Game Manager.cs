@@ -52,7 +52,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        UpdateGameState(GameState.StartGame);
+        UpdateGameState(GameState.Menu);
     }
 
     private void Init()
@@ -115,7 +115,11 @@ public class GameManager : MonoBehaviour
         GameState = newState;
         switch(newState)
         {
+            case GameState.Menu:
+                break;
             case GameState.StartGame:
+                EventManager.TriggerEvent("PauseEvent", true);
+                EventManager.TriggerEvent("TriggerThemeSound", "CarCrash");
                 break;
             case GameState.Stage_1:
                 break;
@@ -124,13 +128,14 @@ public class GameManager : MonoBehaviour
             case GameState.Stage_3:
                 EventManager.TriggerEvent("Activate");
                 EventManager.TriggerEvent("FinalEvent");
+                EventManager.TriggerEvent("TriggerThemeSound", "Chasing");
+                EventManager.TriggerEvent("ActivateSafeZone");
                 break;
             case GameState.EndGame:
                 EventManager.TriggerEvent("EndGame_Player");
                 EventManager.TriggerEvent("DisableAllEnemies");
                 EventManager.TriggerEvent("TheEndFadeIn");
                 EventManager.TriggerEvent("DeActivate");
-
                 StartCoroutine(ResetGame());
                 for (int n = 0; n < questItems.Length; n++)
                 {
@@ -167,6 +172,7 @@ public class QuestItem
 
 public enum GameState
 {
+    Menu,
     StartGame,
     Stage_1,
     Stage_2,

@@ -171,8 +171,6 @@ public class FPSCharacterController : MonoBehaviour, IDamage
         volume.profile.TryGet(out analogGlitchVolume);
 
         StartCoroutine(WindForest_Control());
-
-        EventManager.TriggerEvent("StartFadeOut",0.25f);
     }
 
     private void Update()
@@ -399,6 +397,11 @@ public class FPSCharacterController : MonoBehaviour, IDamage
     {
         Vector3 newPos = (Vector3)pos;
         transform.position = new Vector3(newPos.x,newPos.y,newPos.z);
+
+       /* if(isOutside && !musicTheme.themeLoopEnable)
+        {
+            EventManager.TriggerEvent("TriggerThemeSound", "Theme");
+        }*/
     }
 
     private bool IsMoving()

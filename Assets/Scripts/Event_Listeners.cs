@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Build.Pipeline.Utilities;
 using UnityEngine;
 
 public class Event_Listeners : MonoBehaviour
@@ -106,14 +107,33 @@ public class Event_Listeners : MonoBehaviour
                 GameObject player = Instantiate(playerPrefab, spawnPos, Quaternion.identity);
 
                 player.GetComponent<FPSHandsController>().SpawnRefillInventory(Current_PistolBullet, Current_ShotgunBullet, Current_HealthPack, Current_Battery, knifeUnlocked, pistolUnlocked, shotgunUnlocked, axeUnlocked);
-                if (n == 1 || n == 4 || n == 3)
+                player.GetComponent<FPSCharacterController>().ScreenDamage.CurrentHealth -= 0;
+                if (n == 1 || n == 2 || n == 5 || n == 6 || n == 2)
+                {
+                    EventManager.TriggerEvent("TriggerThemeSound", "Theme");
+                    player.GetComponent<FPSCharacterController>().isOutside = true;
+                }
+                else
+                {
                     player.GetComponent<FPSCharacterController>().isOutside = false;
+                    if(n == 0) // Skull
+                    {
+                        EventManager.TriggerEvent("TriggerThemeSound", "AbandonHouse");
+                    }
+                    else if(n == 3) // Staff
+                    {
+                        EventManager.TriggerEvent("TriggerThemeSound", "Hospital");
+                    }
+                    else if (n == 4) // Painting
+                    {
+                        break;
+                    }
+                }
+
+                EventManager.TriggerEvent("StartFadeOut", 0.25f);
 
                 break;
             }
         }
-
-        // Spawn //
     }
-
 }

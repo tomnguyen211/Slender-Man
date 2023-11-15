@@ -7,6 +7,8 @@ using UnityEngine.Events;
 public class Door : MonoBehaviour
 {
     [SerializeField]
+    string building;
+    [SerializeField]
     Teleport_Building Teleport_Building;
     [SerializeField]
     bool teleportDoor;
@@ -233,6 +235,7 @@ public class Door : MonoBehaviour
         if (GameManager.Instance.Player.GetComponent<GetParentObject>().parent.GetComponent<FPSCharacterController>().isOutside)
         {
             EventManager.TriggerEvent("PlayerTeleport", Teleport_Inside.position);
+            EventManager.TriggerEvent("TriggerThemeSound", building);
             GameManager.Instance.Player.GetComponent<GetParentObject>().parent.GetComponent<FPSCharacterController>().isOutside = false;
             Teleport_Building.teleportInside?.Invoke();
             EventManager.TriggerEvent("TeleportInside_Global");
@@ -245,6 +248,7 @@ public class Door : MonoBehaviour
         {
             EventManager.TriggerEvent("PlayerTeleport", Teleport_Outside.position);
             GameManager.Instance.Player.GetComponent<GetParentObject>().parent.GetComponent<FPSCharacterController>().isOutside = true;
+            EventManager.TriggerEvent("TriggerThemeSound", "Theme");
             Teleport_Building.teleportOutside?.Invoke();
             EventManager.TriggerEvent("TeleportOutside_Global");
             sound.Stop();

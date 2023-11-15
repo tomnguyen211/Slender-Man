@@ -39,6 +39,7 @@ public class MainMenu : MonoBehaviour
 
     IEnumerator LoadGame()
     {
+
         yield return new WaitForSeconds(5);
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex + 1);
 
@@ -47,7 +48,6 @@ public class MainMenu : MonoBehaviour
         {
             yield return null;
         }
-
     }
 
     public void QuitGame()
