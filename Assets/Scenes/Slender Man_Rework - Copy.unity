@@ -2098,12 +2098,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 34400843}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &37100419 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6896028994569825611, guid: cc6ad508c5b8f4a4eb8219062352dccc,
-    type: 3}
-  m_PrefabInstance: {fileID: 1121979758}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &40577751
 GameObject:
   m_ObjectHideFlags: 0
@@ -17265,34 +17259,10 @@ MonoBehaviour:
   - {fileID: 1445889580}
   teleportInside_Event:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2002400396}
-        m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
-        m_MethodName: Play
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   teleportOutside_Event:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2002400396}
-        m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
-        m_MethodName: Stop
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!1001 &162976379
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -18630,43 +18600,7 @@ MonoBehaviour:
   spawnPos: {fileID: 2096513468}
   triggerEvent:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1631486291}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-      - m_Target: {fileID: 901161301}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-      - m_Target: {fileID: 938451505}
-        m_TargetAssemblyTypeName: Door, Assembly-CSharp
-        m_MethodName: TriggerClose
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
+      m_Calls: []
 --- !u!65 &239413605
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -21071,66 +21005,12 @@ MonoBehaviour:
   DoorOpenAngle: 90
   isOpen: 0
   txt: {fileID: 0}
-  doorOpenSound:
-  - {fileID: 8300000, guid: 3506c7734dbb20c4c93ce420c820938e, type: 3}
-  - {fileID: 8300000, guid: 252516f8dcf62414e89aca2d56070c15, type: 3}
-  - {fileID: 8300000, guid: 34cd87e1f51739942b63d13c367cef2d, type: 3}
-  doorCloseSound:
-  - {fileID: 8300000, guid: e9afe76a1e5a82e49bd88d242df7a184, type: 3}
-  - {fileID: 8300000, guid: 682c873e620db8d40a247ae42cbc8b8c, type: 3}
-  - {fileID: 8300000, guid: 7094a70ea8c1d824aa5ae6f5c1389548, type: 3}
+  doorOpenSound: []
+  doorCloseSound: []
   triggerEvent:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1957096583}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 853136872}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 910281298}
-        m_TargetAssemblyTypeName: Slenderman_Event_11, Assembly-CSharp
-        m_MethodName: DisalbeSlender
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1184292172}
-        m_TargetAssemblyTypeName: Slenderman_Event_12, Assembly-CSharp
-        m_MethodName: DisalbeSlender
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  unlimitedTrigger: 1
+      m_Calls: []
+  unlimitedTrigger: 0
   isRotating: 0
 --- !u!65 &352239611
 BoxCollider:
@@ -21715,18 +21595,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 027734b128354ef4c9c2cf0bbde765cf, type: 3}
---- !u!114 &399689809 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3147376817665307743, guid: 1433ba59f7bf34b47a3f63c6dbb7c08c,
-    type: 3}
-  m_PrefabInstance: {fileID: 3172003074070308788}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8eecbecc71e93b4489a446d77d0bc68d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &400518404
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -21990,7 +21858,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e961e1e831bfac34facce8ef6ede2b47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isGlobal: 1
+  isGlobal: 0
   enemies:
   - {fileID: 1331727989}
   - {fileID: 848152888}
@@ -22691,11 +22559,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 8430148103205526300, guid: 67aeaeb03c13b6d4abb29ac453798751,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1774131293}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 67aeaeb03c13b6d4abb29ac453798751, type: 3}
 --- !u!4 &420477432 stripped
 Transform:
@@ -38347,12 +38211,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 406281244}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &627619586 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8430148103205526300, guid: 67aeaeb03c13b6d4abb29ac453798751,
-    type: 3}
-  m_PrefabInstance: {fileID: 1552113687}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &628582490 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6543757184063265093, guid: cc6ad508c5b8f4a4eb8219062352dccc,
@@ -39291,30 +39149,12 @@ MonoBehaviour:
   DoorOpenAngle: 0
   isOpen: 0
   txt: {fileID: 0}
-  doorOpenSound:
-  - {fileID: 8300000, guid: 3506c7734dbb20c4c93ce420c820938e, type: 3}
-  - {fileID: 8300000, guid: 252516f8dcf62414e89aca2d56070c15, type: 3}
-  - {fileID: 8300000, guid: 34cd87e1f51739942b63d13c367cef2d, type: 3}
-  doorCloseSound:
-  - {fileID: 8300000, guid: e9afe76a1e5a82e49bd88d242df7a184, type: 3}
-  - {fileID: 8300000, guid: 682c873e620db8d40a247ae42cbc8b8c, type: 3}
-  - {fileID: 8300000, guid: 7094a70ea8c1d824aa5ae6f5c1389548, type: 3}
+  doorOpenSound: []
+  doorCloseSound: []
   triggerEvent:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 936400070}
-        m_TargetAssemblyTypeName: Slenderman_Event_8, Assembly-CSharp
-        m_MethodName: TriggerEvent
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  unlimitedTrigger: 1
+      m_Calls: []
+  unlimitedTrigger: 0
   isRotating: 0
 --- !u!65 &736126361
 BoxCollider:
@@ -41480,12 +41320,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &853136872 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6896028994569825611, guid: cc6ad508c5b8f4a4eb8219062352dccc,
-    type: 3}
-  m_PrefabInstance: {fileID: 1402246014}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &853829391
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -42396,12 +42230,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8626914181284481495, guid: cc6ad508c5b8f4a4eb8219062352dccc,
     type: 3}
   m_PrefabInstance: {fileID: 406281244}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &901161301 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6896028994569825611, guid: cc6ad508c5b8f4a4eb8219062352dccc,
-    type: 3}
-  m_PrefabInstance: {fileID: 1276194943}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &901235043 stripped
 GameObject:
@@ -43522,18 +43350,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &938451505 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1428112239480246577, guid: 7cfab725c8d0aa345843048b42f58a5e,
-    type: 3}
-  m_PrefabInstance: {fileID: 159907614}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4162366dd8f897d4da8955cfc0504b1a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &938619693
 GameObject:
   m_ObjectHideFlags: 0
@@ -43944,14 +43760,8 @@ MonoBehaviour:
   DoorOpenAngle: 0
   isOpen: 0
   txt: {fileID: 0}
-  doorOpenSound:
-  - {fileID: 8300000, guid: 3506c7734dbb20c4c93ce420c820938e, type: 3}
-  - {fileID: 8300000, guid: 252516f8dcf62414e89aca2d56070c15, type: 3}
-  - {fileID: 8300000, guid: 34cd87e1f51739942b63d13c367cef2d, type: 3}
-  doorCloseSound:
-  - {fileID: 8300000, guid: e9afe76a1e5a82e49bd88d242df7a184, type: 3}
-  - {fileID: 8300000, guid: 682c873e620db8d40a247ae42cbc8b8c, type: 3}
-  - {fileID: 8300000, guid: 7094a70ea8c1d824aa5ae6f5c1389548, type: 3}
+  doorOpenSound: []
+  doorCloseSound: []
   triggerEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -48869,7 +48679,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 1121979758}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 37100419}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e360c5505af27f44f85ea3a53901bf26, type: 3}
@@ -49709,14 +49519,8 @@ MonoBehaviour:
   DoorOpenAngle: 77
   isOpen: 1
   txt: {fileID: 0}
-  doorOpenSound:
-  - {fileID: 8300000, guid: 3506c7734dbb20c4c93ce420c820938e, type: 3}
-  - {fileID: 8300000, guid: 252516f8dcf62414e89aca2d56070c15, type: 3}
-  - {fileID: 8300000, guid: 34cd87e1f51739942b63d13c367cef2d, type: 3}
-  doorCloseSound:
-  - {fileID: 8300000, guid: e9afe76a1e5a82e49bd88d242df7a184, type: 3}
-  - {fileID: 8300000, guid: 682c873e620db8d40a247ae42cbc8b8c, type: 3}
-  - {fileID: 8300000, guid: 7094a70ea8c1d824aa5ae6f5c1389548, type: 3}
+  doorOpenSound: []
+  doorCloseSound: []
   triggerEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -51971,7 +51775,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 1276194943}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 901161301}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e360c5505af27f44f85ea3a53901bf26, type: 3}
@@ -62061,7 +61865,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 1402246014}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 853136872}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e360c5505af27f44f85ea3a53901bf26, type: 3}
@@ -62512,34 +62316,10 @@ MonoBehaviour:
   - {fileID: 1279407295}
   teleportInside_Event:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1425242005}
-        m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
-        m_MethodName: Play
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   teleportOutside_Event:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1425242005}
-        m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
-        m_MethodName: Stop
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!1 &1425242003
 GameObject:
   m_ObjectHideFlags: 0
@@ -64563,12 +64343,6 @@ Transform:
   - {fileID: 1050125717}
   m_Father: {fileID: 255080518}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1462913551 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6896028994569825611, guid: cc6ad508c5b8f4a4eb8219062352dccc,
-    type: 3}
-  m_PrefabInstance: {fileID: 476995729}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1464130647 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 100148, guid: 8d44a8bf542ec854ab6a6c818ea10b8a,
@@ -66745,18 +66519,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 500, y: 50, z: 50}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &1612597668 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6372904675822259420, guid: b61566ace66aff0448cb1bac2d53e198,
-    type: 3}
-  m_PrefabInstance: {fileID: 3681884238282587298}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 28ff830b417ebb74d9b2c77ff25a575e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1614376576
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -67497,7 +67259,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   time: 0.1
-  isStart: 0
+  isStart: 1
 --- !u!108 &1646178486
 Light:
   m_ObjectHideFlags: 0
@@ -67768,66 +67530,12 @@ MonoBehaviour:
   DoorOpenAngle: -100
   isOpen: 0
   txt: {fileID: 0}
-  doorOpenSound:
-  - {fileID: 8300000, guid: 3506c7734dbb20c4c93ce420c820938e, type: 3}
-  - {fileID: 8300000, guid: 252516f8dcf62414e89aca2d56070c15, type: 3}
-  - {fileID: 8300000, guid: 34cd87e1f51739942b63d13c367cef2d, type: 3}
-  doorCloseSound:
-  - {fileID: 8300000, guid: e9afe76a1e5a82e49bd88d242df7a184, type: 3}
-  - {fileID: 8300000, guid: 682c873e620db8d40a247ae42cbc8b8c, type: 3}
-  - {fileID: 8300000, guid: 7094a70ea8c1d824aa5ae6f5c1389548, type: 3}
+  doorOpenSound: []
+  doorCloseSound: []
   triggerEvent:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1957096583}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 853136872}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 910281298}
-        m_TargetAssemblyTypeName: Slenderman_Event_11, Assembly-CSharp
-        m_MethodName: DisalbeSlender
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1184292172}
-        m_TargetAssemblyTypeName: Slenderman_Event_12, Assembly-CSharp
-        m_MethodName: DisalbeSlender
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  unlimitedTrigger: 1
+      m_Calls: []
+  unlimitedTrigger: 0
   isRotating: 0
 --- !u!65 &1677522203
 BoxCollider:
@@ -69065,7 +68773,7 @@ PrefabInstance:
         type: 3}
       propertyPath: enemy
       value: 
-      objectReference: {fileID: 627619586}
+      objectReference: {fileID: 0}
     - target: {fileID: 7870960603073420783, guid: 67aeaeb03c13b6d4abb29ac453798751,
         type: 3}
       propertyPath: customPatrolEnable
@@ -70681,108 +70389,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1773961318}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1774131290 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8430148103205526300, guid: 67aeaeb03c13b6d4abb29ac453798751,
-    type: 3}
-  m_PrefabInstance: {fileID: 420477431}
-  m_PrefabAsset: {fileID: 0}
---- !u!82 &1774131293
-AudioSource:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1774131290}
-  m_Enabled: 1
-  serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
-  m_Volume: 1
-  m_Pitch: 1
-  Loop: 0
-  Mute: 0
-  Spatialize: 0
-  SpatializePostEffects: 0
-  Priority: 128
-  DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
-  Pan2D: 0
-  rolloffMode: 0
-  BypassEffects: 0
-  BypassListenerEffects: 0
-  BypassReverbZones: 0
-  rolloffCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  panLevelCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  spreadCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  reverbZoneMixCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
 --- !u!1 &1790984251 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2644302673264271411, guid: f2e7136decf39354a8649d8d801389f5,
@@ -70808,7 +70414,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   time: 0.1
-  isStart: 0
+  isStart: 1
 --- !u!1001 &1792256996
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -74633,43 +74239,7 @@ MonoBehaviour:
   spawnPos: {fileID: 0}
   triggerEvent:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 527174546}
-        m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
-        m_MethodName: Stop
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 37100419}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-      - m_Target: {fileID: 859039640}
-        m_TargetAssemblyTypeName: Slenderman_Event_7, Assembly-CSharp
-        m_MethodName: TriggerEvent
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
+      m_Calls: []
 --- !u!65 &1858973892
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -74950,89 +74520,11 @@ MonoBehaviour:
   DoorOpenAngle: 150
   isOpen: 0
   txt: {fileID: 0}
-  doorOpenSound:
-  - {fileID: 8300000, guid: 3506c7734dbb20c4c93ce420c820938e, type: 3}
-  - {fileID: 8300000, guid: 252516f8dcf62414e89aca2d56070c15, type: 3}
-  - {fileID: 8300000, guid: 34cd87e1f51739942b63d13c367cef2d, type: 3}
-  doorCloseSound:
-  - {fileID: 8300000, guid: e9afe76a1e5a82e49bd88d242df7a184, type: 3}
-  - {fileID: 8300000, guid: 682c873e620db8d40a247ae42cbc8b8c, type: 3}
-  - {fileID: 8300000, guid: 7094a70ea8c1d824aa5ae6f5c1389548, type: 3}
+  doorOpenSound: []
+  doorCloseSound: []
   triggerEvent:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1612597668}
-        m_TargetAssemblyTypeName: GhostWomen, Assembly-CSharp
-        m_MethodName: MoveTrigger
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1646178485}
-        m_TargetAssemblyTypeName: WFX_LightFlicker, Assembly-CSharp
-        m_MethodName: TriggerEvent
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 459822997}
-        m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
-        m_MethodName: Play
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1790984255}
-        m_TargetAssemblyTypeName: WFX_LightFlicker, Assembly-CSharp
-        m_MethodName: TriggerEvent
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1462913551}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-      - m_Target: {fileID: 910281298}
-        m_TargetAssemblyTypeName: Slenderman_Event_11, Assembly-CSharp
-        m_MethodName: Activate
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
+      m_Calls: []
   unlimitedTrigger: 0
   isRotating: 0
 --- !u!65 &1878651668
@@ -75565,18 +75057,6 @@ Transform:
   - {fileID: 1646178483}
   m_Father: {fileID: 2058807813}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1923551803 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7511080664941652259, guid: 1433ba59f7bf34b47a3f63c6dbb7c08c,
-    type: 3}
-  m_PrefabInstance: {fileID: 3172003074070308788}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 61b5d496fb6370149a867884410847c8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &1923551809 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3238999578615166559, guid: 1433ba59f7bf34b47a3f63c6dbb7c08c,
@@ -76772,12 +76252,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1677522204}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1957096583 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6896028994569825611, guid: cc6ad508c5b8f4a4eb8219062352dccc,
-    type: 3}
-  m_PrefabInstance: {fileID: 1050125716}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1957270858
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -77099,29 +76573,11 @@ MonoBehaviour:
   DoorOpenAngle: -10
   isOpen: 0
   txt: {fileID: 0}
-  doorOpenSound:
-  - {fileID: 8300000, guid: 3506c7734dbb20c4c93ce420c820938e, type: 3}
-  - {fileID: 8300000, guid: 252516f8dcf62414e89aca2d56070c15, type: 3}
-  - {fileID: 8300000, guid: 34cd87e1f51739942b63d13c367cef2d, type: 3}
-  doorCloseSound:
-  - {fileID: 8300000, guid: e9afe76a1e5a82e49bd88d242df7a184, type: 3}
-  - {fileID: 8300000, guid: 682c873e620db8d40a247ae42cbc8b8c, type: 3}
-  - {fileID: 8300000, guid: 7094a70ea8c1d824aa5ae6f5c1389548, type: 3}
+  doorOpenSound: []
+  doorCloseSound: []
   triggerEvent:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1984211064}
-        m_TargetAssemblyTypeName: TriggerEvent, Assembly-CSharp
-        m_MethodName: Trigger_Event
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   unlimitedTrigger: 0
   isRotating: 0
 --- !u!65 &1984211059
@@ -78121,30 +77577,12 @@ MonoBehaviour:
   DoorOpenAngle: 90
   isOpen: 0
   txt: {fileID: 0}
-  doorOpenSound:
-  - {fileID: 8300000, guid: 3506c7734dbb20c4c93ce420c820938e, type: 3}
-  - {fileID: 8300000, guid: 252516f8dcf62414e89aca2d56070c15, type: 3}
-  - {fileID: 8300000, guid: 34cd87e1f51739942b63d13c367cef2d, type: 3}
-  doorCloseSound:
-  - {fileID: 8300000, guid: e9afe76a1e5a82e49bd88d242df7a184, type: 3}
-  - {fileID: 8300000, guid: 682c873e620db8d40a247ae42cbc8b8c, type: 3}
-  - {fileID: 8300000, guid: 7094a70ea8c1d824aa5ae6f5c1389548, type: 3}
+  doorOpenSound: []
+  doorCloseSound: []
   triggerEvent:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 936400070}
-        m_TargetAssemblyTypeName: Slenderman_Event_8, Assembly-CSharp
-        m_MethodName: TriggerEvent
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  unlimitedTrigger: 1
+      m_Calls: []
+  unlimitedTrigger: 0
   isRotating: 0
 --- !u!65 &2008519746
 BoxCollider:
@@ -98629,7 +98067,7 @@ PrefabInstance:
         type: 3}
       propertyPath: AudioManager
       value: 
-      objectReference: {fileID: 399689809}
+      objectReference: {fileID: 0}
     - target: {fileID: 3772689125138464307, guid: 1433ba59f7bf34b47a3f63c6dbb7c08c,
         type: 3}
       propertyPath: bulletCasing
@@ -98674,7 +98112,7 @@ PrefabInstance:
         type: 3}
       propertyPath: MovementManager
       value: 
-      objectReference: {fileID: 1923551803}
+      objectReference: {fileID: 0}
     - target: {fileID: 9045474193669187323, guid: 1433ba59f7bf34b47a3f63c6dbb7c08c,
         type: 3}
       propertyPath: heartBeat_Sound

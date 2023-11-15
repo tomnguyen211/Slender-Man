@@ -123,18 +123,22 @@ public class FPSHandsController : MonoBehaviour
 
     private void LateUpdate()
     {
-        ValidateHeldItem();
-        AdjustBulletPoistion();
-        UpdateInput();
-        UpdateHandsPose();
-        UpdateMovementBounce(deltaTime: Time.deltaTime);
-        UpdateHandsPosition();
 
-        if (IsAttacking || IsReloading || currentHandsPose == null)
-            return;
+        if(!fpsCharacterController.immobilized)
+        {
+            ValidateHeldItem();
+            AdjustBulletPoistion();
+            UpdateInput();
+            UpdateHandsPose();
+            UpdateMovementBounce(deltaTime: Time.deltaTime);
+            UpdateHandsPosition();
 
-        PlayHandsAnimation(currentHandsPose.HandsAnimationStateName, currentHandsPose.AnimationStateBlendTime);
-        PlayItemAnimation(currentHandsPose.ItemAnimationStateName, currentHandsPose.AnimationStateBlendTime);
+            if (IsAttacking || IsReloading || currentHandsPose == null)
+                return;
+
+            PlayHandsAnimation(currentHandsPose.HandsAnimationStateName, currentHandsPose.AnimationStateBlendTime);
+            PlayItemAnimation(currentHandsPose.ItemAnimationStateName, currentHandsPose.AnimationStateBlendTime);
+        }
     }
 
     private void AdjustBulletPoistion()

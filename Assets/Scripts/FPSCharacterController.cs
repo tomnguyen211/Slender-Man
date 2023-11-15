@@ -100,6 +100,9 @@ public class FPSCharacterController : MonoBehaviour, IDamage
     [SerializeField]
     AudioSource scaryLoopSound;
 
+    public bool immueDamage;
+    public bool immobilized;
+
     private void OnEnable()
     {
 
@@ -108,6 +111,7 @@ public class FPSCharacterController : MonoBehaviour, IDamage
         EventManager.StartListening("TriggerWindSound", TriggerWindSound);
         EventManager.StartListening("JumpScareSound", JumpScareSound);
         EventManager.StartListening("FinalEvent", FinalEvent);
+        EventManager.StartListening("EndGame_Player", EndGame_Player);
 
 
 
@@ -124,6 +128,8 @@ public class FPSCharacterController : MonoBehaviour, IDamage
         EventManager.StopListening("TriggerWindSound", TriggerWindSound);
         EventManager.StopListening("JumpScareSound", JumpScareSound);
         EventManager.StopListening("FinalEvent", FinalEvent);
+        EventManager.StopListening("EndGame_Player", EndGame_Player);
+
 
 
         triggerEvent -= UpdateStatic;
@@ -177,10 +183,12 @@ public class FPSCharacterController : MonoBehaviour, IDamage
             return;
         }
 
-        UpdateInput();
-        UpdateTransform();
-        UpdateCameraRotation();
-
+        if(!immobilized)
+        {
+            UpdateInput();
+            UpdateTransform();
+            UpdateCameraRotation();
+        }
     }
 
     private void LateUpdate()
@@ -291,12 +299,15 @@ public class FPSCharacterController : MonoBehaviour, IDamage
 
     public void Damage(float damage, GameObject attacker)
     {
-        currentHealth -= damage;
-        ScreenDamage.CurrentHealth -= damage;
-        Attacker = attacker;
-        GameManager.Instance.CharacterBar.TakeDamage(damage);
-        if (currentHealth < 0f)
-            Debug.Log("You're Dead");
+        if(!immueDamage)
+        {
+            currentHealth -= damage;
+            ScreenDamage.CurrentHealth -= damage;
+            Attacker = attacker;
+            GameManager.Instance.CharacterBar.TakeDamage(damage);
+            if (currentHealth <= 0f)
+                Debug.Log("You're Dead");
+        }
     }
 
     public void Mana()
@@ -659,5 +670,16 @@ public class FPSCharacterController : MonoBehaviour, IDamage
             triggerEvent.Invoke(3);
         }
         finalEventActivate = true;
+    }
+
+    public void EndGame_Player()
+    {
+        glitchStage = 0;
+        triggerEvent.Invoke(0);
+        immueDamage = true;
+        immobilized = true;
+        EventManager.TriggerEvent("StartFadein"); ;
+        // Text //
+
     }
 }

@@ -1,6 +1,8 @@
+using System.Collections;
 using Unity.Collections;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -124,6 +126,9 @@ public class GameManager : MonoBehaviour
                 EventManager.TriggerEvent("FinalEvent");
                 break;
             case GameState.EndGame:
+                EventManager.TriggerEvent("EndGame_Player");
+                EventManager.TriggerEvent("DisableAllEnemies");
+                StartCoroutine(ResetGame());
                 break;
         }
 
@@ -134,6 +139,14 @@ public class GameManager : MonoBehaviour
     {
         Player = (GameObject)p;
     }
+
+    IEnumerator ResetGame()
+    {
+        yield return new WaitForSeconds(15);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
+
+    }
+
 }
 
 
@@ -153,5 +166,7 @@ public enum GameState
     Stage_3,
     EndGame
 }
+
+
 
 
