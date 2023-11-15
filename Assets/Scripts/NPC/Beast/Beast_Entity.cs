@@ -345,11 +345,15 @@ public class Beast_Idle : IdleState
         {
             character.Audio("Idle");
         }
+        character.rb.constraints = RigidbodyConstraints.FreezeAll;
+
     }
 
     public override void Exit()
     {
         base.Exit();
+        character.rb.constraints = RigidbodyConstraints.None;
+
     }
 
     public override void LogicUpdate()
@@ -622,6 +626,15 @@ public class Beast_Attack : AttackState
         base.Enter();
 
         character.Audio("Attack");
+        character.rb.constraints = RigidbodyConstraints.FreezeAll;
+
+
+    }
+
+    public override void Exit()
+    {
+        base.Exit();
+        character.rb.constraints = RigidbodyConstraints.None;
 
     }
 }
@@ -640,6 +653,7 @@ public class Beast_Dead : DeadState
         character.anim.SetTrigger(animBoolName);
         deadTime = stateData.deadTime;
         character.seeker.CancelCurrentPathRequest();
+        character.rb.constraints = RigidbodyConstraints.FreezeAll;
 
         character.Audio("Dead");
     }

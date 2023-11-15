@@ -34,6 +34,10 @@ public class CharacterInfoBar : MonoBehaviour
 
     public TextMeshProUGUI text_Quest;
 
+    private void Awake()
+    {
+        GameManager.Instance.CharacterBar = this;
+    }
 
     /*private void Start()
     {

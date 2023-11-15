@@ -347,12 +347,15 @@ public class Ripper_Idle : IdleState
         {
             character.Audio("Idle");
         }
+        character.rb.constraints = RigidbodyConstraints.FreezeAll;
 
     }
 
     public override void Exit()
     {
         base.Exit();
+        character.rb.constraints = RigidbodyConstraints.None;
+
     }
 
     public override void LogicUpdate()
@@ -631,6 +634,15 @@ public class Ripper_Attack : AttackState
     {
         base.Enter();
         character.Audio("Attack");
+        character.rb.constraints = RigidbodyConstraints.FreezeAll;
+
+    }
+
+    public override void Exit()
+    {
+        base.Exit();
+        character.rb.constraints = RigidbodyConstraints.None;
+
     }
 
     public void PresetAttack()
@@ -667,6 +679,7 @@ public class Ripper_Dead : DeadState
         deadTime = stateData.deadTime;
         character.seeker.CancelCurrentPathRequest();
         character.Audio("Dead");
+        character.rb.constraints = RigidbodyConstraints.FreezeAll;
 
     }
 

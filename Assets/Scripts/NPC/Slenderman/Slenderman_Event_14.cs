@@ -33,13 +33,14 @@ public class Slenderman_Event_14 : MonoBehaviour
             hasTrigger = true;
             StartCoroutine(DelayEvent());
             EventManager.TriggerEvent("JumpScareSound");
+            Instantiate(Vendigo, spawnLocation.position, Vendigo.transform.rotation);
+
         }
     }
 
     public void TriggerEvent()
     {
         Slender_Entity.gameObject.SetActive(true);
-        Instantiate(Vendigo, spawnLocation.position, Vendigo.transform.rotation);
     }
 
     IEnumerator DelayEvent()

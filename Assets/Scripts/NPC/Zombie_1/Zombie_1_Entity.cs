@@ -376,6 +376,7 @@ public class Zombie_1_Idle : IdleState
         {
             character.Audio("Idle");
         }
+        character.rb.constraints = RigidbodyConstraints.FreezeAll;
 
     }
 
@@ -384,6 +385,8 @@ public class Zombie_1_Idle : IdleState
         base.Exit();
 
         character.anim.SetFloat("Multiply", 1f);
+        character.rb.constraints = RigidbodyConstraints.None;
+
     }
 
     public override void LogicUpdate()
@@ -461,6 +464,7 @@ public class Zombie_1_Move : MoveState
             character.Audio("Idle");
 
         character.MovementManager.SetPaceTimer(0.3f);
+
     }
 
     public override void Exit()
@@ -468,8 +472,8 @@ public class Zombie_1_Move : MoveState
         base.Exit();
         character.transform.rotation = Quaternion.LookRotation(direction);
         character.transform.eulerAngles = new Vector3(0, character.transform.eulerAngles.y, 0);
-        character.seeker.CancelCurrentPathRequest();
-        character.seeker.StopAllCoroutines();
+        //character.seeker.CancelCurrentPathRequest();
+        //character.seeker.StopAllCoroutines();
         character.MovementManager.SetPaceTimer(0.5f);
 
     }
@@ -621,8 +625,8 @@ public class Zombie_1_Patrol : PatrolState
         Debug.Log("X: " + rot.x + " Y: " + rot.y + " Z: " + rot.z);
         character.transform.rotation = Quaternion.LookRotation(direction);
         character.transform.eulerAngles = new Vector3(0, character.transform.eulerAngles.y, 0);
-        character.seeker.CancelCurrentPathRequest();
-        character.seeker.StopAllCoroutines();
+        //character.seeker.CancelCurrentPathRequest();
+        //character.seeker.StopAllCoroutines();
 
         if (character.isReturning)
             character.isActive = false;
@@ -663,13 +667,15 @@ public class Zombie_1_Attack : AttackState
     public override void Enter()
     {
         base.Enter();
-
+        character.rb.constraints = RigidbodyConstraints.FreezeAll;
         character.Audio("Attack");
     }
 
     public override void Exit()
     {
         base.Exit();
+        character.rb.constraints = RigidbodyConstraints.None;
+
     }
 
     public override void LogicUpdate()
@@ -709,6 +715,7 @@ public class Zombie_1_Dead : DeadState
         character.anim.SetTrigger(animBoolName);
         deadTime = stateData.deadTime;
         character.seeker.CancelCurrentPathRequest();
+        character.rb.constraints = RigidbodyConstraints.FreezeAll;
 
         character.Audio("Dead");
 

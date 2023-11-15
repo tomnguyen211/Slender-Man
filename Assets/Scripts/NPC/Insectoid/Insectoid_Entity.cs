@@ -327,6 +327,8 @@ public class Insectoid_Idle : IdleState
         base.Enter();
         if (character.DetectionCheck)
             character.Audio("Idle");
+        character.rb.constraints = RigidbodyConstraints.FreezeAll;
+
 
 
     }
@@ -334,6 +336,8 @@ public class Insectoid_Idle : IdleState
     public override void Exit()
     {
         base.Exit();
+        character.rb.constraints = RigidbodyConstraints.None;
+
     }
 
     public override void LogicUpdate()
@@ -582,12 +586,21 @@ public class Insectoid_Attack : AttackState
         base.Enter();
 
         character.Audio("Attack");
+        character.rb.constraints = RigidbodyConstraints.FreezeAll;
+
     }
     public override void AnimationFinishTrigger()
     {
         base.AnimationFinishTrigger();
         character.Insectoid_Idle.PresetIdle();
         stateMachine.ChangeState(character.Insectoid_Idle);
+    }
+
+    public override void Exit()
+    {
+        base.Exit();
+        character.rb.constraints = RigidbodyConstraints.None;
+
     }
 }
 public class Insectoid_Dead : DeadState
@@ -606,6 +619,8 @@ public class Insectoid_Dead : DeadState
         deadTime = stateData.deadTime;
         character.seeker.CancelCurrentPathRequest();
         character.Audio("Dead");
+        character.rb.constraints = RigidbodyConstraints.FreezeAll;
+
     }
 
     public override void Exit()

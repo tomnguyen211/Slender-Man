@@ -107,7 +107,8 @@ public class MovementManager : MonoBehaviour
 
     private void CollisionSoundTrigger()
     {
-        if (isMoving.Invoke())
+        object a = isMoving?.Invoke();
+        if (a != null && (bool) a)
         {
             Ray ray = new Ray(groundCheckPosition, -transform.up);
             RaycastHit rayGround;

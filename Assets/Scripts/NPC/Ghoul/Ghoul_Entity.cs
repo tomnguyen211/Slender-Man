@@ -324,12 +324,15 @@ public class Ghoul_Idle : IdleState
         {
             character.Audio("Idle");
         }
+        character.rb.constraints = RigidbodyConstraints.FreezeAll;
 
     }
 
     public override void Exit()
     {
         base.Exit();
+        character.rb.constraints = RigidbodyConstraints.None;
+
     }
 
     public override void LogicUpdate()
@@ -542,6 +545,15 @@ public class Ghoul_Attack : AttackState
     {
         base.Enter();
         character.Audio("Attack");
+        character.rb.constraints = RigidbodyConstraints.FreezeAll;
+
+
+    }
+
+    public override void Exit()
+    {
+        base.Exit();
+        character.rb.constraints = RigidbodyConstraints.None;
 
     }
 
@@ -576,6 +588,8 @@ public class Ghoul_Dead : DeadState
         deadTime = stateData.deadTime;
         character.seeker.CancelCurrentPathRequest();
         character.Audio("Dead");
+        character.rb.constraints = RigidbodyConstraints.FreezeAll;
+
     }
 
     public override void Exit()

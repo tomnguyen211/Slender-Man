@@ -71,6 +71,7 @@ public class FPSCharacterController : MonoBehaviour, IDamage
     [SerializeField]
     AudioClip[] windSoundVariants;
 
+    [SerializeField]
     Volume volume;
 
     DigitalGlitchVolume digitalGlitchVolume;
@@ -97,6 +98,8 @@ public class FPSCharacterController : MonoBehaviour, IDamage
     AudioSource jumpjumpScareSource;
 
     private bool finalEventActivate;
+    [SerializeField]
+    AudioSource scaryLoopSound;
 
     private void OnEnable()
     {
@@ -140,7 +143,6 @@ public class FPSCharacterController : MonoBehaviour, IDamage
             Vector3 cameraEuler = cameraTransform.rotation.eulerAngles;
             cameraPitch = cameraEuler.x;
             cameraYaw = cameraEuler.y;
-            volume = cameraTransform.GetComponent<Volume>();
         }
 
         SlenderObj = new List<GameObject>();
@@ -153,12 +155,15 @@ public class FPSCharacterController : MonoBehaviour, IDamage
         ScreenDamage.maxHealth = ScreenDamage.CurrentHealth = currentHealth = maxHealth;
         currentMana = maxMana;
         handController.currentBattery = handController.batteryMax;
+
         GameManager.Instance.CharacterBar.Init(maxHealth, maxMana, handController.batteryMax);
 
         volume.profile.TryGet(out digitalGlitchVolume);
         volume.profile.TryGet(out analogGlitchVolume);
 
         StartCoroutine(WindForest_Control());
+
+        EventManager.TriggerEvent("StartFadeOut");
     }
 
     private void Update()
@@ -645,7 +650,8 @@ public class FPSCharacterController : MonoBehaviour, IDamage
 
     private void FinalEvent()
     {
-        if(glitchStage > 2)
+        scaryLoopSound.Play();
+        if (glitchStage > 2)
         {
             glitchStage = 2;
             triggerEvent.Invoke(3);

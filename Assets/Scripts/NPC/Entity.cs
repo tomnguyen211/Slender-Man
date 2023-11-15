@@ -83,6 +83,7 @@ public class Entity : MonoBehaviour
         stateMachine = new FiniteStateMachine();
         seeker = GetComponent<Seeker>();
         characterController = GetComponent<CharacterController>();
+        MovementManager = GetComponent<MovementManager>();
         Initialization();
     }
 
