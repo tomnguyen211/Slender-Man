@@ -12,7 +12,8 @@ public class PauseMenu : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (GameIsPaused) { 
+            if (GameIsPaused) 
+            { 
                 Resume();
             } else
             {
@@ -21,25 +22,26 @@ public class PauseMenu : MonoBehaviour
         }
     }
 
-    public void Pause()
-    {
-        PauseMenuUI.SetActive(true);
-        Time.timeScale = 0f;
-        GameIsPaused = true;
-    }
-
     public void Resume()
     {
         PauseMenuUI.SetActive(false);
-        Time.timeScale = 1f;
+        Time.timeScale = 1;
         GameIsPaused = false;
+    }
+
+    void Pause()
+    {
+        PauseMenuUI.SetActive(true);
+        Time.timeScale = 0;
+        GameIsPaused = true;
     }
 
     public void LoadMenu()
     {
-        Time.timeScale = 1f;
+        Time.timeScale = 1;
         SceneManager.LoadScene("Menu");
     }
+
     public void Exit()
     {
         Debug.Log("Exiting Game...");
