@@ -678,6 +678,9 @@ public class FPSCharacterController : MonoBehaviour, IDamage
             triggerEvent.Invoke(3);
         }
         finalEventActivate = true;
+        heartBeat_Sound.loop = true;
+        heartBeat_Sound.Play();
+
     }
 
     public void EndGame_Player()
