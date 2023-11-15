@@ -82,7 +82,7 @@ public class CameraFade : MonoBehaviour
             }
             else if(fadeIn)
             {
-                if (alpha >= 1f) // Fully faded out
+                if (alpha <= 0) // Fully faded in
                 {
                     alpha = 0f;
                     time = 1f;
@@ -94,13 +94,15 @@ public class CameraFade : MonoBehaviour
         }
     }
 
-    public void StartFadein()
+    public void StartFadein(object amount)
     {
+        speedScale = (float)amount;
         isFading = true;
         fadeIn = true;
     }
-    public void StartFadeOut()
+    public void StartFadeOut(object amount)
     {
+        speedScale = (float)amount;
         isFading = true;
         fadeOut = true;
     }

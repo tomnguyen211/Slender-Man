@@ -171,7 +171,7 @@ public class FPSCharacterController : MonoBehaviour, IDamage
 
         StartCoroutine(WindForest_Control());
 
-        EventManager.TriggerEvent("StartFadeOut");
+        EventManager.TriggerEvent("StartFadeOut",0.25f);
     }
 
     private void Update()
@@ -443,70 +443,73 @@ public class FPSCharacterController : MonoBehaviour, IDamage
 
     public void Glitch_Damage_Enable(GameObject a, bool cont)
     {
-        if (!isGlitch || cont)
+        if(!immueDamage)
         {
-            isGlitch = true;
-            stopGlitch = false;
-
-            if(Glitch_Coroutine != null)
-                StopCoroutine(Glitch_Coroutine);
-            if (Glitch_Coroutine_Stop != null)
-                StopCoroutine(Glitch_Coroutine_Stop);
-
-            if(finalEventActivate)
+            if (!isGlitch || cont)
             {
-                if (glitchStage < 2)
-                    glitchStage++;
+                isGlitch = true;
+                stopGlitch = false;
+
+                if (Glitch_Coroutine != null)
+                    StopCoroutine(Glitch_Coroutine);
+                if (Glitch_Coroutine_Stop != null)
+                    StopCoroutine(Glitch_Coroutine_Stop);
+
+                if (finalEventActivate)
+                {
+                    if (glitchStage < 2)
+                        glitchStage++;
+                }
+                else
+                {
+                    if (glitchStage < 5)
+                        glitchStage++;
+                }
+
+
+                switch (glitchStage)
+                {
+                    case 1:
+                        Glitch_Coroutine = StartCoroutine(GlitchCour_Increase(5));
+                        triggerEvent.Invoke(1);
+                        break;
+                    case 2:
+                        Glitch_Coroutine = StartCoroutine(GlitchCour_Increase(7));
+                        triggerEvent.Invoke(2);
+                        Damage(2, a);
+                        break;
+                    case 3:
+                        Glitch_Coroutine = StartCoroutine(GlitchCour_Increase(7));
+                        triggerEvent.Invoke(3);
+                        Damage(4, a);
+                        break;
+                    case 4:
+                        Glitch_Coroutine = StartCoroutine(GlitchCour_Increase(8));
+                        triggerEvent.Invoke(4);
+                        Damage(6, a);
+                        break;
+                    case 5:
+                        Glitch_Coroutine = StartCoroutine(GlitchCour_Increase(10));
+                        triggerEvent.Invoke(5);
+                        Damage(10, a);
+                        break;
+                    default:
+                        break;
+
+                }
             }
-            else
+
+            for (int i = 0; i < SlenderObj.Count; i++)
             {
-                if (glitchStage < 5)
-                    glitchStage++;
+                if (SlenderObj[i] == null)
+                    SlenderObj.RemoveAt(i);
             }
 
-
-            switch (glitchStage)
+            if (a != null && !SlenderObj.Contains(a))
             {
-                case 1:
-                    Glitch_Coroutine = StartCoroutine(GlitchCour_Increase(5));
-                    triggerEvent.Invoke(1);                 
-                    break;
-                case 2:
-                    Glitch_Coroutine = StartCoroutine(GlitchCour_Increase(7));
-                    triggerEvent.Invoke(2);
-                    Damage(2, a);
-                    break;
-                case 3:
-                    Glitch_Coroutine = StartCoroutine(GlitchCour_Increase(7));
-                    triggerEvent.Invoke(3);
-                    Damage(4, a);
-                    break;
-                case 4:
-                    Glitch_Coroutine = StartCoroutine(GlitchCour_Increase(8));
-                    triggerEvent.Invoke(4);
-                    Damage(6, a);
-                    break;
-                case 5:
-                    Glitch_Coroutine = StartCoroutine(GlitchCour_Increase(10));
-                    triggerEvent.Invoke(5);
-                    Damage(10, a);
-                    break;
-                default:
-                    break;
-
+                SlenderObj.Add(a);
             }
-        }
-
-        for(int i = 0; i < SlenderObj.Count; i++)
-        {
-            if (SlenderObj[i] == null)
-                SlenderObj.RemoveAt(i);
-        }
-
-        if(a != null && !SlenderObj.Contains(a))
-        {
-            SlenderObj.Add(a);
-        }
+        }       
     }
 
     public void Glitch_Damage_Disable(GameObject a, bool cont)
@@ -674,11 +677,17 @@ public class FPSCharacterController : MonoBehaviour, IDamage
 
     public void EndGame_Player()
     {
+        if (Glitch_Coroutine != null)
+            StopCoroutine(Glitch_Coroutine);
+        if (Glitch_Coroutine_Stop != null)
+            StopCoroutine(Glitch_Coroutine_Stop);
+        isGlitch = false;
+        stopGlitch = false;
         glitchStage = 0;
         triggerEvent.Invoke(0);
         immueDamage = true;
         immobilized = true;
-        EventManager.TriggerEvent("StartFadein"); ;
+        EventManager.TriggerEvent("StartFadein",0.1f); ;
         // Text //
 
     }

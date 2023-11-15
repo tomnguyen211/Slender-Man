@@ -129,6 +129,10 @@ public class GameManager : MonoBehaviour
                 EventManager.TriggerEvent("EndGame_Player");
                 EventManager.TriggerEvent("DisableAllEnemies");
                 StartCoroutine(ResetGame());
+                for (int n = 0; n < questItems.Length; n++)
+                {
+                    questItems[n].hasUnlock = false;
+                }
                 break;
         }
 

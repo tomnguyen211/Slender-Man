@@ -117,8 +117,18 @@ public class FPSHandsController : MonoBehaviour
     private void Start()
     {
         _crosshair = _crosshairGameObject.GetComponent<CrosshairController>();
-        EventManager.TriggerEvent("Get_Player", DetectReference);      
+        EventManager.TriggerEvent("Get_Player", DetectReference);
+
     }
+
+   /* IEnumerator Wait()
+    {
+        yield return new WaitForSeconds(5);
+        Time.timeScale = 0f;
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        fpsCharacterController.immobilized = true;
+    }*/
 
 
     private void LateUpdate()
