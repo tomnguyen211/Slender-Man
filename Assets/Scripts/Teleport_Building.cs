@@ -28,6 +28,8 @@ public class Teleport_Building : MonoBehaviour
         {
             EventManager.StartListening("TeleportOutside_Global", TeleportOutside_Global);
             EventManager.StartListening("TeleportInside_Global", TeleportInside_Global);
+            EventManager.StartListening("DisableAllEnemies", DisableAllEnemies);
+
 
         }
     }
@@ -41,6 +43,8 @@ public class Teleport_Building : MonoBehaviour
         {
             EventManager.StopListening("TeleportOutside_Global", TeleportOutside_Global);
             EventManager.StopListening("TeleportInside_Global", TeleportInside_Global);
+            EventManager.StopListening("DisableAllEnemies", DisableAllEnemies);
+
         }
     }
 
@@ -84,6 +88,17 @@ public class Teleport_Building : MonoBehaviour
         }
     }
     private void TeleportInside_Global()
+    {
+        for (int n = 0; n < enemies.Length; n++)
+        {
+            if (enemies[n] != null && enemies[n].TryGetComponent<IDetect>(out IDetect detect))
+            {
+                detect.DisableDetect();
+            }
+        }
+    }
+
+    private void DisableAllEnemies()
     {
         for (int n = 0; n < enemies.Length; n++)
         {

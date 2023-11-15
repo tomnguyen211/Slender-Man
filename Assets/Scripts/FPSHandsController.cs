@@ -1330,6 +1330,7 @@ public class FPSHandsController : MonoBehaviour
         healingCoroutine = StartCoroutine(Healing_Coroutine());
         healthPack--;
         GameManager.Instance.CharacterBar.UpdateUHealth(healthPack);
+        
     }
 
     IEnumerator Healing_Coroutine()
@@ -1346,6 +1347,7 @@ public class FPSHandsController : MonoBehaviour
             {
                 fpsCharacterController.currentHealth += 1;
                 GameManager.Instance.CharacterBar.Heal(1);
+                fpsCharacterController.ScreenDamage.CurrentHealth += 1;
                 time = 0.05f;
             }
             yield return null;

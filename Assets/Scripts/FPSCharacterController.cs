@@ -52,8 +52,7 @@ public class FPSCharacterController : MonoBehaviour, IDamage
     private float maxMana;
     [ReadOnly]
     public float currentMana;
-    [SerializeField]
-    ScreenDamage ScreenDamage;
+    public ScreenDamage ScreenDamage;
     [ReadOnly]
     GameObject Attacker;
     #endregion
@@ -128,6 +127,9 @@ public class FPSCharacterController : MonoBehaviour, IDamage
 
 
         triggerEvent -= UpdateStatic;
+
+        MovementManager.isMoving -= IsMoving;
+
     }
 
     private void Awake()

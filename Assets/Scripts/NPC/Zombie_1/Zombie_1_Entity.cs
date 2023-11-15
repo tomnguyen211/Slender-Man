@@ -272,7 +272,7 @@ public class Zombie_1_Entity : Entity,IDamage,IDetect
         DetectionTimer = entityData.detectionTimer;
         DetectionCheck = true;
         stateMachine.ChangeState(Zombie_1_Shout);
-        Zombie_1_Idle.isIdleTimeOver = true;
+        Zombie_1_Idle.isIdleTimeOver = false;
     }
 
     private bool IsMoving()
@@ -801,6 +801,8 @@ public class Zombie_1_Shout : AI_State
         base.Enter();
         target = character.enemy.transform.position;
         character.Audio("Roar");
+        character.rb.constraints = RigidbodyConstraints.FreezeAll;
+
 
     }
 
@@ -820,5 +822,12 @@ public class Zombie_1_Shout : AI_State
             character.transform.rotation = Quaternion.RotateTowards(character.transform.rotation, rot, 800 * Time.deltaTime);
         else
             character.transform.rotation = Quaternion.RotateTowards(character.transform.rotation, rot, 600 * Time.deltaTime);
+    }
+
+    public override void Exit()
+    {
+        base.Exit();
+        character.rb.constraints = RigidbodyConstraints.None;
+
     }
 }
