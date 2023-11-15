@@ -19,11 +19,14 @@ public class Slenderman_FinalEvent : MonoBehaviour
     private void OnDisable()
     {
         EventManager.StopListening("Activate", Activate);
+        EventManager.StopListening("DeActivate", DeActivate);
+
     }
 
     private void Start()
     {
         EventManager.StartListening("Activate", Activate);
+        EventManager.StartListening("DeActivate", DeActivate);
 
 
         playerRef = GameManager.Instance.Player;
@@ -48,6 +51,10 @@ public class Slenderman_FinalEvent : MonoBehaviour
     private void Activate()
     {
         hasActivate = true;
+    }
+    private void DeActivate()
+    {
+        hasActivate = false;
     }
 
     private void Spawn()

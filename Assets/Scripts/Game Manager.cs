@@ -128,6 +128,9 @@ public class GameManager : MonoBehaviour
             case GameState.EndGame:
                 EventManager.TriggerEvent("EndGame_Player");
                 EventManager.TriggerEvent("DisableAllEnemies");
+                EventManager.TriggerEvent("TheEndFadeIn");
+                EventManager.TriggerEvent("DeActivate");
+
                 StartCoroutine(ResetGame());
                 for (int n = 0; n < questItems.Length; n++)
                 {

@@ -692,7 +692,7 @@ public class FPSCharacterController : MonoBehaviour, IDamage
         triggerEvent.Invoke(0);
         immueDamage = true;
         immobilized = true;
-        EventManager.TriggerEvent("StartFadein",0.1f); ;
+        EventManager.TriggerEvent("StartFadeIn",0.1f); ;
         // Text //
     }
 }
