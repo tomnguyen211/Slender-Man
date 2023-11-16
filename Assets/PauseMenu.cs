@@ -59,7 +59,7 @@ public class PauseMenu : MonoBehaviour
         Time.timeScale = 0;
         GameIsPaused = true;
 
-        if(!eventPause)
+        if (!eventPause)
         {
             EventManager.TriggerEvent("PauseEvent", true);
             eventResume = false;
@@ -85,12 +85,14 @@ public class PauseMenu : MonoBehaviour
 
     public void RollOverSoundOption()
     {
+        Debug.Log("Passed");
         source.clip = soundRollOver_Option;
         source.Play();
     }
 
     public void RollOverSoundQuit()
     {
+        Debug.Log("Passed");
         source.clip = soundRollOver_Exit;
         source.Play();
     }

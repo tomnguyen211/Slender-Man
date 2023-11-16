@@ -2,7 +2,6 @@ using UnityEngine;
 using System.Collections;
 using Unity.Collections;
 using UnityEngine.Events;
-using TMPro.EditorUtilities;
 
 public class PickupItem_Highlight : MonoBehaviour
 {

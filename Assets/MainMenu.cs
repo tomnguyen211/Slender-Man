@@ -17,6 +17,10 @@ public class MainMenu : MonoBehaviour
     AudioSource laughSound;
     [SerializeField]
     AudioSource staticSound;
+    [SerializeField]
+    AudioSource themeMusic;
+    [SerializeField]
+    AudioSource interferenceSound;
     private void Start()
     {
         source = GetComponent<AudioSource>();
@@ -35,6 +39,9 @@ public class MainMenu : MonoBehaviour
         staticSound.Play();
         EventManager.TriggerEvent("StartFadeIn", 0.2f);
         StartCoroutine(LoadGame());
+        StartCoroutine(ReduceThemeSound());
+        //Cursor.visible = false;
+
     }
 
     IEnumerator LoadGame()
@@ -66,5 +73,18 @@ public class MainMenu : MonoBehaviour
     {
         source.clip = soundRollOver_Exit;
         source.Play();
+    }
+
+    IEnumerator ReduceThemeSound()
+    {
+        float acceleration_theme = (themeMusic.volume - 0) / 5;
+        float acceleration_intefere= (interferenceSound.volume - 0) / 5;
+
+        while (themeMusic.volume > 0)
+        {
+            themeMusic.volume -= acceleration_theme * Time.deltaTime;
+            interferenceSound.volume -= acceleration_intefere * Time.deltaTime;
+            yield return null;
+        }
     }
 }

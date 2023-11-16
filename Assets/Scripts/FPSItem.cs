@@ -136,5 +136,7 @@ public class FPSItem : ScriptableObject
 
         public GameObject[] MuzzleFlash;
         public GameObject[] ImpactMark;
+
+        public AudioClip[] hitSound;
     }
 }

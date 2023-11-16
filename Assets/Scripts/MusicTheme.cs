@@ -56,7 +56,7 @@ public class MusicTheme : MonoBehaviour
         {
             if(!music.isPlaying) 
             {
-                EventManager.TriggerEvent("PauseEvent", false);
+                EventManager.TriggerEvent("StartEvent", false);
                 carCrashEvent = false;
                 EventManager.TriggerEvent("StartFadeOut", 0.25f);
                 triggerEvent?.Invoke();

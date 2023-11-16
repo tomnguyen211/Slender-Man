@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Slenderman_EndEvent : MonoBehaviour
 {
@@ -8,6 +9,8 @@ public class Slenderman_EndEvent : MonoBehaviour
 
     [SerializeField]
     LayerMask armor;
+
+    public UnityEvent triggerEvent;
 
     private void OnEnable()
     {
@@ -25,6 +28,7 @@ public class Slenderman_EndEvent : MonoBehaviour
         {
             hasTrigger = true;
             GameManager.Instance.UpdateGameState(GameState.EndGame);
+            triggerEvent?.Invoke();
         }
     }
 

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Slenderman_FinalEvent : MonoBehaviour
 {
@@ -11,6 +12,8 @@ public class Slenderman_FinalEvent : MonoBehaviour
 
     [SerializeField]
     private bool spawnEnable = true;
+
+    public UnityEvent triggerEffect;
 
     [SerializeField]
     GameObject SlenderObj;
@@ -51,6 +54,7 @@ public class Slenderman_FinalEvent : MonoBehaviour
     private void Activate()
     {
         hasActivate = true;
+        triggerEffect?.Invoke();
     }
     private void DeActivate()
     {

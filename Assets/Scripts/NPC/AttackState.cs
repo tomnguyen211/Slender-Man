@@ -60,6 +60,8 @@ public class AttackState : AI_State
 
     public bool CheckIfDistance()
     {
+        if(entity.enemy == null)
+            return false;
         return entity.IsBetween(Vector3.Distance(entity.rayCenter.transform.position, entity.enemy.transform.position), stateData.minDistance, stateData.maxDistance);
     }
 

@@ -1,13 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.Entities.UniversalDelegates;
-using UnityEditor.Search;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.Rendering;
-using URPGlitch.Runtime.AnalogGlitch;
-using URPGlitch.Runtime.DigitalGlitch;
-using static UnityEditor.Progress;
 
 public class FPSHandsController : MonoBehaviour
 {
@@ -39,8 +33,8 @@ public class FPSHandsController : MonoBehaviour
 
     [Header("Object References")]
     [SerializeField] private FPSCharacterController fpsCharacterController = null;
-    [SerializeField] private Transform handsParentTransform = null;
-    [SerializeField] private Transform handsTransform = null;
+    [SerializeField] public Transform handsParentTransform = null;
+    [SerializeField] public Transform handsTransform = null;
     [SerializeField] private Animator handsAnimator = null;
 
 
@@ -115,6 +109,11 @@ public class FPSHandsController : MonoBehaviour
     [SerializeField]
     AudioManager AudioManager;
 
+    [SerializeField]
+    AudioSource hitEffectSound;
+
+
+
     private void Awake()
     {
         EventManager.TriggerEvent("Get_Player", DetectReference);
@@ -126,11 +125,14 @@ public class FPSHandsController : MonoBehaviour
         _crosshair = _crosshairGameObject.GetComponent<CrosshairController>();
 
         EventManager.StartListening("PauseEvent", PauseEvent);
+        EventManager.StartListening("StartEvent", StartEvent);
+
 
     }
     private void OnDisable()
     {
         EventManager.StopListening("PauseEvent", PauseEvent);
+        EventManager.StopListening("StartEvent", StartEvent);
 
     }
 
@@ -138,29 +140,35 @@ public class FPSHandsController : MonoBehaviour
     {
         if((bool)isPause)
         {
+            Debug.Log("Passed");
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
             _crosshairGameObject.SetActive(false);
             fpsCharacterController.immobilized = true;
         }
-        else
+        else if(!(bool)isPause)
         {
+            Debug.Log("Passed");
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
             _crosshairGameObject.SetActive(true);
             fpsCharacterController.immobilized = false;
         }
     }
-
-   /* IEnumerator Wait()
+    
+    private void StartEvent(object isPause)
     {
-        yield return new WaitForSeconds(5);
-        Time.timeScale = 0f;
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
-        fpsCharacterController.immobilized = true;
-    }*/
-
+        if ((bool)isPause)
+        {
+            _crosshairGameObject.SetActive(false);
+            fpsCharacterController.immobilized = true;
+        }
+        else
+        {
+            _crosshairGameObject.SetActive(true);
+            fpsCharacterController.immobilized = false;
+        }
+    }
 
     private void LateUpdate()
     {
@@ -305,6 +313,8 @@ public class FPSHandsController : MonoBehaviour
             IsAiming = true;
         if (Input.GetKeyUp(aimKey))
             IsAiming = false;
+
+        InteractManager_UI();
         if (Input.GetKeyUp(interact))
             InteractManager();
         if (Input.GetKeyUp(heal) && !IsHealing && healthPack > 0 && fpsCharacterController.currentHealth < fpsCharacterController.GetMaxHealth)
@@ -960,6 +970,9 @@ public class FPSHandsController : MonoBehaviour
                             component_1.Damage(heldItemPreviousFrame.Stats.damage, hit, DetectReference);
                         else
                             component_1.Damage(heldItemPreviousFrame.Stats.damage, DetectReference);
+
+                        hitEffectSound.clip = heldItemPreviousFrame.Stats.hitSound[Random.Range(0, heldItemPreviousFrame.Stats.hitSound.Length)];
+                        hitEffectSound.Play();
                     }
                     else if (target.parent != null && target.parent.CompareTag("Enemy") && target.parent.TryGetComponent<IDamage>(out IDamage component_2))
                     {
@@ -968,6 +981,8 @@ public class FPSHandsController : MonoBehaviour
                         else
                             component_2.Damage(heldItemPreviousFrame.Stats.damage, DetectReference);
 
+                        hitEffectSound.clip = heldItemPreviousFrame.Stats.hitSound[Random.Range(0, heldItemPreviousFrame.Stats.hitSound.Length)];
+                        hitEffectSound.Play();
                     }
                 }
             }
@@ -1007,9 +1022,10 @@ public class FPSHandsController : MonoBehaviour
                     else if (hit.collider.transform.parent != null && hit.collider.transform.parent.TryGetComponent<IDamage>(out IDamage component_2))
                     {
                         component_2.Damage(heldItemPreviousFrame.Stats.damage, hit, DetectReference);
-
-
                     }
+
+                    hitEffectSound.clip = heldItemPreviousFrame.Stats.hitSound[Random.Range(0, heldItemPreviousFrame.Stats.hitSound.Length)];
+                    hitEffectSound.Play();
                 }
                 /*else if (hit.collider.CompareTag("Ground"))
                 {
@@ -1046,6 +1062,9 @@ public class FPSHandsController : MonoBehaviour
                     {
                         component_2.Damage(heldItemPreviousFrame.Stats.damage, hit, DetectReference);
                     }
+
+                    hitEffectSound.clip = heldItemPreviousFrame.Stats.hitSound[Random.Range(0, heldItemPreviousFrame.Stats.hitSound.Length)];
+                    hitEffectSound.Play();
                 }
                 /*else if (hit.collider.CompareTag("Ground"))
                 {
@@ -1111,12 +1130,94 @@ public class FPSHandsController : MonoBehaviour
         return heldItem.Stats.totalBullet <= heldItem.Stats.maxTotalBullet;
     }
 
+    public void InteractManager_UI()
+    {
+        Vector3 shootRayOrigin = handsParentTransform.GetComponent<Camera>().ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0f));
+        RaycastHit hit;
+
+        if (Physics.Raycast(shootRayOrigin, handsParentTransform.forward, out hit, 2, interactLayer))
+        {
+            if (hit.collider.CompareTag("Pickup"))
+            {
+                GameManager.Instance.CharacterBar.UpdateUIInteract("Pickup E");
+            }
+            else if (hit.collider.CompareTag("Medicine"))
+            {
+                if (healthPack < 3)
+                {
+                    GameManager.Instance.CharacterBar.UpdateUIInteract("Pickup E");
+                }
+                else
+                {
+                    GameManager.Instance.CharacterBar.UpdateUIInteract("Pickup (Full)");
+                }
+            }
+            else if (hit.collider.CompareTag("Battery"))
+            {
+                if (battery < 3)
+                {
+                    GameManager.Instance.CharacterBar.UpdateUIInteract("Pickup E");
+                }
+                else
+                    GameManager.Instance.CharacterBar.UpdateUIInteract("Pickup (Full)");
+            }
+            else if (hit.collider.CompareTag("Quest"))
+            {
+                if (!hit.collider.GetComponent<PickupItem_Highlight>().hasInteract)
+                {
+                    GameManager.Instance.CharacterBar.UpdateUIInteract("Interact E");
+                }
+                else
+                    GameManager.Instance.CharacterBar.UpdateUIInteract("");
+            }
+            else if (hit.collider.CompareTag("Ammo"))
+            {
+                if (hit.collider.name == "PistolBullet")
+                {
+                    for (int i = 0; i < FPSItemSelector.SelectionOptions.Count; i++)
+                    {
+                        if (FPSItemSelector.SelectionOptions[i].ItemAsset.HandsPivotBoneTransformName == "handgun")
+                        {
+                            if (FPSItemSelector.SelectionOptions[i].ItemAsset.Stats.totalBullet >= FPSItemSelector.SelectionOptions[i].ItemAsset.Stats.maxTotalBullet)
+                                GameManager.Instance.CharacterBar.UpdateUIInteract("Pickup (Full)");
+                            else
+                            {
+                                GameManager.Instance.CharacterBar.UpdateUIInteract("Pickup E");
+                            }
+                            break;
+                        }
+                    }
+                }
+                else if (hit.collider.name == "ShotgunBullet")
+                {
+                    for (int i = 0; i < FPSItemSelector.SelectionOptions.Count; i++)
+                    {
+                        if (FPSItemSelector.SelectionOptions[i].ItemAsset.HandsPivotBoneTransformName == "shotgun")
+                        {
+                            if (FPSItemSelector.SelectionOptions[i].ItemAsset.Stats.totalBullet >= FPSItemSelector.SelectionOptions[i].ItemAsset.Stats.maxTotalBullet)
+                                GameManager.Instance.CharacterBar.UpdateUIInteract("Pickup (Full)");
+                            else
+                            {
+                                GameManager.Instance.CharacterBar.UpdateUIInteract("Pickup E");
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        else if (!Physics.Raycast(shootRayOrigin, handsParentTransform.forward, out hit, 5, invisibleLayer))
+        {
+            GameManager.Instance.CharacterBar.UpdateUIInteract("");
+        }
+    }
+
     public void InteractManager()
     {
         Vector3 shootRayOrigin = handsParentTransform.GetComponent<Camera>().ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0f));
         RaycastHit hit;
 
-        if (Physics.Raycast(shootRayOrigin, handsParentTransform.forward, out hit, 20, interactLayer))
+        if (Physics.Raycast(shootRayOrigin, handsParentTransform.forward, out hit, 2, interactLayer))
         {
             if (hit.collider.CompareTag("Pickup"))
             {
@@ -1324,22 +1425,25 @@ public class FPSHandsController : MonoBehaviour
                     {
                         if (FPSItemSelector.SelectionOptions[i].ItemAsset.HandsPivotBoneTransformName == "handgun")
                         {
-                            int amount = FPSItemSelector.SelectionOptions[i].ItemAsset.Stats.maxTotalBullet - FPSItemSelector.SelectionOptions[i].ItemAsset.Stats.totalBullet;
-
-                            if (amount >= 7)
-                                FPSItemSelector.SelectionOptions[i].ItemAsset.Stats.totalBullet += 7;
-                            else
-                                FPSItemSelector.SelectionOptions[i].ItemAsset.Stats.totalBullet += amount;
-
-                            UpdateAmmoUI();
-                            hit.collider.gameObject.SetActive(false);
-
-                            if (hit.transform.TryGetComponent<TriggerEvent>(out TriggerEvent trigger))
+                            if (FPSItemSelector.SelectionOptions[i].ItemAsset.Stats.totalBullet < FPSItemSelector.SelectionOptions[i].ItemAsset.Stats.maxTotalBullet)
                             {
-                                trigger.eventTrigger?.Invoke();
-                            }
+                                int amount = FPSItemSelector.SelectionOptions[i].ItemAsset.Stats.maxTotalBullet - FPSItemSelector.SelectionOptions[i].ItemAsset.Stats.totalBullet;
 
-                            break;
+                                if (amount >= 7)
+                                    FPSItemSelector.SelectionOptions[i].ItemAsset.Stats.totalBullet += 7;
+                                else
+                                    FPSItemSelector.SelectionOptions[i].ItemAsset.Stats.totalBullet += amount;
+
+                                UpdateAmmoUI();
+                                hit.collider.gameObject.SetActive(false);
+
+                                if (hit.transform.TryGetComponent<TriggerEvent>(out TriggerEvent trigger))
+                                {
+                                    trigger.eventTrigger?.Invoke();
+                                }
+                                break;
+                            }
+                           
                         }
 
                     }
@@ -1353,22 +1457,25 @@ public class FPSHandsController : MonoBehaviour
                     {
                         if (FPSItemSelector.SelectionOptions[i].ItemAsset.HandsPivotBoneTransformName == "shotgun")
                         {
-                            int amount = FPSItemSelector.SelectionOptions[i].ItemAsset.Stats.maxTotalBullet - FPSItemSelector.SelectionOptions[i].ItemAsset.Stats.totalBullet;
-
-                            if (amount >= 5)
-                                FPSItemSelector.SelectionOptions[i].ItemAsset.Stats.totalBullet += 5;
-                            else
-                                FPSItemSelector.SelectionOptions[i].ItemAsset.Stats.totalBullet += amount;
-
-                            UpdateAmmoUI();
-                            hit.collider.gameObject.SetActive(false);
-
-                            if (hit.transform.TryGetComponent<TriggerEvent>(out TriggerEvent trigger))
+                            if (FPSItemSelector.SelectionOptions[i].ItemAsset.Stats.totalBullet < FPSItemSelector.SelectionOptions[i].ItemAsset.Stats.maxTotalBullet)
                             {
-                                trigger.eventTrigger?.Invoke();
-                            }
+                                int amount = FPSItemSelector.SelectionOptions[i].ItemAsset.Stats.maxTotalBullet - FPSItemSelector.SelectionOptions[i].ItemAsset.Stats.totalBullet;
 
-                            break;
+                                if (amount >= 5)
+                                    FPSItemSelector.SelectionOptions[i].ItemAsset.Stats.totalBullet += 5;
+                                else
+                                    FPSItemSelector.SelectionOptions[i].ItemAsset.Stats.totalBullet += amount;
+
+                                UpdateAmmoUI();
+                                hit.collider.gameObject.SetActive(false);
+
+                                if (hit.transform.TryGetComponent<TriggerEvent>(out TriggerEvent trigger))
+                                {
+                                    trigger.eventTrigger?.Invoke();
+                                }
+
+                                break;
+                            }                          
                         }
                     }
 
@@ -1376,12 +1483,6 @@ public class FPSHandsController : MonoBehaviour
 
                 }
             }
-            /*else if (hit.collider.CompareTag("Ground"))
-            {
-                float angle = Vector3.Angle(hit.normal, transform.up);
-                Quaternion startRot = Quaternion.LookRotation(hit.normal);
-                GameObject bulletHole = Instantiate(heldItemPreviousFrame.Stats.ImpactMark, hit.point, startRot);
-            }*/
         }
 
     }
@@ -1702,8 +1803,6 @@ public class FPSHandsController : MonoBehaviour
             }
             else
                 FPSItemSelector.SelectionOptions[n].ItemAsset.Stats.currentBullet = pistolBullet;
-
-
         }
 
         if (shotgun)
@@ -1717,12 +1816,14 @@ public class FPSHandsController : MonoBehaviour
             }
             else
                 FPSItemSelector.SelectionOptions[n].ItemAsset.Stats.currentBullet = shotgunBullet;
-
-
         }
 
         healthPack = med;
+        GameManager.Instance.CharacterBar.UpdateUHealth(healthPack);
+
         this.battery = battery;
+        GameManager.Instance.CharacterBar.UpdateUIBattery(battery);
+
 
         if (knife)
         {

@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.Events;
+using TMPro;
 
 public class Door : MonoBehaviour
 {
@@ -49,8 +50,6 @@ public class Door : MonoBehaviour
     private bool unlimitedTrigger;
 
     public bool isRotating;
-
-
 
     void Start()
     {
@@ -157,38 +156,57 @@ public class Door : MonoBehaviour
                 triggerEvent?.Invoke();
             }
         }
+
         if (trig)
         {
-           /* if (open)
+            if (open)
             {
-                txt.text = "Close E";
+                GameManager.Instance.CharacterBar.UpdateUIInteract("Close E");
             }
             else
             {
-                txt.text = "Open E";
-            }*/
+                GameManager.Instance.CharacterBar.UpdateUIInteract("Open E");
+            }
         }
     }
-    private void OnTriggerEnter(Collider coll)//вход и выход в\из  триггера 
+    /*private void OnTriggerEnter(Collider coll)//вход и выход в\из  триггера 
     {
         if (coll.CompareTag("Player"))
         {
-            /*if (!open)
+            if (open)
             {
-                txt.text = "Close E ";
+                GameManager.Instance.CharacterBar.UpdateUIInteract("Close E");
             }
             else
             {
-                txt.text = "Open E";
-            }*/
+                GameManager.Instance.CharacterBar.UpdateUIInteract("Open E");
+            }
+            trig = true;
+        }
+    }*/
+
+    private void OnTriggerStay(Collider coll)
+    {
+        if (coll.CompareTag("Player"))
+        {
+            if (open)
+            {
+                GameManager.Instance.CharacterBar.UpdateUIInteract("Close E");
+            }
+            else
+            {
+                GameManager.Instance.CharacterBar.UpdateUIInteract("Open E");
+            }
             trig = true;
         }
     }
+
+
     private void OnTriggerExit(Collider coll)//вход и выход в\из  триггера 
     {
         if (coll.CompareTag("Player"))
         {
-            //txt.text = " ";
+            GameManager.Instance.CharacterBar.UpdateUIInteract("");
             trig = false;
         }
     }

@@ -34,6 +34,9 @@ public class CharacterInfoBar : MonoBehaviour
 
     public TextMeshProUGUI text_Quest;
 
+    public TextMeshProUGUI text_Interact;
+
+
     private void Awake()
     {
         GameManager.Instance.CharacterBar = this;
@@ -182,6 +185,11 @@ public class CharacterInfoBar : MonoBehaviour
     public void UpdateUIQuest(int current)
     {
         text_Quest.SetText(current.ToString() +"/"+6);
+    }
+
+    public void UpdateUIInteract(string text)
+    {
+        text_Interact.SetText(text);
     }
 
     public void EnableAmmo()

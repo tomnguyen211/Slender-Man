@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.Build.Pipeline.Utilities;
 using UnityEngine;
 
 public class Event_Listeners : MonoBehaviour
@@ -107,7 +104,11 @@ public class Event_Listeners : MonoBehaviour
                 GameObject player = Instantiate(playerPrefab, spawnPos, Quaternion.identity);
 
                 player.GetComponent<FPSHandsController>().SpawnRefillInventory(Current_PistolBullet, Current_ShotgunBullet, Current_HealthPack, Current_Battery, knifeUnlocked, pistolUnlocked, shotgunUnlocked, axeUnlocked);
-                player.GetComponent<FPSCharacterController>().ScreenDamage.CurrentHealth -= 0;
+/*                player.GetComponent<FPSCharacterController>().ScreenDamage
+
+                player.GetComponent<FPSCharacterController>().ScreenDamage.CurrentHealth--;
+                player.GetComponent<FPSCharacterController>().ScreenDamage.CurrentHealth++;*/
+
                 if (n == 1 || n == 2 || n == 5 || n == 6 || n == 2)
                 {
                     EventManager.TriggerEvent("TriggerThemeSound", "Theme");

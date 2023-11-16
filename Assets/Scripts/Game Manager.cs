@@ -118,7 +118,7 @@ public class GameManager : MonoBehaviour
             case GameState.Menu:
                 break;
             case GameState.StartGame:
-                EventManager.TriggerEvent("PauseEvent", true);
+                EventManager.TriggerEvent("StartEvent", true);
                 EventManager.TriggerEvent("TriggerThemeSound", "CarCrash");
                 break;
             case GameState.Stage_1:

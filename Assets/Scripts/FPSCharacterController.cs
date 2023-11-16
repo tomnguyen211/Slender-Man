@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Collections;
-using UnityEditor.Search;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Rendering;
@@ -104,6 +103,9 @@ public class FPSCharacterController : MonoBehaviour, IDamage
     public bool immueDamage;
     public bool immobilized;
 
+    [SerializeField]
+    LayerMask groundLayer;
+
     private void OnEnable()
     {
 
@@ -199,8 +201,11 @@ public class FPSCharacterController : MonoBehaviour, IDamage
             return;
         }
 
-        UpdateCameraPosition();
-        Mana();
+        if (!immobilized)
+        {
+            UpdateCameraPosition();
+            Mana();
+        }
     }
 
     private void UpdateInput()
@@ -307,8 +312,10 @@ public class FPSCharacterController : MonoBehaviour, IDamage
             if (currentHealth <= 0f)
             {
                 immueDamage = true;
-                EventManager.TriggerEvent("PlayerSpawn");
-                Destroy(gameObject);
+                immobilized = true;
+                handController.handsTransform.gameObject.SetActive(false);
+                StartCoroutine(FallingDead());
+                //Destroy(gameObject);
             }
         }
     }
@@ -700,5 +707,23 @@ public class FPSCharacterController : MonoBehaviour, IDamage
         immobilized = true;
         EventManager.TriggerEvent("StartFadeIn",0.1f); ;
         // Text //
+    }
+
+    IEnumerator FallingDead()
+    {
+        float timer = 5f;
+
+        while(timer > 0)
+        {
+            timer -= Time.smoothDeltaTime;
+            if (!Physics.Raycast(handController.handsParentTransform.position, Vector3.down, 0.5f, groundLayer))
+            {
+                handController.handsParentTransform.Translate(Vector3.down * Time.deltaTime * 1.25f);
+            }
+            yield return null;
+        }
+
+        EventManager.TriggerEvent("PlayerSpawn");
+        Destroy(gameObject);
     }
 }
