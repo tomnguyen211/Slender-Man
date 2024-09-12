@@ -40,4 +40,4 @@ It Follows is an immersive horror game that combines elements of survival and st
 
 This project is licensed under the [MIT License](LICENSE).
 
-Thank you for visiting!
+<br>Thank you for visiting!
